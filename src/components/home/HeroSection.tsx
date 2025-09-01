@@ -1,4 +1,5 @@
 import {Play, Download, Zap, } from 'lucide-react';
+import Image from 'next/image';
 
 export default function HeroSection () {
     const NetworkPattern = () => (
@@ -23,26 +24,36 @@ export default function HeroSection () {
         <NetworkPattern />
         
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+          <div className="flex w-full mx-auto justify-center mb-8">
+            <Image
+                            src="/favicon.png"
+                            alt="Broadcast Studio Logo" 
+                            
+                            width={82}
+                            height={82}
+                           
+                        />
+          </div>
           <div className="mb-6">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
+            <span className="inline-flex items-center px-3 py-1  rounded-full text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
               <Zap className="w-4 h-4 mr-1" />
-              Open Source
+              Open Source - <b> Packet Tracer Alternative</b>
             </span>
           </div>
           
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-100 to-cyan-400 bg-clip-text text-transparent">
-            O Sistema de
+            Powerful App
             <br />
             <span className="relative">
-              Emulação de Redes
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transform rotate-1"></div>
+             Network Emulation
+              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transform rotate-1" />
             </span>
           </h1>
           
-          <p className="text-xl sm:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Uma alternativa poderosa ao Cisco Packet Tracer para simulação e aprendizado de redes.
+          <p className="text-xl sm:text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+           An platform for studying computer networks, network simulation, and hands-on learning with integrated
             <br />
-            <span className="text-cyan-400">Funciona em qualquer plataforma.</span>
+            <span className="text-cyan-400">artificial intelligence.</span>
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
