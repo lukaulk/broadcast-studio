@@ -4,7 +4,7 @@ import Header from '../../src/components/home/Header';
 import HeroSection from '../../src/components/home/HeroSection';
 import Features from '../../src/components/home/Features';
 import CTASection from '@/src/components/home/CTASection';
-import Footer from '@/src/components/home/Footesr';
+import Footer from '@/src/components/home/Footer';
 
 const HomePage = () => {
   return (

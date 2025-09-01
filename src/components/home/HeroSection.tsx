@@ -26,13 +26,11 @@ export default function HeroSection () {
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
           <div className="flex w-full mx-auto justify-center mb-8">
             <Image
-                            src="/favicon.png"
-                            alt="Broadcast Studio Logo" 
-                            
-                            width={82}
-                            height={82}
-                           
-                        />
+                src="/favicon.png"
+                alt="Broadcast Studio Logo" 
+                width={82}
+                height={82}
+            />
           </div>
           <div className="mb-6">
             <span className="inline-flex items-center px-3 py-1  rounded-full text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
