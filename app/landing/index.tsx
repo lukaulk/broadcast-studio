@@ -1,10 +1,11 @@
 "use client"
-import React from 'react';
+import Footer from '@/src/components/home/Footer';
+import CTASection from '../../src/components/home/CTASection';
+import Features from '../../src/components/home/Features';
 import Header from '../../src/components/home/Header';
 import HeroSection from '../../src/components/home/HeroSection';
-import Features from '../../src/components/home/Features';
-import CTASection from '@/src/components/home/CTASection';
-import Footer from '@/src/components/home/Footer';
+
+
 
 const HomePage = () => {
   return (

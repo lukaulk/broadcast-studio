@@ -1,5 +1,5 @@
-import { Menu, X, Network } from "lucide-react";
-import React, { useState } from "react";
+import { Menu, Network, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
