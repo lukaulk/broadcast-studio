@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
-import Header from '../components/home/Header';
-import HeroSection from '../components/home/HeroSection';
+import Header from '../../src/components/home/Header';
+import HeroSection from '../../src/components/home/HeroSection';
 import { Network, Play, Users, Shield, Github, Twitter } from 'lucide-react';
 
 const HomePage = () => {
