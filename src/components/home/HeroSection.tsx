@@ -24,7 +24,7 @@ export default function HeroSection () {
         <NetworkPattern />
         
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-          <div className="flex w-full mx-auto justify-center mb-8">
+          <div className="flex w-full mx-auto justify-center mt-5 sm:mt-0 mb-8">
             <Image
                 src="/favicon.png"
                 alt="Broadcast Studio Logo" 
@@ -35,11 +35,11 @@ export default function HeroSection () {
           <div className="mb-6">
             <span className="inline-flex items-center px-3 py-1  rounded-full text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
               <Zap className="w-4 h-4 mr-1" />
-              Open Source - <b> Packet Tracer Alternative</b>
+              Open Source - <b className='ml-2'> Packet Tracer Alternative</b>
             </span>
           </div>
           
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-100 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-white sm:bg-gradient-to-r sm:from-white sm:via-gray-100 sm:to-cyan-400 sm:bg-clip-text sm:text-transparent">
             Powerful App
             <br />
             <span className="relative">
