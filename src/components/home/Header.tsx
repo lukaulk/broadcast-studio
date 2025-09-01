@@ -12,7 +12,7 @@ export default function Header() {
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center space-x-2">
                         
-                        <Network className="w-8 h-8 text-yellow-400" />
+                        <Network className="w-8 h-8 text-cyan-400" />
                         
                         <span className="text-xl font-bold">Broadcast Studio</span>
                     </div>
