@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Broadcast Studio 📡
+Overview
 
-## Getting Started
+Broadcast Studio is a next-generation computer network simulator, designed to be a modern and robust alternative to tools like Cisco Packet Tracer. Our intuitive web platform allows users to build, simulate, and test complex network topologies directly in their browser, with a friendly interface and advanced features. 🌐
 
-First, run the development server:
+Whether you're a student, a teacher, or an IT professional, Broadcast Studio provides the flexibility and power needed to visualize, experiment with, and master the world of computer networks. 💻✨
+Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+    Visual Topology Editor: Create and visualize network topologies by dragging and dropping devices (routers, switches, PCs) onto a canvas. 🖱️
+
+    Real-Time Simulation: Watch data traffic and network behavior in real time. 🚦
+
+    Integrated Terminal: Use a built-in terminal to test device connectivity and configuration by running commands like ping and traceroute. 🚀
+
+    Cross-Platform Compatibility: Developed as a web application, it can be accessed from any device and is prepared for a future desktop version. 📱🖥️
+
+Project Architecture
+
+Broadcast Studio follows a modern and scalable architecture, divided into three main parts:
+
+    Front-end: Built with Next.js (React), it provides the user interface (UI) for creating topologies. Interactivity and visualization of links between nodes are managed with the React Flow library.
+
+    Back-end: A robust Python API serves as the simulation engine. It uses the CORE Emulator API to create and manage virtual networks, acting as the bridge between the UI and the actual simulation.
+
+    Connector (Middleware): This will be an intermediate layer, ensuring smooth and efficient communication between the front-end and the back-end.
+
+Technologies Used
+
+    Front-end:
+
+        Next.js
+
+        React
+
+        React Flow
+
+        TypeScript
+
+        Tailwind CSS (for styling)
+
+    Back-end:
+
+        Python
+
+        CORE Emulator API
+
+    Development Tools:
+
+        Bun (Package Manager)
+
+        ESLint (Code Quality Linter)
+
+        VS Code (Editor)
+
+Getting Started
+Prerequisites
+
+Make sure you have Bun installed on your system.
+Project Setup
+
+# Clone the repository
+git clone [https://github.com/your-username/broadcast-studio.git](https://github.com/your-username/broadcast-studio.git)
+
+# Navigate to the project directory
+cd broadcast-studio
+
+Installation
+
+# Install front-end dependencies with Bun
+bun install
+
+Running the Project
+
+To start the Next.js development server:
+
+# Start the development server
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser and go to http://localhost:3000 to see Broadcast Studio in action. 🎉
+Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Contributions are always welcome! If you have ideas for new features, improvements, or find any bugs, please open an issue or a pull request. 🙏
+License
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
