@@ -1,5 +1,6 @@
 import { Download, Play, Zap } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import NetworkPattern from "./NetworkPattern";
 
 export default function HeroSection() {
@@ -8,7 +9,7 @@ export default function HeroSection() {
       <NetworkPattern />
 
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="flex w-full mx-auto justify-center mt-5 sm:mt-0 mb-8">
+        <div className="flex w-full mx-auto justify-center mt-15 sm:mt-0 mb-8">
           <Image src="/favicon.png" alt="Broadcast Studio Logo" width={82} height={82} />
         </div>
         <div className="mb-6">
@@ -35,6 +36,7 @@ export default function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Link href="/studio" className="group">
           <button
             type="button"
             className="group bg-gradient-to-r cursor-pointer from-cyan-400 to-blue-500 text-black px-8 py-4 rounded-full font-semibold text-lg  hover:scale-105 transition-all duration-300 shadow-2xl shadow-cyan-400/25"
@@ -44,6 +46,7 @@ export default function HeroSection() {
               <Play className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </span>
           </button>
+          </Link>
 
           <button
             type="button"
