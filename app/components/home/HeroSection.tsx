@@ -1,0 +1,67 @@
+import {Play, Download, Zap, } from 'lucide-react';
+
+export default function HeroSection () {
+    const NetworkPattern = () => (
+        <div className="absolute inset-0 overflow-hidden opacity-20">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-32 h-32 border border-cyan-400/30 rotate-45 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
+      );
+
+    return (
+       <section className="relative min-h-screen flex items-center justify-center">
+        <NetworkPattern />
+        
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+          <div className="mb-6">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
+              <Zap className="w-4 h-4 mr-1" />
+              Open Source
+            </span>
+          </div>
+          
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-100 to-cyan-400 bg-clip-text text-transparent">
+            O Sistema de
+            <br />
+            <span className="relative">
+              Emulação de Redes
+              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transform rotate-1"></div>
+            </span>
+          </h1>
+          
+          <p className="text-xl sm:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Uma alternativa poderosa ao Cisco Packet Tracer para simulação e aprendizado de redes.
+            <br />
+            <span className="text-cyan-400">Funciona em qualquer plataforma.</span>
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button className="group bg-gradient-to-r from-cyan-400 to-blue-500 text-black px-8 py-4 rounded-full font-semibold text-lg hover:scale-105 transition-all duration-300 shadow-2xl shadow-cyan-400/25">
+              <span className="flex items-center">
+                Começar Agora
+                <Play className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+            
+            <button className="group border-2 border-gray-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300">
+              <span className="flex items-center">
+                <Download className="w-5 h-5 mr-2" />
+                Download Gratuito
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    )
+}
