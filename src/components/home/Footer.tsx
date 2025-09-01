@@ -11,10 +11,10 @@ export default function Footer() {
             </div>
             
             <div className="flex items-center space-x-6">
-              <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">
+              <a href="https://github.com/lukaulk/broadcast-studio" className="text-gray-400 hover:text-cyan-400 transition-colors">
                 <Github className="w-6 h-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">
+              <a href="https://x.com/lukaudev" className="text-gray-400 hover:text-cyan-400 transition-colors">
                 <Twitter className="w-6 h-6" />
               </a>
             </div>
