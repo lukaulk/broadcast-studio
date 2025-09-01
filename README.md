@@ -82,7 +82,7 @@ flowchart LR
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/broadcast-studio.git
+git clone https://github.com/lukaulk/broadcast-studio.git
 
 # Navigate into the project directory
 cd broadcast-studio
