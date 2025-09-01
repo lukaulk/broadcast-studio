@@ -1,85 +1,122 @@
-Broadcast Studio 📡
-Overview
+# Broadcast Studio 📡
 
-Broadcast Studio is a next-generation computer network simulator, designed to be a modern and robust alternative to tools like Cisco Packet Tracer. Our intuitive web platform allows users to build, simulate, and test complex network topologies directly in their browser, with a friendly interface and advanced features. 🌐
+## 📖 Overview
 
-Whether you're a student, a teacher, or an IT professional, Broadcast Studio provides the flexibility and power needed to visualize, experiment with, and master the world of computer networks. 💻✨
-Key Features
+**Broadcast Studio** An intelligent platform for studying computer networks, network simulation, and hands-on learning with integrated artificial intelligence. Ideal for students, teachers, and professionals who want to explore, test, and understand network behavior in controlled environments, with support for automated analysis, realistic simulations, and AI-based interactive learning. 🌐
 
-    Visual Topology Editor: Create and visualize network topologies by dragging and dropping devices (routers, switches, PCs) onto a canvas. 🖱️
+Whether you’re a student, teacher, or IT professional, Broadcast Studio provides the flexibility and power you need to visualize, experiment with, and master the world of computer networks. 💻✨
 
-    Real-Time Simulation: Watch data traffic and network behavior in real time. 🚦
+---
 
-    Integrated Terminal: Use a built-in terminal to test device connectivity and configuration by running commands like ping and traceroute. 🚀
+![Broadcast Studio Preview](./public/sample.png)
 
-    Cross-Platform Compatibility: Developed as a web application, it can be accessed from any device and is prepared for a future desktop version. 📱🖥️
+---
 
-Project Architecture
+## ✨ Key Features
 
-Broadcast Studio follows a modern and scalable architecture, divided into three main parts:
+* **Visual Topology Editor**: Build and visualize topologies by dragging and dropping devices (routers, switches, PCs) onto a canvas. 🖱️
+* **Real-Time Simulation**: Watch data traffic and network behavior live. 🚦
+* **Integrated Terminal**: Run commands like `ping` and `traceroute` inside a built-in terminal. 🚀
+* **Cross-Platform Compatibility**: Web-based and accessible from any device, with future support for a desktop version. 📱🖥️
 
-    Front-end: Built with Next.js (React), it provides the user interface (UI) for creating topologies. Interactivity and visualization of links between nodes are managed with the React Flow library.
+---
 
-    Back-end: A robust Python API serves as the simulation engine. It uses the CORE Emulator API to create and manage virtual networks, acting as the bridge between the UI and the actual simulation.
+## 🏗️ Project Architecture
 
-    Connector (Middleware): This will be an intermediate layer, ensuring smooth and efficient communication between the front-end and the back-end.
+Broadcast Studio follows a modern, scalable architecture divided into three main layers:
 
-Technologies Used
+```mermaid
+flowchart LR
+    A[Front-end<br/>Next.js + React + React Flow] --> B[Connector (Middleware)]
+    B --> C[Back-end<br/>Python + CORE Emulator API]
 
-    Front-end:
+    subgraph User Interface
+        A
+    end
 
-        Next.js
+    subgraph Communication Layer
+        B
+    end
 
-        React
+    subgraph Simulation Engine
+        C
+    end
+```
 
-        React Flow
+* **Front-end**: Built with **Next.js (React)**, interactive topology editing with **React Flow**.
+* **Back-end**: Python API with **CORE Emulator** for creating and managing virtual networks.
+* **Connector (Middleware)**: Ensures smooth communication between the UI and the simulation engine.
 
-        TypeScript
+---
 
-        Tailwind CSS (for styling)
+## 🛠️ Technologies Used
 
-    Back-end:
+### Front-end
 
-        Python
+* Next.js
+* React
+* React Flow
+* TypeScript
+* Tailwind CSS
 
-        CORE Emulator API
+### Back-end
 
-    Development Tools:
+* Python
+* CORE Emulator API
 
-        Bun (Package Manager)
+### Development Tools
 
-        ESLint (Code Quality Linter)
+* Bun (Package Manager)
+* ESLint (Code Linter)
+* VS Code (Editor)
 
-        VS Code (Editor)
+---
 
-Getting Started
-Prerequisites
+## 🚀 Getting Started
 
-Make sure you have Bun installed on your system.
-Project Setup
+### 📌 Prerequisites
 
+* **Bun** must be installed on your system.
+
+### ⚙️ Setup
+
+```bash
 # Clone the repository
-git clone [https://github.com/your-username/broadcast-studio.git](https://github.com/your-username/broadcast-studio.git)
+git clone https://github.com/your-username/broadcast-studio.git
 
-# Navigate to the project directory
+# Navigate into the project directory
 cd broadcast-studio
+```
 
-Installation
+### 📦 Installation
 
+```bash
 # Install front-end dependencies with Bun
 bun install
+```
 
-Running the Project
+### ▶️ Running the Project
 
-To start the Next.js development server:
-
+```bash
 # Start the development server
 bun dev
+```
 
-Open your browser and go to http://localhost:3000 to see Broadcast Studio in action. 🎉
-Contributing
+Open your browser and go to **[http://localhost:3000](http://localhost:3000)** to see Broadcast Studio in action. 🎉
 
-Contributions are always welcome! If you have ideas for new features, improvements, or find any bugs, please open an issue or a pull request. 🙏
-License
+---
 
-This project is licensed under the MIT License.
+## 🤝 Contributing
+
+Contributions are always welcome! 🙌
+
+* Open an *issue* to report bugs or suggest improvements.
+* Submit a *pull request* for new features or fixes.
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
