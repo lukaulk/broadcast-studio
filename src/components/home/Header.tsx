@@ -1,4 +1,7 @@
+"use client"
+
 import { Menu, Network, X } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Header() {
@@ -23,9 +26,12 @@ export default function Header() {
             <a href="#download" className="text-gray-300 hover:text-white transition-colors">
               Download
             </a>
-            <a href="#community" className="text-gray-300 hover:text-white transition-colors">
+            <Link href="/community">
+             <span className="text-gray-300 hover:text-white transition-colors">
               Community
-            </a>
+            </span>
+            </Link>
+           
           </nav>
 
           <button
