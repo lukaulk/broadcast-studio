@@ -23,8 +23,8 @@ Broadcast Studio follows a modern, scalable architecture divided into three main
 
 ```mermaid
 flowchart LR
-    A[Front-end<br/>Next.js + React + React Flow] --> B[Connector (Middleware)]
-    B --> C[Back-end<br/>Python + CORE Emulator API]
+    A[Front-end: Next.js, React, React Flow] --> B[Connector (Middleware)]
+    B --> C[Back-end: Python, CORE Emulator API]
 
     subgraph User Interface
         A
