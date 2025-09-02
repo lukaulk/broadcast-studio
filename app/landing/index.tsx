@@ -1,9 +1,9 @@
 "use client";
-import Footer from "@/src/components/Footer";
-import CTASection from "../../src/components/CTASection";
-import Features from "../../src/components/Features";
-import Header from "../../src/components/Header";
-import HeroSection from "../../src/components/HeroSection";
+import Footer from "@/components/home/Footer";
+import CTASection from "../../components/home/CTASection";
+import Features from "../../components/home/Features";
+import Header from "../../components/home/Header";
+import HeroSection from "../../components/home/HeroSection";
 
 const HomePage = () => {
   return (

@@ -11,7 +11,13 @@ export default function HeroSection() {
 
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="flex w-full mx-auto justify-center mt-15 sm:mt-0 mb-8">
-          <Image src="/favicon.png" alt="Broadcast Studio Logo" width={82} height={82} className="backdrop-blur-2xl bg-black/1"/>
+          <Image
+            src="/favicon.png"
+            alt="Broadcast Studio Logo"
+            width={82}
+            height={82}
+            className="backdrop-blur-2xl bg-black/1"
+          />
         </div>
         <div className="mb-6">
           <span className="inline-flex items-center px-3 py-1  rounded-full text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
@@ -38,29 +44,31 @@ export default function HeroSection() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link href="/studio" className="group">
-          <button
-            type="button"
-            className="group bg-gradient-to-r cursor-pointer from-cyan-400 to-blue-500 text-black px-8 py-4 rounded-full font-semibold text-lg  hover:scale-105 transition-all duration-300 shadow-2xl shadow-cyan-400/25"
-          >
-            <span className="flex items-center">
-              Try Beta Now
-              <Play className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </button>
+            <button
+              type="button"
+              className="group bg-gradient-to-r cursor-pointer from-cyan-400 to-blue-500 text-black px-8 py-4 rounded-full font-semibold text-lg  hover:scale-105 transition-all duration-300 shadow-2xl shadow-cyan-400/25"
+            >
+              <span className="flex items-center">
+                Try Beta Now
+                <Play className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
           </Link>
-<FeatureSubscribeDialog featureName="Live Packet Capture" triggerText="Quero ser avisado" buttonTrigger={
-(<button
-            type="button"
-            className="group cursor-pointer border-2 border-gray-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300"
-          >
-            <span className="flex items-center">
-              <Download className="w-5 h-5 mr-2" />
-              Download for windows
-            </span>
-          </button>)
-} />
-
-          
+          <FeatureSubscribeDialog
+            featureName="Windows Version"
+            triggerText="Notify me"
+            buttonTrigger={
+              <button
+                type="button"
+                className="group cursor-pointer border-2 border-gray-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300"
+              >
+                <span className="flex items-center">
+                  <Download className="w-5 h-5 mr-2" />
+                  Download for windows
+                </span>
+              </button>
+            }
+          />
         </div>
       </div>
     </section>

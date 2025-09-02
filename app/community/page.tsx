@@ -1,4 +1,4 @@
-import Header from "@/src/components/Header";
+import Header from "@/components/home/Header";
 
 export default function CommunityPage() {
   return (

@@ -83,7 +83,7 @@ export default function FeatureSubscribeDialog({
             <CheckCircle2 className="mt-0.5 h-5 w-5" />
             <div>
               <p className="font-medium">You&apos;re on the list!</p>
-              <p className="text-sm text-muted-foreground">We&apos;ll email {email} as soon as the feature is live.</p>
+              <p className="text-sm text-muted-foreground">We&apos;ll email <span className="font-semibold">{email}</span> as soon as the feature is live.</p>
             </div>
           </div>
         ) : (
