@@ -29,28 +29,6 @@ Whether you’re a student, teacher, or IT professional, Broadcast Studio provid
 
 ---
 
-## 🏗️ Project Architecture
-
-Broadcast Studio follows a modern, scalable architecture divided into three main layers:
-
-```mermaid
-flowchart LR
-    A[Front-end: Next.js, React, React Flow] --> B[Connector (Middleware)]
-    B --> C[Back-end: Python, CORE Emulator API]
-
-    subgraph User Interface
-        A
-    end
-
-    subgraph Communication Layer
-        B
-    end
-
-    subgraph Simulation Engine
-        C
-    end
-```
-
 * **Front-end**: Built with **Next.js (React)**, interactive topology editing with **React Flow**.
 * **Back-end**: Python API with **CORE Emulator** for creating and managing virtual networks.
 * **Connector (Middleware)**: Ensures smooth communication between the UI and the simulation engine.
