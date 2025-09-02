@@ -2,6 +2,7 @@ import { Download, Play, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import NetworkPattern from "./NetworkPattern";
+import FeatureSubscribeDialog from "./NewsletterDialog";
 
 export default function HeroSection() {
   return (
@@ -47,8 +48,8 @@ export default function HeroSection() {
             </span>
           </button>
           </Link>
-
-          <button
+<FeatureSubscribeDialog featureName="Live Packet Capture" triggerText="Quero ser avisado" buttonTrigger={
+(<button
             type="button"
             className="group cursor-pointer border-2 border-gray-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300"
           >
@@ -56,7 +57,10 @@ export default function HeroSection() {
               <Download className="w-5 h-5 mr-2" />
               Download for windows
             </span>
-          </button>
+          </button>)
+} />
+
+          
         </div>
       </div>
     </section>
