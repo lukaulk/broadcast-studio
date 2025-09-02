@@ -3,7 +3,7 @@
     <td align="left" width="120">
       <img src="public/favicon.png" alt="Broadcast Studio Logo" width="100" />
     </td>
-    <td align="right">
+    <td >
       <h1>Broadcast Studio</span></h1>
       <h3 style="margin-top: -10px;">Free open source network simulation, packet tracer alternative</h3>
     </td>
