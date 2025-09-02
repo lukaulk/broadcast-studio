@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "@/styles/globals.css";
-import { Analytics } from "@vercel/analytics/next"
-import Header from "@/src/components/home/Header";
+import "@/src/styles/globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import Header from "@/src/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Broadcast Studio - Emulador de Redes",
-  description: "Crie e emule redes de computadores com precisão. Uma alternativa poderosa e de código aberto para Cisco Packet Tracer.",
+  description:
+    "Crie e emule redes de computadores com precisão. Uma alternativa poderosa e de código aberto para Cisco Packet Tracer.",
 };
 
 export default function RootLayout({
@@ -26,12 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         <Header />
         {children}
-         <Analytics />
+        <Analytics />
       </body>
     </html>
   );
