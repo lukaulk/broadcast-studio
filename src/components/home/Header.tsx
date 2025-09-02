@@ -15,16 +15,16 @@ export default function Header() {
           </div>
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-gray-300 hover:text-white transition-colors">
-              Recursos
+              Features
             </a>
-            <a href="#about" className="text-gray-300 hover:text-white transition-colors">
-              Sobre
+            <a href="https://github.com/lukaulk/broadcast-studio/blob/master/README.md" className="text-gray-300 hover:text-white transition-colors">
+              About
             </a>
             <a href="#download" className="text-gray-300 hover:text-white transition-colors">
               Download
             </a>
             <a href="#community" className="text-gray-300 hover:text-white transition-colors">
-              Comunidade
+              Community
             </a>
           </nav>
 

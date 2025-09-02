@@ -28,7 +28,7 @@ const NetworkPattern = () => {
       {squares.map((sq) => (
         <div
           key={sq.id}
-          className="absolute w-32 h-32 border-2 bg-cyan-500/10 border-cyan-400 rotate-45 animate-pulse"
+          className="absolute w-32 h-32 border-2 bg-cyan-500/5  sm:bg-cyan-500/10 border-cyan-400 rotate-45 animate-pulse"
           style={{
             left: sq.left,
             top: sq.top,

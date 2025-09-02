@@ -1,8 +1,9 @@
 import {  Network, Shield, Users } from "lucide-react";
-import { useId } from "react";
+
 
 export default function Features() {
-    const id = useId();
+    const id = "features";
+    
     return (
          <section id={id} className="py-20 bg-gradient-to-b from-black to-cyan-900/30 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
