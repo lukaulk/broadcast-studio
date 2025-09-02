@@ -2,13 +2,9 @@
 
 ## 📖 Overview
 
-**Broadcast Studio** An intelligent platform for studying computer networks, network simulation, and hands-on learning with integrated artificial intelligence. Ideal for students, teachers, and professionals who want to explore, test, and understand network behavior in controlled environments, with support for automated analysis, realistic simulations, and AI-based interactive learning. 🌐
+**Broadcast Studio** is a web app for studying computer networks, network simulation, and hands-on learning with integrated artificial intelligence. Ideal for students, teachers, and professionals who want to explore, test, and understand network behavior in controlled environments, with support for automated analysis, realistic simulations, and AI-based interactive learning. 🌐
 
 Whether you’re a student, teacher, or IT professional, Broadcast Studio provides the flexibility and power you need to visualize, experiment with, and master the world of computer networks. 💻✨
-
----
-
-![Broadcast Studio Preview](./public/sample.png)
 
 ---
 
@@ -120,3 +116,5 @@ Contributions are always welcome! 🙌
 This project is licensed under the **MIT License**.
 
 ---
+
+![Broadcast Studio Preview](./public/sample.png)
