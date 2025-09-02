@@ -1,10 +1,14 @@
+import Header from "@/src/components/Header";
 
-export default function CommunityPage(){
-       return (
-        <div className="pt-20 min-h-screen flex items-center justify-center bg-gradient-to-b from-black to-cyan-900/30">
-            <h1 className="text-4xl sm:text-5xl font-bold text-center"> 
-                Join the <span className="text-cyan-400">Broadcast Studio</span> Community! 
-            </h1>
-        </div>
-        )
+export default function CommunityPage() {
+  return (
+    <>
+      <Header headerText="Community" noHomeLink />
+      <div className="pt-20 min-h-screen flex items-center justify-center bg-gradient-to-b bg-black text-white">
+        <h1 className="text-4xl sm:text-5xl font-bold text-center">
+          <span className="text-white">Community!</span> 
+        </h1>
+      </div>
+    </>
+  );
 }

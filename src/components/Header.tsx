@@ -1,10 +1,14 @@
-"use client"
+"use client";
 
 import { Menu, Network, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  headerText?: string;
+  noHomeLink?: boolean;
+}
+export default function Header( { headerText, noHomeLink }: HeaderProps ) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -14,24 +18,31 @@ export default function Header() {
           <div className="flex items-center space-x-2">
             <Network className="w-6 h-6 text-cyan-400" />
 
-            <span className="text-xl font-bold">Broadcast Studio</span>
+            <span className="text-xl font-bold text-white">{headerText ? headerText : "Broadcast Studio"}</span>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
+            {noHomeLink ? (
+              <Link href="/">
+                <span className="text-gray-300 hover:text-white transition-colors">Home</span>
+              </Link>
+            ) : (
             <a href="#features" className="text-gray-300 hover:text-white transition-colors">
               Features
             </a>
-            <a href="https://github.com/lukaulk/broadcast-studio/blob/master/README.md" className="text-gray-300 hover:text-white transition-colors">
+            )}
+            
+            <a
+              href="https://github.com/lukaulk/broadcast-studio/blob/master/README.md"
+              className="text-gray-300 hover:text-white transition-colors"
+            >
               About
             </a>
             <a href="#download" className="text-gray-300 hover:text-white transition-colors">
               Download
             </a>
             <Link href="/community">
-             <span className="text-gray-300 hover:text-white transition-colors">
-              Community
-            </span>
+              <span className="text-gray-300 hover:text-white transition-colors">Community</span>
             </Link>
-           
           </nav>
 
           <button
