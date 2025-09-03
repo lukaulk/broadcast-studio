@@ -75,8 +75,8 @@ export default function OptionBar() {
           </div>
         </TabsList>
 
-        <TabsContent value="logical">Make changes to your account here.</TabsContent>
-        <TabsContent value="physical">Change your password here.</TabsContent>
+        <TabsContent value="logical" className="w-full flex items-center justify-center">Logic View Here</TabsContent>
+        <TabsContent value="physical" className="w-full flex items-center justify-center">Physical View Here.</TabsContent>
       </Tabs>
   );
 }
