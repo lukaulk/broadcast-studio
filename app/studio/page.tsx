@@ -9,9 +9,8 @@ export const metadata = {
 };
 export default function Studio() {
   return (
-    <div className="flex flex-col h-dvh w-full bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
+    <div className="flex flex-col h-dvh w-full min-w-dvh bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
       <Header />
-
       <div className="flex flex-1 w-full">
         <OptionBar />
         <SideBar />

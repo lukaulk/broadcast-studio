@@ -75,7 +75,6 @@ export default function OptionBar() {
             </button>
           </div>
         </TabsList>
-
        
         <Minimap margin={5} />
         <TabsContent value="logical" className="w-full flex items-center justify-center">Logic View Here
