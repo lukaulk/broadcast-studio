@@ -8,6 +8,9 @@ export default function ElementBar() {
         
           <div className="flex items-center min-w-20">
            <Component icon="/dvc/tv.png" name="TV" type="End Device"/>
+           <Component icon="/dvc/tv.png" name="TV" type="End Device"/>
+           <Component icon="/dvc/tv.png" name="TV" type="End Device"/>
+    
 
             <div className="w-12 h-12 bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] rounded-md flex items-center justify-center hover:bg-[var(--bsui-active)] active:scale-95 cursor-pointer">
               <svg
