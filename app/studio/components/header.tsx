@@ -23,8 +23,8 @@ const MENU_DATA = {
       "Export",
       "separator",
       "Recent Projects",
-      "Exit"
-    ]
+      "Exit",
+    ],
   },
   edit: {
     label: "Edit",
@@ -39,8 +39,8 @@ const MENU_DATA = {
       "separator",
       "Select All",
       "Find",
-      "Replace"
-    ]
+      "Replace",
+    ],
   },
   view: {
     label: "View",
@@ -55,8 +55,8 @@ const MENU_DATA = {
       "Rulers",
       "separator",
       "Theme",
-      "Preferences"
-    ]
+      "Preferences",
+    ],
   },
   nodes: {
     label: "Nodes",
@@ -72,8 +72,8 @@ const MENU_DATA = {
       "Disconnect Nodes",
       "separator",
       "Node Properties",
-      "Node Library"
-    ]
+      "Node Library",
+    ],
   },
   hierarchy: {
     label: "Hierarchy",
@@ -89,8 +89,8 @@ const MENU_DATA = {
       "Sort by Date",
       "separator",
       "Filter",
-      "Search"
-    ]
+      "Search",
+    ],
   },
   window: {
     label: "Window",
@@ -108,12 +108,12 @@ const MENU_DATA = {
       "Audio Mixer",
       "separator",
       "Reset Layout",
-      "Save Layout"
-    ]
-  }
+      "Save Layout",
+    ],
+  },
 };
+const MENU_ORDER: MenuKey[] = ["file", "edit", "view", "nodes", "hierarchy", "window"];
 
-const MENU_ORDER = ["file", "edit", "view", "nodes", "hierarchy", "window"];
 
 const STYLES = {
   container: "flex h-10 w-full items-center bg-[var(--bsui-gray-1)] text-[var(--bsui-gray-0)]",
@@ -121,59 +121,56 @@ const STYLES = {
     container: "flex items-center bs-logo mr-3 overflow-hidden flex-shrink-0",
     image: "ml-4",
     textDesktop: "ml-2 text-md font-semibold hidden sm:inline",
-    textMobile: "ml-2 text-md font-semibold sm:hidden"
+    textMobile: "ml-2 text-md font-semibold sm:hidden",
   },
   desktop: {
     container: "hidden md:flex items-center space-x-1 ml-2 flex-1 overflow-x-auto",
-    button: "flex cursor-pointer items-center rounded-md px-3 py-1 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)] whitespace-nowrap",
-    text: "text-sm"
+    button:
+      "flex cursor-pointer items-center rounded-md px-3 py-1 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)] whitespace-nowrap",
+    text: "text-sm",
   },
   mobile: {
     button: "md:hidden flex items-center ml-auto mr-4",
-    hamburger: "flex cursor-pointer items-center rounded-md p-1 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)]",
-    overlay: "absolute top-10 left-0 right-0 bg-[var(--bsui-gray-2)] border-b border-[var(--bsui-border)] z-50 md:hidden",
+    hamburger:
+      "flex cursor-pointer items-center rounded-md p-1 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)]",
+    overlay:
+      "absolute top-10 left-0 right-0 bg-[var(--bsui-gray-2)] border-b border-[var(--bsui-border)] z-50 md:hidden",
     container: "flex flex-col",
-    menuButton: "w-full text-left px-4 py-2 text-sm hover:bg-[var(--bsui-active)]"
+    menuButton: "w-full text-left px-4 py-2 text-sm hover:bg-[var(--bsui-active)]",
   },
   dropdown: {
-    content: "bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] text-[var(--bsui-gray-0)] rounded-none",
-    contentMobile: "bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] text-[var(--bsui-gray-0)] rounded-none w-full",
-    separator: "bg-[var(--bsui-border)]"
-  }
+    content:
+      "bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] text-[var(--bsui-gray-0)] rounded-none",
+    contentMobile:
+      "bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] text-[var(--bsui-gray-0)] rounded-none w-full",
+    separator: "bg-[var(--bsui-border)]",
+  },
 };
+type MenuKey = keyof typeof MENU_DATA;
 
-function MenuDropdown({ menuKey, isDesktop = true }) {
+function MenuDropdown({ menuKey, isDesktop = true }: { menuKey: MenuKey; isDesktop?: boolean }) {
   const menu = MENU_DATA[menuKey];
-  
+
   return (
     <DropdownMenu key={menuKey}>
       <DropdownMenuTrigger asChild>
-        <button 
+        <button
           type="button"
           className={isDesktop ? STYLES.desktop.button : STYLES.mobile.menuButton}
         >
-          <span className={isDesktop ? STYLES.desktop.text : undefined}>
-            {menu.label}
-          </span>
+          <span className={isDesktop ? STYLES.desktop.text : undefined}>{menu.label}</span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent 
+      <DropdownMenuContent
         className={isDesktop ? STYLES.dropdown.content : STYLES.dropdown.contentMobile}
       >
-        {menu.items.map((item:string , index:number) => {
+        {menu.items.map((item: string) => {
           if (item === "separator") {
             return (
-              <DropdownMenuSeparator 
-                key={`${menuKey}-sep-${index}`} 
-                className={STYLES.dropdown.separator} 
-              />
+              <DropdownMenuSeparator key={`${menuKey}-sep`} className={STYLES.dropdown.separator} />
             );
           }
-          return (
-            <DropdownMenuItem key={`${menuKey}-${index}`}>
-              {item}
-            </DropdownMenuItem>
-          );
+          return <DropdownMenuItem key={`${menuKey}-${item}`}>{item}</DropdownMenuItem>;
         })}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -184,34 +181,28 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(prev => !prev);
+    setMobileMenuOpen((prev) => !prev);
   };
 
   return (
     <div className={STYLES.container}>
       {/* Logo Section */}
       <div className={STYLES.logo.container}>
-        <Image 
-          src="/favicon.png" 
-          alt="Logo" 
-          width={34} 
-          height={34} 
-          className={STYLES.logo.image} 
-        />
+        <Image src="/favicon.png" alt="Logo" width={34} height={34} className={STYLES.logo.image} />
         <span className={STYLES.logo.textDesktop}>Broadcast Studio</span>
         <span className={STYLES.logo.textMobile}>BS</span>
       </div>
 
       {/* Desktop Menu */}
       <div className={STYLES.desktop.container}>
-        {MENU_ORDER.map(menuKey => (
+        {MENU_ORDER.map((menuKey) => (
           <MenuDropdown key={`desktop-${menuKey}`} menuKey={menuKey} isDesktop={true} />
         ))}
       </div>
 
       {/* Mobile Menu Button */}
       <div className={STYLES.mobile.button}>
-        <button 
+        <button
           type="button"
           onClick={toggleMobileMenu}
           className={STYLES.mobile.hamburger}
@@ -225,7 +216,7 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className={STYLES.mobile.overlay}>
           <div className={STYLES.mobile.container}>
-            {MENU_ORDER.map(menuKey => (
+            {MENU_ORDER.map((menuKey) => (
               <MenuDropdown key={`mobile-${menuKey}`} menuKey={menuKey} isDesktop={false} />
             ))}
           </div>
