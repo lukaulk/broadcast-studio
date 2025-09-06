@@ -9,11 +9,11 @@ export default function ElementBar() {
         <div className="flex items-center min-w-20">
           <div className="flex space-x-4 items-center">
             <Component icon="/dvc/tv.png" name="TV" type="End Device" />
-            <Component icon="/dvc/pc.png" name="TV" type="End Device" />
-            <Component icon="/dvc/Monitor.png" name="TV" type="End Device" />
-            <Component icon="/dvc/router.png" name="TV" type="Wireless Device" />
-            <Component icon="/dvc/Switch.png" name="TV" type="Connect Device" />
-            <Component icon="/dvc/Desktop.png" name="TV" type="End Device" />
+            <Component icon="/dvc/pc.png" name="PC" type="End Device" />
+            <Component icon="/dvc/Monitor.png" name="Monitor" type="End Device" />
+            <Component icon="/dvc/router.png" name="Router" type="Wireless Device" />
+            <Component icon="/dvc/Switch.png" name="Switch" type="Connect Device" />
+            <Component icon="/dvc/Desktop.png" name="Desktop" type="End Device" />
             <div className="w-12 h-12 bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] rounded-md flex items-center justify-center hover:bg-[var(--bsui-active)] active:scale-95 cursor-pointer">
             <svg
               aria-hidden="true"
