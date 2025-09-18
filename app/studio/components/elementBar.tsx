@@ -9,9 +9,12 @@ export default function ElementBar() {
             <Component icon="/dvc/laptop.png" name="PC" type="End Device" />
             <Component icon="/dvc/router.png" name="Router" type="Wireless Device" />
             <Component icon="/dvc/switch.png" name="Switch" type="Connect Device" />
-            <Component icon="/dvc/server.png" name="Server" type="End Device" />
+            <Component icon="/dvc/server.png" name="Server" type="End Device" className="scale-130"/>
             <Component icon="/dvc/smartphone.png" name="Smartphone" type="End Device" />
+            <Component icon="/dvc/internet.png" name="Cloud" type="End Device" />
             <Component icon="/dvc/desktop.png" name="Desktop" type="End Device" />
+            <Component icon="/dvc/printer.png" name="Printer" type="End Device" />
+
             
             <div className="w-12 h-12 bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] rounded-md flex items-center justify-center hover:bg-[var(--bsui-active)] active:scale-95 cursor-pointer">
             <svg
