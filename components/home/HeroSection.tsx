@@ -26,18 +26,18 @@ export default function HeroSection() {
           </span>
         </div>
 
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-white sm:bg-gradient-to-r sm:from-white sm:via-gray-100 sm:to-cyan-400 sm:bg-clip-text sm:text-transparent">
+        <h1 className="relative text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-white sm:bg-gradient-to-r sm:from-white sm:via-gray-100 sm:to-cyan-400 sm:bg-clip-text sm:text-transparent">
           Powerful App
           <br />
-          <span className="relative">
+          <span className="">
             Network Emulator
             <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transform rotate-1" />
           </span>
         </h1>
 
         <p className="text-xl sm:text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-          An platform for studying computer networks, network simulation, and hands-on learning with
-          integrated
+          An platform for studying computer networks, network simulation, and
+          hands-on learning with integrated
           <br />
           <span className="text-cyan-400">artificial intelligence.</span>
         </p>

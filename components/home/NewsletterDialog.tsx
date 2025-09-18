@@ -1,4 +1,3 @@
-import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,12 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Mail } from "lucide-react";
+import { useId, useState } from "react";
 
 export default function FeatureSubscribeDialog({
   featureName = "New Feature",
   triggerText = "Notify me",
-  buttonTrigger
+  buttonTrigger,
 }: {
   featureName?: string;
   triggerText?: string;
@@ -61,20 +61,31 @@ export default function FeatureSubscribeDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) reset(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) reset();
+      }}
+    >
       <DialogTrigger asChild>
-        {buttonTrigger ? buttonTrigger :
-        <Button className="rounded-2xl px-4" variant="default">
-          <Mail className="mr-2 h-4 w-4" /> {triggerText}
-        </Button>
-        }
-        
+        {buttonTrigger ? (
+          buttonTrigger
+        ) : (
+          <Button className="rounded-2xl px-4" variant="default">
+            <Mail className="mr-2 h-4 w-4" /> {triggerText}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="text-xl">Get notified when we launch</DialogTitle>
+          <DialogTitle className="text-xl">
+            Get notified when we launch
+          </DialogTitle>
           <DialogDescription>
-            Subscribe to receive an email when <span className="font-medium">{featureName}</span> becomes available in Broadcast Studio.
+            Subscribe to receive an email when{" "}
+            <span className="font-medium">{featureName}</span> becomes available
+            in Broadcast Studio.
           </DialogDescription>
         </DialogHeader>
 
@@ -83,7 +94,10 @@ export default function FeatureSubscribeDialog({
             <CheckCircle2 className="mt-0.5 h-5 w-5" />
             <div>
               <p className="font-medium">You&apos;re on the list!</p>
-              <p className="text-sm text-muted-foreground">We&apos;ll email <span className="font-semibold">{email}</span> as soon as the feature is live.</p>
+              <p className="text-sm text-muted-foreground">
+                We&apos;ll email <span className="font-semibold">{email}</span>{" "}
+                as soon as the feature is live.
+              </p>
             </div>
           </div>
         ) : (
@@ -102,11 +116,20 @@ export default function FeatureSubscribeDialog({
               />
               {error && <p className="text-sm text-destructive">{error}</p>}
             </div>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
+            <DialogFooter className="">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setOpen(false)}
+                className="cursor-pointer"
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading} className="rounded-2xl">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="rounded-2xl cursor-pointer"
+              >
                 {loading ? "Subscribing…" : "Subscribe"}
               </Button>
             </DialogFooter>
