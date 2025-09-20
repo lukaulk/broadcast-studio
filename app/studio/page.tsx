@@ -16,14 +16,13 @@ export default function Studio() {
     <div className="flex flex-col h-dvh w-full min-w-dvh bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
       <Header />
       <ResizablePanelGroup direction="vertical" className="flex-1 w-full select-none">
-        {/* OptionBar and SideBar */}
         <ResizablePanel className="flex w-full">
           <ResizablePanelGroup direction="horizontal" className="w-full h-full">
-            <ResizablePanel>
+            <ResizablePanel className="flex w-full h-vh">
               <OptionBar />
             </ResizablePanel>
-            <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] w-1 cursor-col-resize" />
-            <ResizablePanel defaultSize={20} minSize={10} className="flex">
+            <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] hover:w-1 w-[1px] cursor-col-resize" />
+            <ResizablePanel defaultSize={20} minSize={13} maxSize={21} className="flex">
               <SideBar />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -31,7 +30,7 @@ export default function Studio() {
         
           <ToolBar />
 
-        <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] h-1 cursor-row-resize" />
+        <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] h-[1px] hover:h-2 cursor-row-resize" />
         
         {/* Painel inferior com ElementBar */}
         <ResizablePanel

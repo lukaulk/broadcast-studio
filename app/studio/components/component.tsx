@@ -11,7 +11,7 @@ interface ComponentProps {
 export default function Component({ name, type, icon, description, className }: ComponentProps) {
   return (
     <div
-      className={`group relative flex items-center justify-center w-40 h-40 hover:scale-105 transition-transform rounded-md overflow-hidden cursor-grab active:opacity-90 active:border active:border-blue-500 ${className}`}
+      className={`group relative flex items-center justify-center w-40 h-40 hover:scale-105 transition-transform rounded-md overflow-hidden  active:opacity-90 active:border active:border-blue-500 ${className}`}
       title={description}
     >
       {icon && (
