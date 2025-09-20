@@ -5,7 +5,7 @@ import Minimap from "./minimap";
 
 export default function OptionBar() {
   return (
-  <Tabs defaultValue="logical" className="w-full relative rounded-none">
+  <Tabs defaultValue="logical" className="w-full h-vh relative rounded-none">
         <TabsList className="flex h-17 rounded-none border-b border-b-[var(--bsui-border)] w-full justify-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)] shadow-md">
           <div className="flex space-x-2 ml-4">
             <TabsTrigger
@@ -77,9 +77,9 @@ export default function OptionBar() {
         </TabsList>
        
         <Minimap margin={5} />
-        <TabsContent value="logical" className="w-full flex items-center justify-center">Logic View Here
+        <TabsContent value="logical" className="w-full h-dvh flex items-center justify-center">Logic View Here
         </TabsContent>
-        <TabsContent value="physical" className="w-full flex items-center justify-center">Physical View Here.</TabsContent>
+        <TabsContent value="physical" className="w-full h-dvh flex items-center justify-center">Physical View Here.</TabsContent>
       </Tabs>
   );
 }

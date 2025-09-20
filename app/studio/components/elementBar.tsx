@@ -1,4 +1,3 @@
-"use client";
 
 import Component from "./component";
 
@@ -6,8 +5,7 @@ import Component from "./component";
 export default function ElementBar() {
     
   return (
-    <div className="flex w-full justify-center select-none">
-      <div className="flex min-h-40 max-h-45 rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)] shadow-md">
+      <div className="">
         <div className="flex items-center min-w-20">
           <div className="flex space-x-4 items-center">
             <Component icon="/dvc/laptop.png" name="PC" type="End Device" />
@@ -15,7 +13,7 @@ export default function ElementBar() {
             <Component icon="/dvc/switchs.png" name="Switch" type="Connect Device" />
             <Component icon="/dvc/server.png" name="Server" type="End Device" className="scale-130"/>
             <Component icon="/dvc/smartphone.png" name="Smartphone" type="End Device" />
-            <Component icon="/dvc/internet.png" name="Cloud" type="End Device" />
+            <Component icon="/dvc/internet.png" name="Cloud" type="End Device" className="scale-125"/>
             <Component icon="/dvc/desktop.png" name="Desktop" type="End Device" />
             <Component icon="/dvc/printer.png" name="Printer" type="End Device" className="scale-130" />
 
@@ -36,6 +34,5 @@ export default function ElementBar() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

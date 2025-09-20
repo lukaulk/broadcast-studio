@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 
 export default function Studio() {
   return (
-    <div className="flex h-vh w-sm border-l border-l-[var(--bsui-border)] justify-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)]">
+    <div className="flex h-vh min-w-s[300px] w-full justify-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)]">
       <div className="flex items-center border-b border-b-[var(--bsui-border)] w-full justify-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)] shadow-md h-17">
         <span className="text-md font-semibold ml-4">Hierarchy</span>
         <Input type="text" className="mx-4 w-30 border-[var(--bsui-border)]" placeholder="Search nodes.."/>
