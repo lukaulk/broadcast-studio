@@ -1,14 +1,17 @@
-import Header from "./components/header";
 import OptionBar from "./components/optionBar";
 import SideBar from "./components/sideBar";
+import Header from "./components/header";
 import StatusBar from "./components/statusBar";
 import ToolBar from "./components/toolBar";
 import ElementBar from "./components/elementBar";
+
+
 export const metadata = {
   title: "Broadcast Studio",
   description: "A simple broadcast studio application.",
 };
 export default function Studio() {
+ 
   return (
     <div className="flex flex-col h-dvh w-full min-w-dvh bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
       <Header />
