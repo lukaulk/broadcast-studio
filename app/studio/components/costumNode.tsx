@@ -1,27 +1,51 @@
 import React from "react";
 import Image from "next/image";
-import { NodeProps, Handle, Position } from "@xyflow/react";
+import { NodeProps, Handle, Position, Background } from "@xyflow/react";
 
 export interface ImageLabelNodeData {
   label: string;
   image: string;
+  dvctype?: string;
+  styles?: string;
 }
 
 const CustomNode: React.FC<NodeProps<ImageLabelNodeData>> = ({ data }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-2 ">
+    <div className="flex flex-col items-center justify-center">
       <Image
         src={data.image}
         alt={data.label}
-        width={48}
-        height={48}
-        className="w-12 h-12 object-contain mb-2"
+        width={80}
+        height={80}
+        className={`w-30 h-30 object-fit drop-shadow-lg drop-shadow-black/20 ${data.styles} `}
       />
-      <span className="text-sm font-medium text-center">{data.label}</span>
+      <div className="-mt-4 flex flex-col items-center justify-center">
+        <span className="text-[15px]">{data.label}</span>
+        <span className="text-[10px] font-semibold">{data.dvctype || "End Device"}</span>
+      </div>
 
-      {/* Optional handles if you want to connect this node */}
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{
+          border: "none",
+          left: "20px",
+          opacity: 0,
+          borderRadius: 0,
+          height: "100%",
+          width: "20%",
+        }}
+      />
+      <Handle type="source" position={Position.Right}
+        style={{
+          border: "none",
+          right: "20px",
+          opacity: 0,
+          borderRadius: 0,
+          height: "100%",
+          width: "20%",
+        }}
+      />
     </div>
   );
 };

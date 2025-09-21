@@ -6,29 +6,39 @@ import CustomNode, { ImageLabelNodeData } from "../costumNode"; // ajustar camin
 
 // --- edges
 const defaultEdges: Edge[] = [
-  { id: "e1-2", source: "1", target: "2" },
-  { id: "e2-3", source: "2", target: "3", animated: true },
+  {
+    id: "e1-2",
+    source: "1",
+    target: "2"
+  },
+  {
+    id: "e2-3",
+    source: "2",
+    target: "3",
+    style: { stroke: "#008aed", strokeWidth: 2 },
+    animated: true,
+    reconnectable: true,
+  },
 ];
 
 // --- nodes
 const defaultNodes: Node<any>[] = [
   {
     id: "1",
-    type: "input",
-    data: { label: "Input Node" },
+    type: "customNode",
+    data: { label: "Printer", image: "/dvc/printer.png", styles: "scale-145" },
     position: { x: 250, y: 25 },
   },
   {
-    
     id: "2",
-    type: "customNode", 
+    type: "customNode",
     position: { x: 10, y: 125 },
-    data: { label: "PC", image: "/dvc/desktop.png" },
+    data: { label: "Desktop", image: "/dvc/desktop.png" },
   },
   {
     id: "3",
-    type: "output",
-    data: { label: "Output Node" },
+    type: "customNode",
+    data: { label: "Switch", image: "/dvc/switch.png", dvctype: "Connect Device" },
     position: { x: 250, y: 250 },
   },
 ];
@@ -46,7 +56,6 @@ function Flow() {
         defaultEdges={defaultEdges}
         nodeTypes={nodeTypes}
         fitView
-        colorMode="dark"
       >
         <MiniMap
           nodeStrokeWidth={1}
