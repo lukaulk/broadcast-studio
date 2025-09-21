@@ -1,21 +1,17 @@
-// Flow.tsx
-import React, { ComponentType } from "react";
-import { MiniMap, ReactFlowProvider, ReactFlow } from "@xyflow/react";
-import type { Edge, Node, NodeProps } from "@xyflow/react";
-import CustomNode, { CustomNodeData } from "../costumNode"; // keep filename consistent
+import React from "react";
+import { MiniMap, ReactFlow, ReactFlowProvider, Node, Edge, NodeProps } from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
 import ToolBar from "../toolBar";
+import CustomNode, { ImageLabelNodeData } from "../costumNode"; // ajustar caminho se necessário
 
-// Node data shape (reuse CustomNodeData or define a shared one)
-export type NodeData = CustomNodeData; // reuse exported interface
-
-// edges array — Edge[] is correct
+// --- edges
 const defaultEdges: Edge[] = [
   { id: "e1-2", source: "1", target: "2" },
   { id: "e2-3", source: "2", target: "3", animated: true },
 ];
 
-// nodes array: Node<NodeData>[]
-const defaultNodes: Node<NodeData>[] = [
+// --- nodes
+const defaultNodes: Node<any>[] = [
   {
     id: "1",
     type: "input",
@@ -23,9 +19,11 @@ const defaultNodes: Node<NodeData>[] = [
     position: { x: 250, y: 25 },
   },
   {
+    
     id: "2",
-    data: { label: <div>Default Node</div> },
-    position: { x: 100, y: 125 },
+    type: "customNode", 
+    position: { x: 10, y: 125 },
+    data: { label: "PC", image: "/dvc/desktop.png" },
   },
   {
     id: "3",
@@ -33,28 +31,22 @@ const defaultNodes: Node<NodeData>[] = [
     data: { label: "Output Node" },
     position: { x: 250, y: 250 },
   },
-  {
-    id: "4",
-    type: "customNode",
-    data: { label: "Custom", image: "/avatar.png" },
-    position: { x: 400, y: 150 },
-  },
 ];
 
-// nodeTypes typed so TS knows each component expects NodeProps<NodeData>
-const nodeTypes: Record<string, ComponentType<NodeProps<NodeData>>> = {
+// --- nodeTypes
+const nodeTypes: Record<string, React.FC<NodeProps<any>>> = {
   customNode: CustomNode,
 };
 
-export default function Flow() {
+function Flow() {
   return (
     <ReactFlowProvider>
       <ReactFlow
         defaultNodes={defaultNodes}
         defaultEdges={defaultEdges}
-        fitView
-        style={{ width: "100%", height: "100%" }}
         nodeTypes={nodeTypes}
+        fitView
+        colorMode="dark"
       >
         <MiniMap
           nodeStrokeWidth={1}
@@ -70,3 +62,5 @@ export default function Flow() {
     </ReactFlowProvider>
   );
 }
+
+export default Flow;
