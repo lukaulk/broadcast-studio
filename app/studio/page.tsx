@@ -12,15 +12,18 @@ export const metadata = {
 
 export default function Studio() {
   return (
-    <ReactFlowProvider>
       <div className="flex flex-col h-dvh w-full min-w-dvh bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
         <Header />
         <ResizablePanelGroup direction="vertical" className="flex-1 w-full select-none">
           <ResizablePanel className="flex w-full">
             <ResizablePanelGroup direction="horizontal" className="w-full h-full">
+
               <ResizablePanel className="flex w-full h-vh">
+                <ReactFlowProvider>
                 <OptionBar />
+                </ReactFlowProvider>
               </ResizablePanel>
+
               <ResizableHandle withHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] hover:w-1 w-[1px] cursor-col-resize" />
               <ResizablePanel defaultSize={20} minSize={13} maxSize={21} className="flex">
                 <SideBar />
@@ -39,6 +42,5 @@ export default function Studio() {
         </ResizablePanelGroup>
         <StatusBar />
       </div>
-      </ReactFlowProvider>
   );
 }

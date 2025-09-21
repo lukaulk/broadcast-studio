@@ -6,16 +6,23 @@
     "indentWidth": 2,
     "lineWidth": 100
   },
-    "linter": {
+  "linter": {
     "enabled": true,
     "rules": {
+      "style": {
+        "importOrder": "off"
+      },
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off"
       }
     }
   },
-  "assist": {"actions": {"source": {"organizeImports":"on" }}
- }
-  
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  }
 }
