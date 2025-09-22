@@ -1,6 +1,6 @@
 "use client";
 
-import { useReactFlow, useStore } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
 import { Hand, MousePointer, Move, NotebookPen, TagIcon, ZoomIn } from "lucide-react";
 
 
@@ -8,21 +8,11 @@ export default function ToolBar() {
   // agrupa as funções numa só chamada
   const { fitView, setNodes } = useReactFlow();
 
-  // seleciona nodes que têm n.selected === true
-  const selectedNodes = useStore((s) => s.nodes.filter((n) => !!(n as any).selected));
-
   const addLabel = () => {
     const label = prompt("Digite a etiqueta:");
     if (!label) return;
 
-    setNodes((nds) =>
-      nds.map((n) =>
-        // atualiza apenas os nodes selecionados (propriedade selected === true)
-        (n as any).selected
-          ? { ...n, data: { ...(n.data ?? {}), label } }
-          : n
-      )
-    );
+    setNodes((nds) => nds.map((n) => (n.selected ? { ...n, data: { ...(n.data ?? {}), label } } : n)));
   };
 
   return (

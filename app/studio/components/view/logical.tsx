@@ -4,7 +4,7 @@ import React from "react";
 import { MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import type { Node, Edge } from "@xyflow/react";
 import ToolBar from "../toolBar";
-import CustomNode, { ImageLabelNodeData } from "../costumNode";
+import CustomNode from "../costumNode";
 
 // --- edges
 const defaultEdges: Edge[] = [
@@ -45,7 +45,7 @@ const defaultNodes: Node[] = [
 ];
 
 // --- nodeTypes
-const nodeTypes: Record<string, React.ComponentType<any>> = {
+const nodeTypes = {
   customNode: CustomNode,
 };
 
