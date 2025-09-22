@@ -1,8 +1,8 @@
 "use client";
 import "@xyflow/react/dist/style.css";
 import React from "react";
-import { MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
-import type { Node, Edge } from "@xyflow/react";
+import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge } from "@xyflow/react";
+import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
 import CustomNode from "../costumNode";
 
@@ -34,12 +34,12 @@ const defaultNodes: Node[] = [
     id: "2",
     type: "customNode",
     position: { x: 10, y: 125 },
-    data: { label: "Desktop", image: "/dvc/desktop.png" },
+    data: { label: "Desktop", image: "/dvc/svg/desktop.svg" },
   },
   {
     id: "3",
     type: "customNode",
-    data: { label: "Switch", image: "/dvc/switch.png", dvctype: "Connect Device" },
+    data: { label: "Switch", image: "/dvc/svg/switchs.svg", dvctype: "Connect Device" },
     position: { x: 250, y: 250 },
   },
 ];
@@ -50,26 +50,32 @@ const nodeTypes = {
 };
 
 function Flow() {
+  const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
+
+  const onConnect = (connection: Connection) => setEdges((eds) => addEdge(connection, eds));
+
   return (
-    <ReactFlowProvider>
-      <ReactFlow
-        nodes={defaultNodes}
-        edges={defaultEdges}
-        nodeTypes={nodeTypes}
-        fitView
-      >
-        <MiniMap
-          nodeStrokeWidth={1}
-          className="border-2 p-0 m-0 rounded"
-          position="bottom-right"
-          bgColor="#1A1B1DCC"
-          maskColor="#383B3EAA"
-          zoomable
-          pannable
-        />
-        <ToolBar />
-      </ReactFlow>
-    </ReactFlowProvider>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      nodeTypes={nodeTypes}
+      fitView
+    >
+      <MiniMap
+        nodeStrokeWidth={1}
+        className="border-2 p-0 m-0 rounded"
+        position="bottom-right"
+        bgColor="#1A1B1DCC"
+        maskColor="#383B3EAA"
+        zoomable
+        pannable
+      />
+      <ToolBar />
+    </ReactFlow>
   );
 }
 
