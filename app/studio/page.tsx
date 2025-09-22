@@ -19,8 +19,8 @@ function isDesktopDevice(userAgent: string | null) {
   return !mobileRegex.test(userAgent);
 }
 
-export default function Studio() {
-  const headersList = headers();
+export default async function Studio() {
+  const headersList = await headers(); // <-- add await
   const userAgent = headersList.get("user-agent");
 
   if (!isDesktopDevice(userAgent)) {
@@ -35,9 +35,9 @@ export default function Studio() {
     <div className="flex flex-col h-dvh w-full min-w-dvh bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
       <Header />
       <ResizablePanelGroup direction="vertical" className="flex-1 w-full select-none">
-        <ResizablePanel className="flex w-full">
+        <ResizablePanel defaultSize={72} className="flex w-full">
           <ResizablePanelGroup direction="horizontal" className="w-full h-full">
-            <ResizablePanel className="flex w-full h-vh">
+            <ResizablePanel defaultSize={80} className="flex w-full h-vh">
               <ReactFlowProvider>
                 <OptionBar />
               </ReactFlowProvider>

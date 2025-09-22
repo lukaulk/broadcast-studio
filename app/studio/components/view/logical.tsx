@@ -1,8 +1,10 @@
-import React from "react";
-import { MiniMap, ReactFlow, ReactFlowProvider, Node, Edge, NodeProps } from "@xyflow/react";
+"use client";
 import "@xyflow/react/dist/style.css";
+import React from "react";
+import { MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
+import type { Node, Edge } from "@xyflow/react";
 import ToolBar from "../toolBar";
-import CustomNode, { ImageLabelNodeData } from "../costumNode"; // ajustar caminho se necessário
+import CustomNode, { ImageLabelNodeData } from "../costumNode";
 
 // --- edges
 const defaultEdges: Edge[] = [
@@ -21,12 +23,11 @@ const defaultEdges: Edge[] = [
   },
 ];
 
-// --- nodes
-const defaultNodes: Node<any>[] = [
+const defaultNodes: Node[] = [
   {
     id: "1",
     type: "customNode",
-    data: { label: "Printer", image: "/dvc/printer.png", styles: "scale-145" },
+    data: { label: "Printer", image: "/dvc/svg/printer.svg" },
     position: { x: 250, y: 25 },
   },
   {
@@ -44,7 +45,7 @@ const defaultNodes: Node<any>[] = [
 ];
 
 // --- nodeTypes
-const nodeTypes: Record<string, React.FC<NodeProps<any>>> = {
+const nodeTypes: Record<string, React.ComponentType<any>> = {
   customNode: CustomNode,
 };
 
@@ -52,8 +53,8 @@ function Flow() {
   return (
     <ReactFlowProvider>
       <ReactFlow
-        defaultNodes={defaultNodes}
-        defaultEdges={defaultEdges}
+        nodes={defaultNodes}
+        edges={defaultEdges}
         nodeTypes={nodeTypes}
         fitView
       >

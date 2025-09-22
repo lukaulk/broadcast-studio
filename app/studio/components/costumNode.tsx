@@ -1,27 +1,29 @@
+"use client";
 import React from "react";
 import Image from "next/image";
-import { NodeProps, Handle, Position, Background } from "@xyflow/react";
+import { NodeProps, Handle, Position } from "@xyflow/react";
 
-export interface ImageLabelNodeData {
+export interface ImageLabelNodeData extends Record<string, unknown> {
   label: string;
   image: string;
   dvctype?: string;
   styles?: string;
 }
 
-const CustomNode: React.FC<NodeProps<ImageLabelNodeData>> = ({ data }) => {
+const CustomNode: React.FC<NodeProps> = ({ data }) => {
+  const d = data as ImageLabelNodeData;
   return (
     <div className="flex flex-col items-center justify-center">
       <Image
-        src={data.image}
-        alt={data.label}
+        src={d.image}
+        alt={d.label}
         width={80}
         height={80}
-        className={`w-30 h-30 object-fit drop-shadow-lg drop-shadow-black/20 ${data.styles} `}
+        className={`w-30 h-30 object-fit drop-shadow-lg drop-shadow-black/20 ${d.styles || ''}`}
       />
       <div className="-mt-4 flex flex-col items-center justify-center">
-        <span className="text-[15px]">{data.label}</span>
-        <span className="text-[10px] font-semibold">{data.dvctype || "End Device"}</span>
+        <span className="text-[15px]">{d.label}</span>
+        <span className="text-[10px] font-semibold">{d.dvctype || "End Device"}</span>
       </div>
 
       <Handle
