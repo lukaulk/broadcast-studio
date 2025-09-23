@@ -21,7 +21,7 @@ const CustomNode: React.FC<NodeProps> = ({ data }) => {
         height={80}
         className={`w-30 h-30 object-fit drop-shadow-lg drop-shadow-black/20 ${d.styles || ''}`}
       />
-      <div className="-mt-4 flex flex-col items-center justify-center">
+      <div className="-mt-2 flex flex-col items-center justify-center">
         <span className="text-[15px]">{d.label}</span>
         <span className="text-[10px] font-semibold">{d.dvctype || "End Device"}</span>
       </div>

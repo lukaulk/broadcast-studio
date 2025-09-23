@@ -42,6 +42,39 @@ const defaultNodes: Node[] = [
     data: { label: "Switch", image: "/dvc/svg/switchs.svg", dvctype: "Connect Device" },
     position: { x: 250, y: 250 },
   },
+  {
+    id: "4",
+    type: "customNode",
+    data: { label: "Router", image: "/dvc/svg/router.svg", dvctype: "Wireless Device" },
+    position: { x: 150, y: 200 },
+  }, {
+    id: "5",
+    type: "customNode",
+    data: { label: "Laptop", image: "/dvc/svg/laptop.svg", dvctype: "End Device" },
+    position: { x: 70, y: 80 },
+    
+  },
+  {
+    id: "6",
+    type: "customNode",
+    data: { label: "Smartphone", image: "/dvc/svg/smartphone.svg", dvctype: "End Device" },
+    position: { x: 110, y: 100 },
+    
+  },
+  {
+    id: "7",
+    type: "customNode",
+    data: { label: "Cloud", image: "/dvc/svg/cloud.svg", dvctype: "End Device" },
+    position: { x: 190, y: 100 },
+    
+  },
+  {
+    id: "8",
+    type: "customNode",
+    data: { label: "Server", image: "/dvc/svg/Server.svg", dvctype: "Internet" },
+    position: { x: 200, y: 10 },
+    
+  }
 ];
 
 // --- nodeTypes
@@ -58,7 +91,6 @@ function Flow() {
   return (
     <ReactFlow
       nodes={nodes}
-      edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
