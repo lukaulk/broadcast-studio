@@ -49,11 +49,13 @@ export default async function Studio() {
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
-        <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] h-[1px] hover:h-2 cursor-row-resize" />
+
+        <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] h-[1px] hover:h-4 cursor-row-resize" />
+        
         <ResizablePanel
-          minSize={20}
-          defaultSize={28}
-          maxSize={30}
+          minSize={19}
+          defaultSize={20}
+          maxSize={25}
           className="flex rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)] shadow-md"
         >
           <ElementBar />
