@@ -10,16 +10,16 @@ export interface ImageLabelNodeData extends Record<string, unknown> {
   styles?: string;
 }
 
-const CustomNode: React.FC<NodeProps> = ({ data }) => {
+const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
   const d = data as ImageLabelNodeData;
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className={`flex flex-col items-center justify-center ${selected ? "ring-2 ring-[#008AED] rounded-md" : ""}`}>
       <Image
         src={d.image}
         alt={d.label}
         width={80}
         height={80}
-        className={`w-30 h-30 object-fit drop-shadow-lg drop-shadow-black/20 ${d.styles || ''}`}
+        className={`w-30 h-30 object-fit drop-shadow-lg ${selected ? "drop-shadow-[0_0_0.75rem_#1E90FF]" : "drop-shadow-black/20"} ${d.styles || ''}`}
       />
       <div className="-mt-2 flex flex-col items-center justify-center">
         <span className="text-[15px]">{d.label}</span>

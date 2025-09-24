@@ -4,19 +4,19 @@ import Component from "./component";
 
 export default function ElementBar() {
   const components = [
-    { icon: "/dvc/laptop.png", name: "PC", type: "End Device" },
-    { icon: "/dvc/router.png", name: "Router", type: "Wireless Device" },
-    { icon: "/dvc/switchs.png", name: "Switch", type: "Connect Device" },
-    { icon: "/dvc/server.png", name: "Server", type: "End Device", className: "scale-125" },
-    { icon: "/dvc/smartphone.png", name: "Smartphone", type: "End Device" },
-    { icon: "/dvc/internet.png", name: "Cloud", type: "End Device", className: "scale-125" },
-    { icon: "/dvc/desktop.png", name: "Desktop", type: "End Device" },
-    { icon: "/dvc/printer.png", name: "Printer", type: "End Device", className: "scale-125" },
+    { icon: "/dvc/svg/laptop.svg", name: "PC", type: "End Device" },
+    { icon: "/dvc/svg/router.svg", name: "Router", type: "Wireless Device" },
+    { icon: "/dvc/svg/switchs.svg", name: "Switch", type: "Connect Device" },
+    { icon: "/dvc/svg/server.svg", name: "Server", type: "End Device", className: "scale-125" },
+    { icon: "/dvc/svg/smartphone.svg", name: "Smartphone", type: "End Device" },
+    { icon: "/dvc/svg/cloud.svg", name: "Cloud", type: "End Device", className: "scale-125" },
+    { icon: "/dvc/svg/desktop.svg", name: "Desktop", type: "End Device" },
+    { icon: "/dvc/svg/printer.svg", name: "Printer", type: "End Device", className: "scale-125" },
   ];
 
   return (
     <div className="p-2">
-      <div className="flex items-center min-w-20">
+      <div className="flex items-center min-w-20 max-w-dvw overflow-x-scroll overflow-y-hidden">
         <div className="flex space-x-4 items-center">
           {components.map((component, index) => (
             <Component

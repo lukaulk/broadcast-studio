@@ -1,10 +1,11 @@
 "use client";
 import "@xyflow/react/dist/style.css";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge, useReactFlow } from "@xyflow/react";
 import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
 import CustomNode from "../costumNode";
+import { useStudio } from "../studioContext";
 
 // --- edges
 const defaultEdges: Edge[] = [
@@ -36,6 +37,10 @@ function Flow() {
   const { screenToFlowPosition } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");
+  const { setEditApiImpl } = useStudio();
+
+  // clipboard for copy/paste
+  const clipboardRef = useRef<Node[]>([]);
 
   // canvas drawing state
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -157,6 +162,59 @@ function Flow() {
     ctx.clearRect(0, 0, rect.width, rect.height);
     ctx.restore();
   };
+
+  // register edit API with header via context
+  useEffect(() => {
+    const getSelected = () => nodes.filter((n) => n.selected);
+
+    const copy = () => {
+      const selected = getSelected();
+      clipboardRef.current = selected.map((n) => ({ ...n, selected: false }));
+    };
+
+    const cut = () => {
+      const selectedIds = new Set(getSelected().map((n) => n.id));
+      clipboardRef.current = nodes.filter((n) => selectedIds.has(n.id)).map((n) => ({ ...n, selected: false }));
+      setNodes((nds) => nds.filter((n) => !selectedIds.has(n.id)));
+    };
+
+    const paste = () => {
+      if (!clipboardRef.current.length) return;
+      const offset = 20;
+      setNodes((nds) => {
+        const pasted: Node[] = clipboardRef.current.map((n) => {
+          const newId = String(nextIdRef.current++);
+          return {
+            ...n,
+            id: newId,
+            position: { x: n.position.x + offset, y: n.position.y + offset },
+            selected: true,
+          } as Node;
+        });
+        // deselect existing then add pasted selected
+        const cleared: Node[] = nds.map((n) => ({ ...n, selected: false } as Node));
+        return ([] as Node[]).concat(cleared, pasted);
+      });
+    };
+
+    const deleteSelected = () => {
+      const selectedIds = new Set(getSelected().map((n) => n.id));
+      if (selectedIds.size === 0) return;
+      setNodes((nds) => nds.filter((n) => !selectedIds.has(n.id)));
+    };
+
+    const selectAll = () => setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
+
+    setEditApiImpl({
+      copy,
+      cut,
+      paste,
+      deleteSelected,
+      selectAll,
+      hasSelection: () => nodes.some((n) => n.selected),
+      canPaste: () => clipboardRef.current.length > 0,
+    });
+  }, [nodes, setNodes, setEditApiImpl]);
 
   return (
     <ReactFlow

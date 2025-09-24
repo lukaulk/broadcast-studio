@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { memo, useState, useCallback } from "react";
+import { useStudio } from "./studioContext";
 import {
   DropdownMenuContent,
   DropdownMenu,
@@ -151,6 +152,31 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: {
 }) => {
   const menu = MENU_DATA[menuKey];
   let separatorCount = 0;
+  const studio = useStudio();
+
+  const handleItem = (item: string) => {
+    if (!studio) return;
+    const { editApi } = studio;
+    switch (item) {
+      case "Copy":
+        editApi.copy();
+        break;
+      case "Cut":
+        editApi.cut();
+        break;
+      case "Paste":
+        editApi.paste();
+        break;
+      case "Delete":
+        editApi.deleteSelected();
+        break;
+      case "Select All":
+        editApi.selectAll();
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -177,8 +203,16 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: {
               />
             );
           }
+          const isDisabled = (() => {
+            if (!studio) return false;
+            const { editApi } = studio;
+            if (item === "Copy" || item === "Cut" || item === "Delete") return !editApi.hasSelection();
+            if (item === "Paste") return !editApi.canPaste();
+            return false;
+          })();
+
           return (
-            <DropdownMenuItem key={`${menuKey}-${item}`}>
+            <DropdownMenuItem key={`${menuKey}-${item}`} onSelect={() => handleItem(item)} disabled={isDisabled}>
               {item}
             </DropdownMenuItem>
           );
@@ -192,6 +226,7 @@ MenuDropdown.displayName = "MenuDropdown";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const studio = useStudio();
 
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen(prev => !prev);
