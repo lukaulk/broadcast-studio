@@ -98,7 +98,7 @@ Contributions are always welcome! 🙌
 
 * Open an *issue* to report bugs or suggest improvements.
 * Submit a *pull request* for new features or fixes.
-
+* If you looking for the back-end, click here [BS-CORE](https://github.com/lukaulk/bs-core).
 ---
 
 ## 📜 License

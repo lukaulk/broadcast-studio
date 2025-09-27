@@ -229,13 +229,15 @@ function Flow() {
       selectionOnDrag={mode === "select"}
       nodesDraggable={mode === "select"}
       panOnDrag={mode === "move"}
+      panOnScroll={mode !== "pen"}
+      zoomOnScroll={mode !== "pen"}
       fitView
     >
       {/* Pen overlay canvas - only interactive in pen mode */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
         <canvas
           ref={canvasRef}
-          className={`${mode === "pen" ? "pointer-events-auto" : "pointer-events-none"}`}
+          className={`absolute inset-0 ${mode === "pen" ? "pointer-events-auto" : "pointer-events-none"}`}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
