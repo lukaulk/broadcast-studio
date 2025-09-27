@@ -24,14 +24,7 @@ const defaultEdges: Edge[] = [
   },
 ];
 
-const defaultNodes: Node[] = [
-  {
-    "id": "x2",
-    "type": "customNode",
-    "position": { "x": 0, "y": 125 },
-    "data": { "label": "Desktop", "image": "/dvc/svg/desktop.svg" }
-  }
-];
+const defaultNodes: Node[] = [];
 
 const nodeTypes = {
   customNode: CustomNode,

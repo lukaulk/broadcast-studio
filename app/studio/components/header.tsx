@@ -365,7 +365,6 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       Delete: () => studio.editApi.deleteSelected(),
       "Select All": () => studio.editApi.selectAll(),
     };
-
     const fn = commandMap[item];
     if (fn) fn();
   };
@@ -419,7 +418,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
         <DialogContent className={STYLES.dialog.content}>
           <DialogHeader className={STYLES.dialog.header}>
             <DialogTitle className={STYLES.dialog.title}>
-              <Plus size={20} />
+              <Save size={20} />
               Create New Project
             </DialogTitle>
             <DialogDescription className={STYLES.dialog.description}>
@@ -452,20 +451,6 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
                 onChange={(e) => setProjectDescription(e.target.value)}
                 className={STYLES.dialog.input}
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label className={STYLES.dialog.label}>Network Type</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" className={STYLES.dialog.button.secondary}>
-                  <Network size={16} className="mr-2" />
-                  Basic
-                </Button>
-                <Button variant="outline" className={STYLES.dialog.button.secondary}>
-                  <Settings size={16} className="mr-2" />
-                  Advanced
-                </Button>
-              </div>
             </div>
           </div>
 
