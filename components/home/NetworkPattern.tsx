@@ -13,13 +13,22 @@ const NetworkPattern = () => {
   const [squares, setSquares] = useState<Square[]>([]);
 
   useEffect(() => {
-    const generated = Array.from({ length: 15 }, (_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 3}s`,
-      duration: `${3 + Math.random() * 2}s`,
-    }));
+    // Use a fixed seed-like approach to generate consistent positions
+    const generated = Array.from({ length: 15 }, (_, i) => {
+      // Use a simple hash function based on index for consistent "random" values
+      const hash = (i * 37) % 100;
+      const hash2 = (i * 73) % 100;
+      const hash3 = (i * 101) % 3;
+      const hash4 = (i * 127) % 2;
+      
+      return {
+        id: i,
+        left: `${hash}%`,
+        top: `${hash2}%`,
+        delay: `${hash3}s`,
+        duration: `${3 + hash4}s`,
+      };
+    });
     setSquares(generated);
   }, []);
 

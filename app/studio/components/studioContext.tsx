@@ -120,8 +120,8 @@ const defaultFlowApi: StudioFlowApi = {
     version: "1.0.0",
     nodes: [],
     edges: [],
-    createdAt: new Date().toISOString(),
-    lastModified: new Date().toISOString(),
+    createdAt: "",
+    lastModified: "",
   }),
   loadProjectData: noop,
 };
@@ -238,6 +238,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
         const nodes = reactFlowInstance.getNodes();
         const edges = reactFlowInstance.getEdges();
         const viewport = reactFlowInstance.getViewport();
+        const now = new Date().toISOString();
         
         return {
           name: "Broadcast Studio Project",
@@ -252,8 +253,8 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
             minimap: true,
             controls: true,
           },
-          createdAt: new Date().toISOString(),
-          lastModified: new Date().toISOString(),
+          createdAt: now,
+          lastModified: now,
         };
       },
       loadProjectData: (data) => {
@@ -300,8 +301,9 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
         
         // Clone nodes with new IDs and offset position
         const nodeIdMap = new Map<string, string>();
+        let copyCounter = 0;
         const pastedNodes = clipboard.nodes.map(node => {
-          const newId = `${node.id}_copy_${Date.now()}`;
+          const newId = `${node.id}_copy_${++copyCounter}`;
           nodeIdMap.set(node.id, newId);
           return {
             ...node,
@@ -317,7 +319,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
         // Clone edges with updated node references
         const pastedEdges = clipboard.edges.map(edge => ({
           ...edge,
-          id: `${edge.id}_copy_${Date.now()}`,
+          id: `${edge.id}_copy_${++copyCounter}`,
           source: nodeIdMap.get(edge.source) || edge.source,
           target: nodeIdMap.get(edge.target) || edge.target,
           selected: true,
