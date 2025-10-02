@@ -1,6 +1,6 @@
 "use client";
 import "@xyflow/react/dist/style.css";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge, useReactFlow } from "@xyflow/react";
 import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
@@ -32,7 +32,7 @@ const nodeTypes = {
 
 function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
+  const [, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
   const { screenToFlowPosition } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");

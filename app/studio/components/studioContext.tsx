@@ -24,21 +24,21 @@ export interface StudioFlowApi {
   getSelectedEdges: () => Edge[];
   
   // Setters for ReactFlow data
-  setNodes: (nodes: Node[] | ((nodes: Node[]) => Node[])) => void;
-  setEdges: (edges: Edge[] | ((edges: Edge[]) => Edge[])) => void;
-  addNode: (node: Node) => void;
-  addEdge: (edge: Edge) => void;
-  deleteElements: (elements: { nodes?: Node[]; edges?: Edge[] }) => void;
+  setNodes: (_nodes: Node[] | ((_nodes: Node[]) => Node[])) => void;
+  setEdges: (_edges: Edge[] | ((_edges: Edge[]) => Edge[])) => void;
+  addNode: (_node: Node) => void;
+  addEdge: (_edge: Edge) => void;
+  deleteElements: (_elements: { nodes?: Node[]; edges?: Edge[] }) => void;
   
   // ReactFlow instance methods
-  fitView: (options?: any) => void;
+  fitView: (_options?: { padding?: number; includeHiddenNodes?: boolean }) => void;
   zoomIn: () => void;
   zoomOut: () => void;
-  setCenter: (x: number, y: number, options?: any) => void;
+  setCenter: (_x: number, _y: number, _options?: { zoom?: number }) => void;
   
   // Project data
   getProjectData: () => ProjectData;
-  loadProjectData: (data: ProjectData) => void;
+  loadProjectData: (_data: ProjectData) => void;
 }
 
 export interface ProjectData {
@@ -59,7 +59,7 @@ export interface ProjectSettings {
   snapToGrid?: boolean;
   minimap?: boolean;
   controls?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface StudioContextValue {
@@ -70,26 +70,25 @@ interface StudioContextValue {
   flowApi: StudioFlowApi;
   
   // Allow Flow to register actual implementations
-  setEditApiImpl: (impl: Partial<StudioEditApi>) => void;
-  setFlowApiImpl: (impl: Partial<StudioFlowApi>) => void;
+  setEditApiImpl: (_impl: Partial<StudioEditApi>) => void;
+  setFlowApiImpl: (_impl: Partial<StudioFlowApi>) => void;
   
   // Project management
   currentProject: ProjectData | null;
-  setCurrentProject: (project: ProjectData | null) => void;
+  setCurrentProject: (_project: ProjectData | null) => void;
   isDirty: boolean;
-  setIsDirty: (dirty: boolean) => void;
+  setIsDirty: (_dirty: boolean) => void;
   
   // Clipboard for copy/paste operations
   clipboard: {
     nodes: Node[];
     edges: Edge[];
   } | null;
-  setClipboard: (data: { nodes: Node[]; edges: Edge[] } | null) => void;
+  setClipboard: (_data: { nodes: Node[]; edges: Edge[] } | null) => void;
 }
 
 const noop = () => {};
 const noopArray = () => [];
-const noopObject = () => ({});
 
 const defaultEditApi: StudioEditApi = {
   copy: noop,

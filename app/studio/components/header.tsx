@@ -30,11 +30,9 @@ import {
   FolderOpen,
   Save,
   FileDown,
-  LogOut,
   File,
   Calendar,
   Network,
-  Settings,
   Search,
 } from "lucide-react";
 
@@ -220,16 +218,26 @@ const MOCK_PROJECTS = [
 
 /**
  * Utility: safe accessor for studio API methods (guards when studio is not ready).
+ *
+ * Substituí o `any` por `unknown` e faço checagens de tipo em runtime
+ * para evitar a regra @typescript-eslint/no-explicit-any.
  */
 const hasStudioMethod = (studio: ReturnType<typeof useStudio> | undefined, methodPath: string[]) => {
   if (!studio) return false;
-  // shallow check for nested methods like studio.editApi.hasSelection
-  let ptr: any = studio;
+
+  let ptr: unknown = studio;
   for (const key of methodPath) {
-    ptr = ptr?.[key];
-    if (ptr === undefined) return false;
+    if (typeof ptr === "object" && ptr !== null) {
+      const record = ptr as Record<string, unknown>;
+      if (!(key in record)) return false;
+      ptr = record[key];
+    } else {
+      return false;
+    }
   }
-  return true;
+
+  // Se o ponteiro final é função => tem o método
+  return typeof ptr === "function";
 };
 
 /**
@@ -268,6 +276,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       createdAt: new Date().toISOString(),
     };
 
+    // eslint-disable-next-line no-console
     console.log("Creating new project:", newProject);
     setProjectName("");
     setProjectDescription("");
@@ -283,6 +292,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
   const handleOpenProject = () => {
     if (!selectedProject) return;
     const project = MOCK_PROJECTS.find((p) => p.id === selectedProject);
+    // eslint-disable-next-line no-console
     console.log("Opening project:", project);
     setOpenProjectOpen(false);
     setSelectedProject(null);
@@ -302,6 +312,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     if (!file) return;
 
     if (!file.name.endsWith(".bsf")) {
+      // eslint-disable-next-line no-console
       console.warn("Unsupported file type:", file.name);
       return;
     }
@@ -310,10 +321,12 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     reader.onload = (e) => {
       try {
         const projectData = JSON.parse(e.target?.result as string);
+        // eslint-disable-next-line no-console
         console.log("Loaded project from file:", projectData);
         setOpenProjectOpen(false);
         // TODO: import projectData into studio
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error("Error loading project file:", error);
       }
     };
@@ -328,8 +341,8 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     const projectData = {
       name: "My Broadcast Project",
       version: "1.0.0",
-      nodes: hasStudioMethod(studio, ["flowApi", "getNodes"]) ? studio!.flowApi.getNodes() : [],
-      connections: hasStudioMethod(studio, ["flowApi", "getEdges"]) ? studio!.flowApi.getEdges() : [],
+      nodes: hasStudioMethod(studio, ["flowApi", "getNodes"]) ? (studio!.flowApi.getNodes() as unknown) : [],
+      connections: hasStudioMethod(studio, ["flowApi", "getEdges"]) ? (studio!.flowApi.getEdges() as unknown) : [],
       settings: {
         theme: "dark",
         grid: true,
@@ -356,7 +369,10 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     const commandMap: Record<string, () => void> = {
       "New Project": () => setNewProjectOpen(true),
       "Open Project": () => setOpenProjectOpen(true),
-      "Save Project": () => console.log("Saving current project..."),
+      "Save Project": () => {
+        // eslint-disable-next-line no-console
+        console.log("Saving current project...");
+      },
       "Save As...": handleSaveAs,
       Exit: () => router.back(),
       Copy: () => studio.editApi.copy(),
@@ -555,7 +571,7 @@ MenuDropdown.displayName = "MenuDropdown";
  */
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const studio = useStudio();
+  // retirado: const studio = useStudio(); // estava definido mas não utilizado -> warning / lint
 
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
