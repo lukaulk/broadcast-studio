@@ -1,13 +1,14 @@
 "use client";
 
 import Component from "./component";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default function ElementBar() {
   const components = [
     { icon: "/dvc/svg/laptop.svg", name: "PC", type: "End Device" },
     { icon: "/dvc/svg/router.svg", name: "Router", type: "Wireless Device" },
     { icon: "/dvc/svg/switchs.svg", name: "Switch", type: "Connect Device" },
-    { icon: "/dvc/svg/server.svg", name: "Server", type: "End Device", className: "scale-125" },
+    { icon: "/dvc/svg/server.svg", name: "Server", type: "End Device", className: "scale-95" },
     { icon: "/dvc/svg/smartphone.svg", name: "Smartphone", type: "End Device" },
     { icon: "/dvc/svg/cloud.svg", name: "Cloud", type: "End Device", className: "scale-125" },
     { icon: "/dvc/svg/desktop.svg", name: "Desktop", type: "End Device" },
@@ -16,33 +17,36 @@ export default function ElementBar() {
 
   return (
     <div className="p-2">
-      <div className="flex items-center min-w-20 max-w-dvw overflow-x-scroll overflow-y-hidden">
-        <div className="flex space-x-4 items-center">
-          {components.map((component, index) => (
-            <Component
-              key={`${component.name}-${index}`}
-              icon={component.icon}
-              name={component.name}
-              type={component.type}
-              className={component.className}
-            />
-          ))}
+      <ScrollArea className="w-full">
+        <div className="flex items-center min-w-20">
+          <div className="flex space-x-4 items-center">
+            {components.map((component, index) => (
+              <Component
+                key={`${component.name}-${index}`}
+                icon={component.icon}
+                name={component.name}
+                type={component.type}
+                className={component.className}
+              />
+            ))}
 
-          <div className="w-12 h-12 bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] rounded-md flex items-center justify-center hover:bg-[var(--bsui-active)] active:scale-95 cursor-pointer">
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 text-white"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
+            <div className="w-12 h-12 bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] rounded-md flex items-center justify-center hover:bg-[var(--bsui-active)] active:scale-95 cursor-pointer">
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 text-white"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 }

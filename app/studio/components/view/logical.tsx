@@ -6,6 +6,7 @@ import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
 import CustomNode from "../costumNode";
 import { useStudio } from "../studioContext";
+import { toast } from "sonner";
 
 // --- edges
 const defaultEdges: Edge[] = [
@@ -71,6 +72,12 @@ function Flow() {
       };
 
       setNodes((nds) => nds.concat(newNode));
+
+      // helpful tip on first use
+      toast.success(`${payload.name} added`, {
+        description: "CTRL+Click for multi-selection",
+        duration: 3000
+      });
     } catch {
       // ignore invalid payloads
     }
