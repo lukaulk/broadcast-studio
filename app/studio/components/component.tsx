@@ -22,6 +22,8 @@ export default function Component({
     // send a small payload identifying the component
     const payload = JSON.stringify({ type: "imageNode", src: icon, name });
     e.dataTransfer.setData("application/reactflow", payload);
+    // also set plain text for better cross-browser drag initiation (e.g., Firefox)
+    e.dataTransfer.setData("text/plain", payload);
     e.dataTransfer.effectAllowed = "copy";
   };
 

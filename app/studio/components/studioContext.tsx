@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { createContext, useContext, useMemo, useRef, useState } from "react";
 import type { Node, Edge, Viewport, ReactFlowInstance } from "reactflow";
 
@@ -86,6 +88,8 @@ interface StudioContextValue {
   } | null;
   setClipboard: (_data: { nodes: Node[]; edges: Edge[] } | null) => void;
 }
+
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 const noop = () => {};
 const noopArray = () => [];

@@ -524,7 +524,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
                         <div className="flex items-center gap-4 mt-2 text-xs opacity-60">
                           <span className="flex items-center gap-1">
                             <Calendar size={12} />
-                            {project.lastModified.toLocaleDateString()}
+                            {new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "UTC" }).format(project.lastModified)}
                           </span>
                           <span className="flex items-center gap-1">
                             <Network size={12} />
