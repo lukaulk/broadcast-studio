@@ -1,17 +1,12 @@
 "use client";
-import Footer from "@/components/home/Footer";
-import CTASection from "../../components/home/CTASection";
-import Features from "../../components/home/Features";
 import Header from "../../components/home/Header";
 import HeroSection from "../../components/home/HeroSection";
-
+import Footer from "@/components/home/Footer";
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--background)] text-white overflow-x-hidden">
       <Header />
       <HeroSection />
-      <Features />
-      <CTASection />
       <Footer />
     </div>
   );

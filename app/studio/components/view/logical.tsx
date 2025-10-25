@@ -33,7 +33,7 @@ const nodeTypes = {
 
 function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
-  const [, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
   const { screenToFlowPosition } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");
@@ -56,7 +56,10 @@ function Flow() {
 
   const onDrop = useCallback((event: React.DragEvent) => {
     event.preventDefault();
-    const raw = event.dataTransfer.getData("application/reactflow");
+    // read our primary custom MIME type first, then fallback to text/plain
+    const raw =
+      event.dataTransfer.getData("application/reactflow") ||
+      event.dataTransfer.getData("text/plain");
     if (!raw) return;
 
     try {
@@ -171,17 +174,20 @@ function Flow() {
 
   // register edit API with header via context
   useEffect(() => {
-    const getSelected = () => nodes.filter((n) => n.selected);
+    const getSelectedNodes = () => nodes.filter((n) => n.selected);
+    const getSelectedEdges = () => edges.filter((e) => e.selected);
 
     const copy = () => {
-      const selected = getSelected();
+      const selected = getSelectedNodes();
       clipboardRef.current = selected.map((n) => ({ ...n, selected: false }));
     };
 
     const cut = () => {
-      const selectedIds = new Set(getSelected().map((n) => n.id));
+      const selectedIds = new Set(getSelectedNodes().map((n) => n.id));
       clipboardRef.current = nodes.filter((n) => selectedIds.has(n.id)).map((n) => ({ ...n, selected: false }));
       setNodes((nds) => nds.filter((n) => !selectedIds.has(n.id)));
+      // remove edges connected to deleted nodes
+      setEdges((eds) => eds.filter((e) => !selectedIds.has(e.source) && !selectedIds.has(e.target)));
     };
 
     const paste = () => {
@@ -204,12 +210,22 @@ function Flow() {
     };
 
     const deleteSelected = () => {
-      const selectedIds = new Set(getSelected().map((n) => n.id));
-      if (selectedIds.size === 0) return;
-      setNodes((nds) => nds.filter((n) => !selectedIds.has(n.id)));
+      const selectedNodeIds = new Set(getSelectedNodes().map((n) => n.id));
+      const selectedEdgeIds = new Set(getSelectedEdges().map((e) => e.id));
+      if (selectedNodeIds.size === 0 && selectedEdgeIds.size === 0) return;
+      setNodes((nds) => nds.filter((n) => !selectedNodeIds.has(n.id)));
+      setEdges((eds) => eds
+        // drop explicitly selected edges
+        .filter((e) => !selectedEdgeIds.has(e.id))
+        // drop edges connected to removed nodes
+        .filter((e) => !selectedNodeIds.has(e.source) && !selectedNodeIds.has(e.target))
+      );
     };
 
-    const selectAll = () => setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
+    const selectAll = () => {
+      setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
+      setEdges((eds) => eds.map((e) => ({ ...e, selected: true })) as Edge[]);
+    };
 
     setEditApiImpl({
       copy,
@@ -217,10 +233,10 @@ function Flow() {
       paste,
       deleteSelected,
       selectAll,
-      hasSelection: () => nodes.some((n) => n.selected),
+      hasSelection: () => nodes.some((n) => n.selected) || edges.some((e) => e.selected),
       canPaste: () => clipboardRef.current.length > 0,
     });
-  }, [nodes, setNodes, setEditApiImpl]);
+  }, [nodes, edges, setNodes, setEdges, setEditApiImpl]);
 
   return (
     <ReactFlow
