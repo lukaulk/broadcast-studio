@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Broadcast Studio - Emulador de Redes",
+  title: "Broadcast Studio | Open Source Network Simulator",
   description:
     "Crie e emule redes de computadores com precisão. Uma alternativa poderosa e de código aberto para Cisco Packet Tracer.",
 };
