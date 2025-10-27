@@ -10,10 +10,10 @@ export default function Features() {
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl mb-6">
                 Why
-              <span className="font-bold"> Broadcast Studio</span>?
+              <span className="font-bold" translate="no"> Broadcast Studio</span>?
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Designed for networking students and professionals, offering a complete simulation experience.
+              Designed for networking students and professionals, offering a complete and acessible simulation experience.
             </p>
           </div>
 

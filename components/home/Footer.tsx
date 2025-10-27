@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-8 text-center text-zinc-400">
-          <p>&copy; 2025 Broadcast Studio. Open source and free to the community.</p>
+          <p>&copy; {new Date().getFullYear()} Broadcast Studio. Open source and free to the community.</p>
         </div>
         <Link href="https://lukau.vercel.app/" target="_blank" rel="noopener noreferrer">
             <div className="flex items-center justify-center mt-2"><span translate="no">Created By</span> <Image src={"/icons/lukaustack.png"} alt="Lukaustack" width={100} height={60} /></div>

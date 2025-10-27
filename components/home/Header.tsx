@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu, ExternalLink, X } from "lucide-react";
-import { LucideGithub } from "lucide-react"; // ícone de estrela para Community
+import { LucideGithub } from "lucide-react"; 
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
@@ -16,7 +16,7 @@ interface NavLink {
   label: string;
   href: string;
   external?: boolean;
-  showStar?: boolean; // se true, mostra ícone de estrela
+  showStar?: boolean; 
 }
 
 export default function Header({ headerText, noHomeLink }: HeaderProps) {
@@ -72,7 +72,8 @@ export default function Header({ headerText, noHomeLink }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
         <div className="flex items-center justify-between h-16">
           {/* Logo e título */}
-          <div className="flex items-center space-x-2">
+         <Link href={noHomeLink ? "#" : "/"}>
+          <div className="flex items-center space-x-2 user-select-none">
             <Image
               src="/favicon.png"
               alt="Broadcast Studio Logo"
@@ -84,7 +85,7 @@ export default function Header({ headerText, noHomeLink }: HeaderProps) {
               {headerText || "Broadcast Studio"}
             </span>
           </div>
-
+         </Link>
           {/* Menu desktop */}
           <nav className="hidden md:flex items-center space-x-8">
             {links.map(renderLink)}

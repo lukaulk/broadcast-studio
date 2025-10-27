@@ -27,7 +27,7 @@ export default async function Studio() {
   if (!isDesktopDevice(userAgent)) {
     return (
       <div className="flex items-center justify-center h-screen text-center p-4 bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
-        <h1>O Broadcast Studio só está disponível em PC.</h1>
+        <h1>Sorry!, Broadcast Studio is only available on PC at the moment.</h1>
       </div>
     );
   }

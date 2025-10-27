@@ -17,6 +17,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Broadcast Studio | Open Source Network Simulator",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  authors: {
+    name: "Lukau NDOMBELE",
+    url: "https://lukau.vercel.app/",
+  },
   description:
     "Crie e emule redes de computadores com precisão. Uma alternativa poderosa e de código aberto para Cisco Packet Tracer.",
 };
