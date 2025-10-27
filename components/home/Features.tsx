@@ -13,7 +13,7 @@ export default function Features() {
               <span className="font-bold" translate="no"> Broadcast Studio</span>?
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Designed for networking students and professionals, offering a complete and acessible simulation experience.
+              Designed for <b>computers network</b> students and professionals, offering a complete and acessible simulation experience.
             </p>
           </div>
 

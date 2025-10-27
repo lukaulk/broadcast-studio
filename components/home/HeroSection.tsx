@@ -9,19 +9,19 @@ import {
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center">
+    <section className="relative min-h-screen flex items-center justify-center ">
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
 
-        <div className="mb-6">
-          <div className="inline-flex items-center py-2 px-4   rounded-full text-sm border border-zinc-500 bg-zinc-900">
-            <Zap className="w-4 h-4 mr-1" /> GNS3 & Packet Tracer <b className="ml-1">Alternative</b>
+        <div className="mb-6 mt-12">
+          <div className="inline-flex items-center py-2 px-4 rounded-full text-sm border border-zinc-500 bg-zinc-900" translate="no">
+            <Zap className="w-4 h-4 mr-1"  /> GNS3 & Packet Tracer <b className="ml-1">Alternative</b>
           </div>
         </div>
-        <h1 className="relative text-4xl sm:text-6xl lg:text-7xl rubik mb-6 text-white">
-          Open-Source
+        <h1 className="relative text-4xl sm:text-6xl lg:text-6xl rubik mb-6 text-white" >
+          Open Source 
           <br />
           <span className="font-semibold">
-            Network Emulator
+            Computer Network Simulator
           </span>
         </h1>
         <p className="text-xl sm:text-xl text-zinc-400 mb-8 max-w-2xl mx-auto leading-relaxed radio-canada">
