@@ -9,7 +9,7 @@ import {
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center ">
+    <section className="relative min-h-screen flex mt-10 items-center justify-center ">
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
 
         <div className="mb-6 mt-12">
