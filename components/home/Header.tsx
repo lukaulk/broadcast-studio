@@ -32,7 +32,7 @@ export default function Header({ headerText, noHomeLink }: HeaderProps) {
       href: "https://github.com/lukaulk/broadcast-studio/blob/master/README.md",
       external: true,
     },
-    { label: "Download", href: "#download" },
+    { label: "Log In", href: "/login" },
     { label: "Community", href: "/community", showStar: true },
   ];
 

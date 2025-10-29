@@ -10,10 +10,10 @@ export default function CommunityPage() {
   return (
     <>
       <Header headerText="Community" noHomeLink />
-      <div className="pt-20 min-h-screen flex flex-col items-center justify-center">
-        <div className="mb-6">
+      <div className="pt-20 mx-6 min-h-screen flex flex-col items-center justify-center">
+        <div className="mb-6 gap-2">
           <h1 className="text-lg sm:text-2xl text-center robik font-semibold">Community Posts</h1>
-          <span className="opacity-65">Explore posts and discussions from our vibrant community.</span>
+          <span className="opacity-65 flex items-center w-full text-center">Explore posts and discussions from our vibrant community.</span>
         </div>
         {/* Community Posts Page */}
         <Card className="w-full max-w-3xl mx-auto mb-10 bg-zinc-950 border-zinc-800 shadow-lg">
