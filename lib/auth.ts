@@ -1,15 +1,15 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./prisma";
+import { Prisma } from "../src/generated/prisma/client";
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
-    provider: "postgresql", // ou "mysql", "sqlite" conforme seu DB
+  database: prismaAdapter(Prisma, {
+    provider: "mysql", 
   }),
   
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // mude para true em produção
+    requireEmailVerification: false, 
   },
   
   socialProviders: {
@@ -25,16 +25,13 @@ export const auth = betterAuth({
   
   secret: process.env.BETTER_AUTH_SECRET!,
   
-  // URL base da sua aplicação
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   
-  // Configurações de sessão
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 dias
-    updateAge: 60 * 60 * 24, // atualiza a cada 24h
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // 1 day
   },
   
-  // Configurações avançadas (opcional)
   advanced: {
     cookiePrefix: "better-auth",
     crossSubDomainCookies: {
