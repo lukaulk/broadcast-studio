@@ -19,6 +19,7 @@ export default function Home() {
                 password: data.password,
               },
               })
+              
               console.log("Signup success:", res)
             } else {
               // Login
