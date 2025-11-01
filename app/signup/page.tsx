@@ -23,7 +23,7 @@ export default function SignUpPage() {
               email: data.email,
               password: data.password,
               name: data.name,
-              callbackURL: "/dashboard",
+              callbackURL: "/",
             })
 
             if (result.error) {
@@ -32,7 +32,7 @@ export default function SignUpPage() {
             }
 
             toast.success("Account created successfully!")
-            router.push("/dashboard")
+            router.push("/")
             router.refresh()
           } catch {
             toast.error("An unexpected error occurred")
@@ -42,7 +42,7 @@ export default function SignUpPage() {
           try {
             await authClient.signIn.social({
               provider: "google",
-              callbackURL: "/dashboard",
+              callbackURL: "/",
             })
           } catch {
             toast.error("Failed to sign in with Google")
@@ -52,7 +52,7 @@ export default function SignUpPage() {
           try {
             await authClient.signIn.social({
               provider: "github",
-              callbackURL: "/dashboard",
+              callbackURL: "/",
             })
           } catch {
             toast.error("Failed to sign in with GitHub")

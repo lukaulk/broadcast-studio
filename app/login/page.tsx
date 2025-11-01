@@ -17,7 +17,7 @@ export default function LoginPage() {
             const result = await authClient.signIn.email({
               email: data.email,
               password: data.password,
-              callbackURL: "/dashboard",
+              callbackURL: "/",
             })
 
             if (result.error) {
@@ -26,9 +26,9 @@ export default function LoginPage() {
             }
 
             toast.success("Signed in successfully!")
-            router.push("/dashboard")
+            router.push("/")
             router.refresh()
-          } catch (err) {
+          } catch {
             toast.error("An unexpected error occurred")
           }
         }}
@@ -36,9 +36,9 @@ export default function LoginPage() {
           try {
             await authClient.signIn.social({
               provider: "google",
-              callbackURL: "/dashboard",
+              callbackURL: "/",
             })
-          } catch (err) {
+          } catch {
             toast.error("Failed to sign in with Google")
           }
         }}
@@ -46,9 +46,9 @@ export default function LoginPage() {
           try {
             await authClient.signIn.social({
               provider: "github",
-              callbackURL: "/dashboard",
+              callbackURL: "/",
             })
-          } catch (err) {
+          } catch {
             toast.error("Failed to sign in with GitHub")
           }
         }}
