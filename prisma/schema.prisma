@@ -14,6 +14,7 @@ model User {
   name          String?
   email         String    @unique
   emailVerified Boolean   @default(false)
+  image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
@@ -21,17 +22,19 @@ model User {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  accountId         String
-  providerId        String
-  accessToken       String?
-  refreshToken      String?
-  idToken           String?
-  expiresAt         DateTime?
-  password          String?
+  id                  String    @id @default(cuid())
+  userId              String
+  accountId           String
+  providerId          String
+  accessToken         String?
+  refreshToken        String?
+  idToken             String?
+  expiresAt           DateTime?
+  accessTokenExpiresAt DateTime?
+  scope               String?
+  password            String?
   
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@unique([providerId, accountId])
   @@index([userId])
@@ -52,7 +55,7 @@ model Session {
 model Verification {
   id         String   @id @default(cuid())
   identifier String
-  value      String
+  value      String   @db.VarChar(1000)
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

@@ -6,21 +6,29 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
   experimental: {
     serverActions: {
-      bodySizeLimit: "2mb", 
+      bodySizeLimit: "2mb",
       allowedOrigins: ["http://localhost:3000"],
     },
   },
-    webpack: (config, { isServer }) => {
+  webpack: (config, { isServer }) => {
     if (!isServer) {
-      // Don't resolve 'fs' module on the client to prevent this error
+      // Don't resolve Node.js built-in modules on the client to prevent this error
       config.resolve.fallback = {
         ...config.resolve.fallback,
         "async_hooks": false,
+        "node:async_hooks": false,
+        "node:process": false,
+        "node:path": false,
+        "node:url": false,
         "fs": false,
         "net": false,
         "tls": false,
+        "path": false,
+        "url": false,
+        "process": false,
       };
     }
+
     return config;
   },
 };
