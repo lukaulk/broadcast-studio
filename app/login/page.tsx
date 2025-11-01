@@ -1,52 +1,55 @@
 // app/login/page.tsx
 "use client"
 import { AuthForm } from "@/components/auth/form"
+import { authClient } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export default function LoginPage() {
+  const router = useRouter()
+
   return (
     <main className="min-h-screen flex items-center justify-center p-4 bg-black radio-canada">
       <AuthForm
         mode="login"
         onSubmit={async (data) => {
           try {
-            const route = data.name ? "/api/auth/email/signup" : "/api/auth/email/signin"
-            const res = await fetch(route, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data),
+            const result = await authClient.signIn.email({
+              email: data.email,
+              password: data.password,
+              callbackURL: "/dashboard",
             })
-            const json = await res.json()
-            console.log(data.name ? "Signup success:" : "Login success:", json)
+
+            if (result.error) {
+              toast.error(result.error.message || "Failed to sign in")
+              return
+            }
+
+            toast.success("Signed in successfully!")
+            router.push("/dashboard")
+            router.refresh()
           } catch (err) {
-            console.error("Auth error:", err)
+            toast.error("An unexpected error occurred")
           }
         }}
         onGoogleLogin={async () => {
           try {
-            await fetch("/api/auth/social", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                provider: "google",
-                callbackURL: "/dashboard",
-              }),
+            await authClient.signIn.social({
+              provider: "google",
+              callbackURL: "/dashboard",
             })
           } catch (err) {
-            console.error("Google login error:", err)
+            toast.error("Failed to sign in with Google")
           }
         }}
         onGithubLogin={async () => {
           try {
-            await fetch("/api/auth/social", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                provider: "github",
-                callbackURL: "/dashboard",
-              }),
+            await authClient.signIn.social({
+              provider: "github",
+              callbackURL: "/dashboard",
             })
           } catch (err) {
-            console.error("Github login error:", err)
+            toast.error("Failed to sign in with GitHub")
           }
         }}
       />
