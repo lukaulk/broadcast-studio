@@ -1,17 +1,16 @@
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { Prisma } from "../src/generated/prisma/client";
+// lib/auth.ts
+import { betterAuth } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 export const auth = betterAuth({
-  database: prismaAdapter(Prisma, {
-    provider: "mysql", 
-  }),
-  
+  database: prismaAdapter(prisma, { provider: "mysql" }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, 
+    requireEmailVerification: false,
   },
-  
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -22,20 +21,14 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     },
   },
-  
   secret: process.env.BETTER_AUTH_SECRET!,
-  
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
-  
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // 1 day
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
   },
-  
   advanced: {
     cookiePrefix: "better-auth",
-    crossSubDomainCookies: {
-      enabled: false,
-    },
+    crossSubDomainCookies: { enabled: false },
   },
-});
+})
