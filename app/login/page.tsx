@@ -1,12 +1,20 @@
-// app/login/page.tsx
 "use client"
 import { AuthForm } from "@/components/auth/form"
-import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 export default function LoginPage() {
   const router = useRouter()
+
+  async function callApi(path: string, body: Record<string, unknown>) {
+    const res = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+    const json = await res.json().catch(() => ({}))
+    return { ok: res.ok, status: res.status, body: json }
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4 bg-black radio-canada">
@@ -14,14 +22,12 @@ export default function LoginPage() {
         mode="login"
         onSubmit={async (data) => {
           try {
-            const result = await authClient.signIn.email({
-              email: data.email,
-              password: data.password,
-              callbackURL: "/",
-            })
+            const route = data.name ? "/api/auth/email/signup" : "/api/auth/email/signin"
+            const { ok, body } = await callApi(route, data)
 
-            if (result.error) {
-              toast.error(result.error.message || "Failed to sign in")
+            if (!ok) {
+              const msg = (body && (body.error || body.message)) || "Failed to sign in"
+              toast.error(msg)
               return
             }
 
@@ -34,20 +40,38 @@ export default function LoginPage() {
         }}
         onGoogleLogin={async () => {
           try {
-            await authClient.signIn.social({
+            const { ok, body } = await callApi("/api/auth/social", {
               provider: "google",
               callbackURL: "/",
             })
+
+            if (!ok) {
+              toast.error((body && (body.error || body.message)) || "Failed to sign in with Google")
+              return
+            }
+
+            if (body && body.redirect && body.url) {
+              window.location.href = body.url
+            }
           } catch {
             toast.error("Failed to sign in with Google")
           }
         }}
         onGithubLogin={async () => {
           try {
-            await authClient.signIn.social({
+            const { ok, body } = await callApi("/api/auth/social", {
               provider: "github",
               callbackURL: "/",
             })
+
+            if (!ok) {
+              toast.error((body && (body.error || body.message)) || "Failed to sign in with GitHub")
+              return
+            }
+
+            if (body && body.redirect && body.url) {
+              window.location.href = body.url
+            }
           } catch {
             toast.error("Failed to sign in with GitHub")
           }
