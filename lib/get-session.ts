@@ -1,9 +1,10 @@
 import { auth } from "@/lib/auth"
-import { cookies } from "next/headers"
+import { headers } from "next/headers"
 
 export async function getSession() {
+    const headersList = await headers()
     return await auth.api.getSession({
-        headers: await cookies(),
+        headers: headersList,
     })
 }
 
