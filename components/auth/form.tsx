@@ -9,9 +9,14 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
+interface dataProps {
+ email: string; 
+ password: string;
+ name?: string
+}
 interface AuthFormProps {
   mode?: "login" | "signup"
-  onSubmit?: (data: { email: string; password: string; name?: string }) => void
+  onSubmit?: (data: dataProps) => void
   onGoogleLogin?: () => void
   onGithubLogin?: () => void
 }
