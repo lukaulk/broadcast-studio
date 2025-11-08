@@ -4,12 +4,15 @@ import Image from "next/image";
 import { memo, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useStudio } from "./studioContext";
+import { useSession, signOut } from "@/lib/auth-client";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenuContent,
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
@@ -34,6 +37,7 @@ import {
   Calendar,
   Network,
   Search,
+  LogOut,
 } from "lucide-react";
 
 /**
@@ -571,11 +575,34 @@ MenuDropdown.displayName = "MenuDropdown";
  */
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { data: session } = useSession();
+  const router = useRouter();
   // retirado: const studio = useStudio(); // estava definido mas não utilizado -> warning / lint
 
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
   }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/login");
+    router.refresh();
+  };
+
+  const getUserInitials = (name?: string | null, email?: string) => {
+    if (name) {
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (email) {
+      return email[0].toUpperCase();
+    }
+    return "U";
+  };
 
   return (
     <div className={STYLES.container}>
@@ -591,7 +618,95 @@ export default function Header() {
         ))}
       </div>
 
-      <div className={STYLES.mobile.button}>
+      {/* User Avatar - Desktop */}
+      {session?.user && (
+        <div className="hidden md:flex items-center ml-auto mr-6">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative flex gap-2 items-center rounded-sm justify-center shrink-0 overflow-hidden px-2 hover:bg-[var(--bsui-active)] transition-colors">
+                <Avatar className="size-8">
+                  <AvatarImage
+                    src={session.user.image || undefined}
+                    alt={session.user.name || session.user.email || "User"}
+                  />
+                  <AvatarFallback className="bg-[var(--bsui-gray-2)] text-[var(--bsui-gray-0)] text-sm font-medium">
+                    {getUserInitials(session.user.name, session.user.email)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm">
+                  {session.user.name || session.user.email || "User"}
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className={STYLES.dropdown.content}
+            >
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {session.user.name || "User"}
+                  </p>
+                  <p className="text-xs leading-none opacity-70">
+                    {session.user.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className={STYLES.dropdown.separator} />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-red-400 focus:text-red-300 focus:bg-red-950/20 cursor-pointer"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
+
+      {/* Mobile menu button and user avatar */}
+      <div className="md:hidden flex items-center gap-2">
+        {session?.user && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative flex size-10 shrink-0 overflow-hidden rounded-full ring-2 ring-[var(--bsui-border)]">
+                <Avatar className="size-10">
+                  <AvatarImage
+                    src={session.user.image || undefined}
+                    alt={session.user.name || session.user.email || "User"}
+                  />
+                  <AvatarFallback className="bg-[var(--bsui-gray-2)] text-[var(--bsui-gray-0)] text-sm font-medium">
+                    {getUserInitials(session.user.name, session.user.email)}
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className={STYLES.dropdown.content}
+            >
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {session.user.name || "User"}
+                  </p>
+                  <p className="text-xs leading-none opacity-70">
+                    {session.user.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className={STYLES.dropdown.separator} />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-red-400 focus:text-red-300 focus:bg-red-950/20 cursor-pointer"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
         <button type="button" onClick={toggleMobileMenu} className={STYLES.mobile.hamburger} aria-label="Toggle mobile menu">
           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>

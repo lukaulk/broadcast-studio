@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import OptionBar from "./components/optionBar";
 import SideBar from "./components/sideBar";
 import Header from "./components/header";
@@ -7,6 +8,7 @@ import ElementBar from "./components/elementBar";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { ReactFlowProvider } from "@xyflow/react";
 import { StudioProvider } from "./components/studioContext";
+import { getSession } from "@/lib/get-session";
 
 export const metadata = {
   title: "Broadcast Studio",
@@ -23,6 +25,12 @@ function isDesktopDevice(userAgent: string | null) {
 export default async function Studio() {
   const headersList = await headers(); // <-- add await
   const userAgent = headersList.get("user-agent");
+
+  // Verificar autenticação
+  const session = await getSession();
+  if (!session?.user) {
+    redirect("/login");
+  }
 
   if (!isDesktopDevice(userAgent)) {
     return (
@@ -53,7 +61,7 @@ export default async function Studio() {
           </ResizablePanel>
 
           <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] h-[1px] hover:h-4 cursor-row-resize" />
-          
+
           <ResizablePanel
             minSize={19}
             defaultSize={20}

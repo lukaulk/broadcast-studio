@@ -373,7 +373,7 @@ export default function CommunityPage() {
 
               <div className="mt-4 space-y-4">
                 <div className="bg-zinc-900 border border-zinc-800 rounded-md p-4">
-                  <p className="text-zinc-300 whitespace-pre-wrap text-base">
+                  <p className="text-zinc-300 whitespace-pre-wrap text-lg">
                     {selectedPost.content}
                   </p>
                 </div>
