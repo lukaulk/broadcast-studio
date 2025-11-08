@@ -624,7 +624,10 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="relative flex gap-2 items-center rounded-sm justify-center shrink-0 overflow-hidden px-2 hover:bg-[var(--bsui-active)] transition-colors">
-                <Avatar className="size-8">
+                <span className="text-sm">
+                  {session.user.name || session.user.email || "User"}
+                </span>
+                <Avatar className="size-7">
                   <AvatarImage
                     src={session.user.image || undefined}
                     alt={session.user.name || session.user.email || "User"}
@@ -633,9 +636,7 @@ export default function Header() {
                     {getUserInitials(session.user.name, session.user.email)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm">
-                  {session.user.name || session.user.email || "User"}
-                </span>
+                
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
