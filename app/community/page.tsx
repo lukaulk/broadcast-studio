@@ -167,10 +167,10 @@ export default function CommunityPage() {
       <Header headerText="Community" noHomeLink />
       <div className="pt-20 mx-6 min-h-screen flex flex-col items-center pb-10">
         <div className="mb-6 gap-2 text-center">
-          <h1 className="text-lg sm:text-2xl robik font-semibold text-white">
+          <h1 className="text-lg sm:text-2xl robik font-semibold text-[var(--foreground)]">
             Community Posts
           </h1>
-          <span className="opacity-65 flex items-center w-full text-center text-zinc-400">
+          <span className="opacity-65 flex items-center w-full text-center text-[var(--muted-foreground)]">
             Explore posts and discussions from our vibrant community.
           </span>
         </div>
@@ -181,7 +181,7 @@ export default function CommunityPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-x-4 flex flex-col sm:flex-row">
                 <div className="space-y-4 w-30">
-                  <Label htmlFor="category" className="text-zinc-300">
+                  <Label htmlFor="category" className="text-[var(--foreground)]">
                     Category
                   </Label>
                   <Select
@@ -189,20 +189,20 @@ export default function CommunityPage() {
                     value={category}
                     onValueChange={(value) => setCategory(value as PostCategory)}
                   >
-                    <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
+                    <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-800">
-                      <SelectItem value="Issue" className="text-white focus:bg-zinc-800">
+                    <SelectContent className="bg-[var(--popover)] border-[var(--border)]">
+                      <SelectItem value="Issue" className="text-[var(--foreground)] focus:bg-[var(--accent)]">
                         Issue
                       </SelectItem>
-                      <SelectItem value="Info" className="text-white focus:bg-zinc-800">
+                      <SelectItem value="Info" className="text-[var(--foreground)] focus:bg-[var(--accent)]">
                         Info
                       </SelectItem>
-                      <SelectItem value="Comment" className="text-white focus:bg-zinc-800">
+                      <SelectItem value="Comment" className="text-[var(--foreground)] focus:bg-[var(--accent)]">
                         Comment
                       </SelectItem>
-                      <SelectItem value="Question" className="text-white focus:bg-zinc-800">
+                      <SelectItem value="Question" className="text-[var(--foreground)] focus:bg-[var(--accent)]">
                         Question
                       </SelectItem>
                     </SelectContent>
@@ -217,7 +217,7 @@ export default function CommunityPage() {
                     value={content}
                     rows={0}
                     onChange={(e) => setContent(e.target.value)}
-                    className="max-h-[100px] w-[360px] flex-1 flex bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
+                    className="max-h-[100px] w-[360px] flex-1 flex bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)]"
                     required
                   />
                 </div>
@@ -225,7 +225,7 @@ export default function CommunityPage() {
                 <Button
                   type="submit"
                   disabled={!content.trim() || isSubmitting}
-                  className=" bg-white text-zinc-900 hover:bg-gray-200 mt-5"
+                  className=" bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90 mt-5"
                 >
                   {isSubmitting ? (
                     "Posting..."
@@ -242,15 +242,15 @@ export default function CommunityPage() {
         ) : (
           <Card className="w-full max-w-3xl mx-auto mb-6 bg-zinc-950 border-zinc-800 shadow-lg">
             <CardContent className="pt-6">
-              <p className="text-zinc-400 mb-6">
-                <MessageCircleMore className="inline w-5 h-5 mr-2 mb-1 text-zinc-500" />
+              <p className="text-[var(--muted-foreground)] mb-6">
+                <MessageCircleMore className="inline w-5 h-5 mr-2 mb-1 text-[var(--muted-foreground)]" />
                 Join the conversation, share your experiences, and learn from others in the field of computer network simulation.
               </p>
               <div className="flex justify-center">
                 <Link href="/login">
                   <Button
                     variant="secondary"
-                    className="text-zinc-900 bg-white hover:bg-gray-200 cursor-pointer"
+                    className="text-[var(--primary-foreground)] bg-[var(--primary)] hover:bg-[var(--primary)]/90 cursor-pointer"
                   >
                     Sign In
                   </Button>
@@ -265,7 +265,7 @@ export default function CommunityPage() {
           {posts.length === 0 ? (
             <Card className="w-full bg-zinc-950 border-zinc-800 shadow-lg">
               <CardContent className="pt-6">
-                <p className="text-zinc-400 text-center py-8">
+                <p className="text-[var(--muted-foreground)] text-center py-8">
                   No posts yet. Be the first to share something!
                 </p>
               </CardContent>
@@ -286,13 +286,13 @@ export default function CommunityPage() {
                           src={post.author.image || undefined}
                           alt={post.author.name || post.author.email}
                         />
-                        <AvatarFallback className="bg-zinc-800 text-white text-sm">
+                        <AvatarFallback className="bg-[var(--muted)] text-[var(--foreground)] text-sm">
                           {getUserInitials(post.author.name, post.author.email)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-white font-medium text-sm">
+                          <span className="text-[var(--foreground)] font-medium text-sm">
                             {post.author.name || post.author.email}
                           </span>
                           <span
@@ -301,7 +301,7 @@ export default function CommunityPage() {
                             <CategoryIcon className="w-3 h-3" />
                             {post.category}
                           </span>
-                          <span className="text-zinc-500 text-sm">
+                          <span className="text-[var(--muted-foreground)] text-sm">
                             {new Date(post.createdAt).toLocaleDateString("pt-BR", {
                               day: "numeric",
                               month: "short",
@@ -310,11 +310,11 @@ export default function CommunityPage() {
                             })}
                           </span>
                         </div>
-                        <p className="text-zinc-300 whitespace-pre-wrap text-xl">
+                        <p className="text-[var(--foreground)] whitespace-pre-wrap text-xl">
                           {post.content}
                         </p>
                         {post.comments.length > 0 && (
-                          <p className="text-zinc-500 text-sm mt-2">
+                          <p className="text-[var(--muted-foreground)] text-sm mt-2">
                             {post.comments.length} {post.comments.length === 1 ? "comment" : "comments"}
                           </p>
                         )}
@@ -330,7 +330,7 @@ export default function CommunityPage() {
 
       {/* Post Details Dialog */}
       <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
-        <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="bg-[var(--popover)] border-[var(--border)] text-[var(--foreground)] max-w-2xl max-h-[90vh] overflow-y-auto">
           {selectedPost && selectedPostCategoryIcon && (
             <>
               <DialogHeader>
@@ -340,12 +340,12 @@ export default function CommunityPage() {
                       src={selectedPost.author.image || undefined}
                       alt={selectedPost.author.name || selectedPost.author.email}
                     />
-                    <AvatarFallback className="bg-zinc-800 text-white">
+                    <AvatarFallback className="bg-[var(--muted)] text-[var(--foreground)]">
                       {getUserInitials(selectedPost.author.name, selectedPost.author.email)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <DialogTitle className="text-left text-white">
+                    <DialogTitle className="text-left text-[var(--foreground)]">
                       {selectedPost.author.name || selectedPost.author.email}
                     </DialogTitle>
                     <div className="flex items-center gap-2 mt-1">
@@ -357,7 +357,7 @@ export default function CommunityPage() {
                         })}
                         {selectedPost.category}
                       </span>
-                      <span className="text-zinc-500 text-xs">
+                      <span className="text-[var(--muted-foreground)] text-xs">
                         {new Date(selectedPost.createdAt).toLocaleDateString("pt-BR", {
                           day: "numeric",
                           month: "short",
@@ -373,19 +373,19 @@ export default function CommunityPage() {
 
               <div className="mt-4 space-y-4">
                 <div className="bg-zinc-900 border border-zinc-800 rounded-md p-4">
-                  <p className="text-zinc-300 whitespace-pre-wrap text-lg">
+                  <p className="text-[var(--foreground)] whitespace-pre-wrap text-lg">
                     {selectedPost.content}
                   </p>
                 </div>
 
-                <div className="border-t border-zinc-800 pt-4">
-                  <h3 className="text-white font-semibold mb-4">
+                <div className="border-t border-[var(--border)] pt-4">
+                  <h3 className="text-[var(--foreground)] font-semibold mb-4">
                     Comments ({selectedPost.comments.length})
                   </h3>
 
                   <div className="space-y-4 mb-4">
                     {selectedPost.comments.length === 0 ? (
-                      <p className="text-zinc-500 text-sm text-center py-4">
+                      <p className="text-[var(--muted-foreground)] text-sm text-center py-4">
                         No comments yet. Be the first to comment!
                       </p>
                     ) : (
@@ -396,16 +396,16 @@ export default function CommunityPage() {
                               src={comment.author.image || undefined}
                               alt={comment.author.name || comment.author.email}
                             />
-                            <AvatarFallback className="bg-zinc-800 text-white text-xs">
+                            <AvatarFallback className="bg-[var(--muted)] text-[var(--foreground)] text-xs">
                               {getUserInitials(comment.author.name, comment.author.email)}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="text-white font-medium text-sm">
+                              <span className="text-[var(--foreground)] font-medium text-sm">
                                 {comment.author.name || comment.author.email}
                               </span>
-                              <span className="text-zinc-500 text-xs">
+                              <span className="text-[var(--muted-foreground)] text-xs">
                                 {new Date(comment.createdAt).toLocaleDateString("pt-BR", {
                                   day: "numeric",
                                   month: "short",
@@ -414,7 +414,7 @@ export default function CommunityPage() {
                                 })}
                               </span>
                             </div>
-                            <p className="text-zinc-300 text-sm whitespace-pre-wrap">
+                            <p className="text-[var(--foreground)] text-sm whitespace-pre-wrap">
                               {comment.content}
                             </p>
                           </div>
@@ -435,13 +435,13 @@ export default function CommunityPage() {
                         placeholder="Write a comment..."
                         value={commentContent}
                         onChange={(e) => setCommentContent(e.target.value)}
-                        className="flex-1 bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
+                        className="flex-1 bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)]"
                         disabled={isSubmittingComment}
                       />
                       <Button
                         type="submit"
                         disabled={!commentContent.trim() || isSubmittingComment}
-                        className="bg-white text-zinc-900 hover:bg-gray-200"
+                        className="bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90"
                       >
                         {isSubmittingComment ? (
                           "Posting..."

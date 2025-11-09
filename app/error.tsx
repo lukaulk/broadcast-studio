@@ -10,7 +10,7 @@ export default function Error() {
         <p className="text-[var(--bsui-gray-0)] opacity-50">Sory!!</p>
 
          <Link  href="/" >
-            <button className="bg-white px-3 py-2 mt-6 cursor-pointer text-zinc-900 rounded-md hover:bg-zinc-200"> Go Back </button>
+            <button className="bg-[var(--card)] px-3 py-2 mt-6 cursor-pointer text-[var(--card-foreground)] rounded-md hover:bg-[var(--accent)]"> Go Back </button>
         </Link>
   </div>
     );

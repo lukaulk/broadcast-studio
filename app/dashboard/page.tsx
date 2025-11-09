@@ -26,13 +26,13 @@ export default function Dashboard() {
     router.push("/login")
   }
 
-  if (isPending) return <p className="text-white">Loading...</p>
+  if (isPending) return <p className="text-[var(--foreground)]">Loading...</p>
   if (!session?.user) return null
 
   const user = session.user as User
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col items-center justify-center">
       <h1 className="text-3xl font-bold">Bem-vindo, {user.name || user.email} 👋</h1>
       <button
         className="mt-4 px-4 py-2 bg-red-600 rounded"

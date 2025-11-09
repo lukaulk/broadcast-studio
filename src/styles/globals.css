@@ -47,55 +47,57 @@
 }
 
 :root {
-   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --radius: 0.625rem;
-  --background: #121212;
-  --foreground: #121212;
-  --card: #121212;
-  --card-foreground: #121212;
-  --popover: #121212;
-  --popover-foreground: #121212;
-  --primary: #303337;
-  --primary-foreground: oklch(0.985 0.002 247.839);
-  --secondary: oklch(0.967 0.003 264.542);
-  --secondary-foreground: #303337;
-  --muted: oklch(0.967 0.003 264.542);
-  --muted-foreground: oklch(0.551 0.027 264.364);
-  --accent: oklch(0.967 0.003 264.542);
-  --accent-foreground: #303337;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
-  --ring: oklch(0.707 0.022 261.325);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.002 247.839);
-  --sidebar-foreground: #121212;
-  --sidebar-primary: #303337;
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.967 0.003 264.542);
-  --sidebar-accent-foreground: #303337;
-  --sidebar-border: oklch(0.928 0.006 264.531);
-  --sidebar-ring: oklch(0.707 0.022 261.325);
+  /* Light mode colors */
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #0a0a0a;
+  --destructive: #ef4444;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #a1a1aa;
+  --chart-1: #3b82f6;
+  --chart-2: #8b5cf6;
+  --chart-3: #ec4899;
+  --chart-4: #f59e0b;
+  --chart-5: #10b981;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #0a0a0a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #0a0a0a;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #a1a1aa;
 
-  /* Broadcast Studio UI Colors */ 
-  --bsui-gray-0: #C4CBD8;
-  --bsui-gray-1: #4B5055;
-  --bsui-gray-2: #383B3E;
-  --bsui-gray-3: #303337; /* Sub Header background */
-  --bsui-gray-4: #1A1B1D;
-  --bsui-gray-5: #A0A6B1;
-  --bsui-border: #4A4F54;
-  --bsui-active: hsl(210, 6%, 40%);
-  --bsui-actived: hsl(210, 6%, 48%);
+  /* Broadcast Studio UI Colors - Light mode */
+  --bsui-gray-0: #1a1a1a;
+  --bsui-gray-1: #d4d4d8;
+  --bsui-gray-2: #e4e4e7;
+  --bsui-gray-3: #f4f4f5; /* Sub Header background */
+  --bsui-gray-4: #ffffff;
+  --bsui-gray-5: #71717a;
+  --bsui-border: #d4d4d8;
+  --bsui-active: hsl(210, 60%, 90%);
+  --bsui-actived: hsl(210, 60%, 85%);
   --bsui-green: #3AE87A;
   --bsui-blue: #1274E3;
 }
 
 .dark {
+  /* Dark mode colors */
   --background: #000000;
   --foreground: oklch(0.985 0.002 247.839);
   --card: #303337;
@@ -122,6 +124,24 @@
   --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  /* Broadcast Studio UI Colors - Dark mode */
+  --bsui-gray-0: #C4CBD8;
+  --bsui-gray-1: #4B5055;
+  --bsui-gray-2: #383B3E;
+  --bsui-gray-3: #303337; /* Sub Header background */
+  --bsui-gray-4: #1A1B1D;
+  --bsui-gray-5: #A0A6B1;
+  --bsui-border: #4A4F54;
+  --bsui-active: hsl(210, 6%, 40%);
+  --bsui-actived: hsl(210, 6%, 48%);
+  --bsui-green: #3AE87A;
+  --bsui-blue: #1274E3;
 }
 html, body {
   font-family: var(--font-sans);

@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Menu,
   X,
@@ -618,9 +619,10 @@ export default function Header() {
         ))}
       </div>
 
-      {/* User Avatar - Desktop */}
-      {session?.user && (
-        <div className="hidden md:flex items-center ml-auto mr-6">
+      {/* Theme Toggle and User Avatar - Desktop */}
+      <div className="hidden md:flex items-center ml-auto mr-6 gap-2">
+        <ThemeToggle />
+        {session?.user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="relative flex gap-2 items-center rounded-sm justify-center shrink-0 overflow-hidden px-2 hover:bg-[var(--bsui-active)] transition-colors">
@@ -636,7 +638,7 @@ export default function Header() {
                     {getUserInitials(session.user.name, session.user.email)}
                   </AvatarFallback>
                 </Avatar>
-                
+
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -663,11 +665,12 @@ export default function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Mobile menu button and user avatar */}
       <div className="md:hidden flex items-center gap-2">
+        <ThemeToggle />
         {session?.user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
