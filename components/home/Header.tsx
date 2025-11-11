@@ -114,7 +114,6 @@ export default function Header({ headerText, noHomeLink }: HeaderProps) {
                 alt="Broadcast Studio Logo"
                 width={40}
                 height={40}
-                className="backdrop-blur-2xl bg-black/10"
               />
               <span className="text-xl font-semibold text-[var(--foreground)]" translate="no">
                 {headerText || "Broadcast Studio"}

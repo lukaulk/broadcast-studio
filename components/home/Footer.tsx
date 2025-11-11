@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-black border-t border-zinc-800 py-12 radio-canada">
+    <footer className="bg-[var(--background)] border-t border-[var(--bsui-gray-0)] py-12 radio-canada">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-center">
 
@@ -22,7 +22,7 @@ export default function Footer() {
           <p>&copy; {new Date().getFullYear()} Broadcast Studio. Open source and free to the community.</p>
         </div>
         <Link href="https://lukau.vercel.app/" target="_blank" rel="noopener noreferrer">
-          <div className="flex items-center justify-center mt-2"><span translate="no">Created By</span> <Image src={"/icons/lukaustack.png"} alt="Lukaustack" width={100} height={60} /></div>
+          <div className="flex items-center justify-center mt-2 "><span translate="no" className="text-[var(--bsui-gray-0)]">Created By</span> <Image src={"/icons/lukaustack.png"} alt="Lukaustack" width={100} height={60} className="bg-black ml-2 p-2 rounded-[2px]" /></div>
         </Link>
       </div>
     </footer>

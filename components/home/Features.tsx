@@ -5,14 +5,14 @@ export default function Features() {
   const id = "features";
 
   return (
-    <section id={id} className="py-20 bg-gradient-to-b from-black to-cyan-900/30 ">
+    <section id={id} className="py-20 bg-gradient-to-b from-[var(--primary)] to-[var(--chart-1)] ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl mb-6">
+        <div className="text-center mb-16 text-[var(--bsui-gray-0)]">
+          <h2 className="text-4xl sm:text-5xl mb-6 ">
             Why
             <span className="font-bold" translate="no"> Broadcast Studio</span>?
           </h2>
-          <p className="text-xl text-[var(--muted-foreground)] max-w-3xl mx-auto">
+          <p className="text-xl text-[--bsui-gray-0] max-w-3xl mx-auto">
             Designed for <b>computers network</b> students and professionals, offering a complete and acessible simulation experience.
           </p>
         </div>
@@ -23,7 +23,7 @@ export default function Features() {
               <Network className="w-6 h-6 text-cyan-400" />
             </div>
             <h3 className="text-2xl font-semibold mb-4">Complete Simulation</h3>
-            <p className="text-[var(--muted-foreground)] leading-relaxed">
+            <p className="text-[--bsui-gray-0] leading-relaxed">
               Simulate complex networks with routers, switches, PCs, and IoT devices.
               Full support for modern network protocols.
             </p>
@@ -34,7 +34,7 @@ export default function Features() {
               <Shield className="w-6 h-6 text-cyan-400" />
             </div>
             <h3 className="text-2xl font-semibold mb-4">Open Source</h3>
-            <p className="text-[var(--muted-foreground)] leading-relaxed">
+            <p className="text-[--bsui-gray-0] leading-relaxed">
               Open source and free forever. Contribute to the community
               and customize to your needs.
             </p>
@@ -45,7 +45,7 @@ export default function Features() {
               <Users className="w-6 h-6 text-cyan-400" />
             </div>
             <h3 className="text-2xl font-semibold mb-4">Cross-platform</h3>
-            <p className="text-[var(--muted-foreground)] leading-relaxed">
+            <p className="text-[--bsui-gray-0] leading-relaxed">
               Works perfectly on Windows, Linux, and macOS.
               A single tool for all your devices.
             </p>
