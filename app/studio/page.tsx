@@ -52,7 +52,6 @@ export default async function Studio() {
                   <OptionBar />
                 </ReactFlowProvider>
               </ResizablePanel>
-
               <ResizableHandle withHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] hover:w-1 w-[1px] cursor-col-resize" />
               <ResizablePanel defaultSize={20} minSize={13} maxSize={21} className="flex">
                 <SideBar />
@@ -66,7 +65,7 @@ export default async function Studio() {
             minSize={19}
             defaultSize={20}
             maxSize={25}
-            className="flex rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)] shadow-md"
+            className="flex rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[--bsui-gray-6)] text-[var(--bsui-gray-0)] shadow-md"
           >
             <ElementBar />
           </ResizablePanel>

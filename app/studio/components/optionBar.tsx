@@ -10,7 +10,7 @@ export default function OptionBar() {
         <div className="flex space-x-2 ml-4">
           <TabsTrigger
             value="logical"
-            className="flex cursor-pointer text-md items-center px-3 py-3 rounded-md text-[var(--bsui-gray-0)] data-[state=active]:bg-[hsl(210,5%,30%)] data-[state=active]:font-semibold hover:bg-[var(--bsui-active)]"
+            className="flex cursor-pointer text-md items-center px-3 py-3 rounded-md text-[var(--bsui-gray-0)] data-[state=active]:bg-[hsl(240,6%,80%)] data-[state=active]:font-semibold hover:bg-[var(--bsui-active)]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ export default function OptionBar() {
           </TabsTrigger>
           <TabsTrigger
             value="physical"
-            className="flex cursor-pointer text-md items-center px-3 py-3  text-[var(--bsui-gray-0)] rounded-md data-[state=active]:bg-[hsl(210,5%,30%)] data-[state=active]:font-semibold hover:bg-[var(--bsui-active)]"
+            className="flex cursor-pointer text-md items-center px-3 py-3  text-[var(--bsui-gray-0)] rounded-md data-[state=active]:bg-[hsl(240,6%,80%)] data-[state=active]:font-semibold hover:bg-[var(--bsui-active)]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
