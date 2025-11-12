@@ -65,7 +65,7 @@ export default async function Studio() {
             minSize={19}
             defaultSize={20}
             maxSize={25}
-            className="flex rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[--bsui-gray-6)] text-[var(--bsui-gray-0)] shadow-md"
+            className="flex rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[var(--bsui-gray-6)] text-[var(--bsui-gray-0)] shadow-md"
           >
             <ElementBar />
           </ResizablePanel>

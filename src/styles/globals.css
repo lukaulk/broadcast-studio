@@ -89,10 +89,11 @@
   --bsui-gray-3: #e4e4e7; /* Sub Header background */
   --bsui-gray-4: hsl(240,6%,70%);
   --bsui-gray-5: #eaeaea;
-  --bsui-gray-6: hsl(240,6%,55%);
+  --bsui-gray-6: #e4e4e7;
+
   --bsui-border: hsl(240,6%,70%);
-  --bsui-active: hsl(240,6%,85%);
-  --bsui-actived: hsl(240,6%,85%);
+  --bsui-active: #f4f4f5;
+  --bsui-actived: hsl(240, 5%, 70%);
   --bsui-green: #3AE87A;
   --bsui-blue: #1274E3;
 }
@@ -138,7 +139,9 @@
   --bsui-gray-3: #303337; /* Sub Header background */
   --bsui-gray-4: #1A1B1D;
   --bsui-gray-5: #A0A6B1;
-  --bsui-gray-6: #383B3E;
+  
+  --bsui-gray-6: var(--bsui-gray-3);
+
   --bsui-border: #4A4F54;
   --bsui-active: hsl(210, 6%, 40%);
   --bsui-actived: hsl(210, 6%, 48%);

@@ -177,7 +177,7 @@ export default function CommunityPage() {
 
         {/* Post Form - Only visible when logged in */}
         {session?.user ? (
-          <Card className="w-full max-w-3xl  mx-auto mb-6 bg-zinc-950 border-zinc-800 shadow-lg sm:fixed z-10">
+          <Card className="w-full max-w-3xl  mx-auto mb-6 dark:bg-zinc-950 dark:border-zinc-800 shadow-lg sm:fixed z-10">
             <CardContent>
               <form onSubmit={handleSubmit} className="space-x-4 flex flex-col sm:flex-row">
                 <div className="space-y-4 w-30">
@@ -225,7 +225,7 @@ export default function CommunityPage() {
                 <Button
                   type="submit"
                   disabled={!content.trim() || isSubmitting}
-                  className=" bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90 mt-5"
+                  className="mt-5  bg-[var(--card-foreground)] text-[var(--card)] hover:bg-[var(--card-foreground)]/90 "
                 >
                   {isSubmitting ? (
                     "Posting..."
@@ -240,7 +240,7 @@ export default function CommunityPage() {
             </CardContent>
           </Card>
         ) : (
-          <Card className="w-full max-w-3xl mx-auto mb-6 bg-zinc-950 border-zinc-800 shadow-lg">
+          <Card className="w-full max-w-3xl mx-auto mb-6 dark:bg-zinc-950 dark:border-zinc-800 shadow-lg">
             <CardContent className="pt-6">
               <p className="text-[var(--muted-foreground)] mb-6">
                 <MessageCircleMore className="inline w-5 h-5 mr-2 mb-1 text-[var(--muted-foreground)]" />
@@ -263,7 +263,7 @@ export default function CommunityPage() {
         {/* Posts List */}
         <div className="w-full max-w-3xl mx-auto space-y-4 md:mt-20">
           {posts.length === 0 ? (
-            <Card className="w-full bg-zinc-950 border-zinc-800 shadow-lg">
+            <Card className="w-full dark:bg-zinc-950 dark:border-zinc-800 shadow-lg">
               <CardContent className="pt-6">
                 <p className="text-[var(--muted-foreground)] text-center py-8">
                   No posts yet. Be the first to share something!
@@ -277,7 +277,7 @@ export default function CommunityPage() {
                 <Card
                   key={post.id}
                   onClick={() => setSelectedPost(post)}
-                  className="w-full bg-zinc-950 border-zinc-800 shadow-lg hover:bg-zinc-900 active:bg-zinc-800 cursor-pointer transition-colors"
+                  className="w-full dark:bg-zinc-950 dark:border-zinc-800 shadow-lg hover:bg-zinc-100 active:bg-zinc-200  dark:hover:bg-zinc-900 dark:active:bg-zinc-800 cursor-pointer transition-colors"
                 >
                   <CardContent>
                     <div className="flex items-start gap-4">
@@ -372,7 +372,7 @@ export default function CommunityPage() {
               </DialogHeader>
 
               <div className="mt-4 space-y-4">
-                <div className="bg-zinc-900 border border-zinc-800 rounded-md p-4">
+                <div className="dark:bg-zinc-900 border dark:border-zinc-800 rounded-md p-4">
                   <p className="text-[var(--foreground)] whitespace-pre-wrap text-lg">
                     {selectedPost.content}
                   </p>
@@ -441,7 +441,7 @@ export default function CommunityPage() {
                       <Button
                         type="submit"
                         disabled={!commentContent.trim() || isSubmittingComment}
-                        className="bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90"
+                        className="bg-[var(--card-foreground)] text-[var(--card)] hover:bg-[var(--card-foreground)]/90"
                       >
                         {isSubmittingComment ? (
                           "Posting..."

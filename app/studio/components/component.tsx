@@ -41,7 +41,7 @@ export default function Component({
           src={icon}
           fill
           sizes="160px"
-          className="object-contain scale-90 transition-all duration-500 ease-in-out group-hover:scale-110 drop-shadow-black/20 drop-shadow-2xl pointer-events-none"
+          className="object-contain scale-90 transition-all duration-500 ease-in-out group-hover:scale-110 drop-shadow-black/90 drop-shadow-xs dark:drop-shadow-black/20 dark:drop-shadow-2xl pointer-events-none"
         />
       )}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">

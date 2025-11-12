@@ -1,6 +1,5 @@
 import { Network, Shield, Users } from "lucide-react";
 
-
 export default function Features() {
   const id = "features";
 

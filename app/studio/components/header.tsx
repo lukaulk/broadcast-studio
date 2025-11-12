@@ -201,7 +201,7 @@ const MOCK_PROJECTS = [
   {
     id: "1",
     name: "Main Broadcast Network",
-    description: "Primary streaming setup with multiple cameras",
+    description: "Primary networks",
     lastModified: new Date("2024-01-15"),
     nodes: 12,
   },
