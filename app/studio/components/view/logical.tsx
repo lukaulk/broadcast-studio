@@ -33,7 +33,7 @@ function Flow() {
   const { screenToFlowPosition } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");
-  const { setEditApiImpl, setFlowApiImpl } = useStudio();
+  const { setEditApiImpl, setFlowApiImpl, incrementNodesVersion } = useStudio();
 
   // clipboard for copy/paste
   const clipboardRef = useRef<Node[]>([]);
@@ -97,7 +97,12 @@ function Flow() {
         };
       }
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => {
+        const updated = nds.concat(newNode);
+        // Notify hierarchy of node change
+        incrementNodesVersion();
+        return updated;
+      });
 
       // helpful tip on first use
       toast.success(`${payload.name || nodeType} added`, {
@@ -108,7 +113,7 @@ function Flow() {
       // Silently handle invalid payloads
       // Error is likely due to invalid JSON or missing required fields
     }
-  }, [screenToFlowPosition, setNodes]);
+  }, [screenToFlowPosition, setNodes, incrementNodesVersion]);
 
   // ensure canvas matches container size
   useEffect(() => {
@@ -209,7 +214,11 @@ function Flow() {
     const cut = () => {
       const selectedIds = new Set(getSelectedNodes().map((n) => n.id));
       clipboardRef.current = nodes.filter((n) => selectedIds.has(n.id)).map((n) => ({ ...n, selected: false }));
-      setNodes((nds) => nds.filter((n) => !selectedIds.has(n.id)));
+      setNodes((nds) => {
+        const updated = nds.filter((n) => !selectedIds.has(n.id));
+        incrementNodesVersion();
+        return updated;
+      });
       // remove edges connected to deleted nodes
       setEdges((eds) => eds.filter((e) => !selectedIds.has(e.source) && !selectedIds.has(e.target)));
     };
@@ -229,7 +238,9 @@ function Flow() {
         });
         // deselect existing then add pasted selected
         const cleared: Node[] = nds.map((n) => ({ ...n, selected: false } as Node));
-        return ([] as Node[]).concat(cleared, pasted);
+        const updated = ([] as Node[]).concat(cleared, pasted);
+        incrementNodesVersion();
+        return updated;
       });
     };
 
@@ -237,7 +248,11 @@ function Flow() {
       const selectedNodeIds = new Set(getSelectedNodes().map((n) => n.id));
       const selectedEdgeIds = new Set(getSelectedEdges().map((e) => e.id));
       if (selectedNodeIds.size === 0 && selectedEdgeIds.size === 0) return;
-      setNodes((nds) => nds.filter((n) => !selectedNodeIds.has(n.id)));
+      setNodes((nds) => {
+        const updated = nds.filter((n) => !selectedNodeIds.has(n.id));
+        incrementNodesVersion();
+        return updated;
+      });
       setEdges((eds) => eds
         // drop explicitly selected edges
         .filter((e) => !selectedEdgeIds.has(e.id))
@@ -267,9 +282,14 @@ function Flow() {
       getEdges: () => edges,
       setNodes: (newNodes) => {
         if (typeof newNodes === 'function') {
-          setNodes((prevNodes) => newNodes(prevNodes));
+          setNodes((prevNodes) => {
+            const updated = newNodes(prevNodes);
+            incrementNodesVersion();
+            return updated;
+          });
         } else {
           setNodes(newNodes);
+          incrementNodesVersion();
         }
       },
       setEdges: (newEdges) => {
@@ -280,7 +300,7 @@ function Flow() {
         }
       },
     } as Partial<import("../studioContext").StudioFlowApi>);
-  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl]);
+  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, incrementNodesVersion]);
 
   return (
     <ReactFlow
@@ -298,22 +318,28 @@ function Flow() {
       panOnScroll={mode !== "pen"}
       zoomOnScroll={mode !== "pen"}
       fitView
+      deleteKeyCode={null}
+      multiSelectionKeyCode={null}
     >
       {/* Pen overlay canvas - only interactive in pen mode */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ zIndex: mode === "pen" ? 10 : -1 }}
-      >
-        <canvas
-          ref={canvasRef}
-          className={`absolute inset-0 ${mode === "pen" ? "pointer-events-auto" : "pointer-events-none"}`}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
-          onContextMenu={handleContextMenu}
-        />
-      </div>
+      {mode === "pen" && (
+        <div
+          className="absolute inset-0 pointer-events-auto"
+          style={{ zIndex: 10 }}
+          suppressHydrationWarning
+        >
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+            onContextMenu={handleContextMenu}
+            suppressHydrationWarning
+          />
+        </div>
+      )}
       <MiniMap
         nodeStrokeWidth={1}
         className="border-2 p-0 m-0 rounded"

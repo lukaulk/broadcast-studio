@@ -2,7 +2,7 @@
 
 
 
-import React, { createContext, useContext, useMemo, useRef, useState } from "react";
+import React, { createContext, useContext, useMemo, useRef, useState, useCallback } from "react";
 import type { Node, Edge, Viewport, ReactFlowInstance } from "@xyflow/react";
 
 export type EditAction = "undo" | "redo" | "cut" | "copy" | "paste" | "delete" | "select_all" | "find" | "replace";
@@ -87,6 +87,10 @@ interface StudioContextValue {
     edges: Edge[];
   } | null;
   setClipboard: (_data: { nodes: Node[]; edges: Edge[] } | null) => void;
+
+  // Nodes version counter to trigger updates in consumers
+  nodesVersion: number;
+  incrementNodesVersion: () => void;
 }
 
 
@@ -141,6 +145,11 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [currentProject, setCurrentProject] = useState<ProjectData | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [clipboard, setClipboard] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
+  const [nodesVersion, setNodesVersion] = useState(0);
+
+  const incrementNodesVersion = useCallback(() => {
+    setNodesVersion((v) => v + 1);
+  }, []);
 
   const setEditApiImpl = (impl: Partial<StudioEditApi>) => {
     editApiRef.current = { ...editApiRef.current, ...impl } as StudioEditApi;
@@ -164,7 +173,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setIsDirty,
     clipboard,
     setClipboard,
-  }), [currentProject, isDirty, clipboard]);
+    nodesVersion,
+    incrementNodesVersion,
+  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion]);
 
   return <StudioContext.Provider value={value}>{children}</StudioContext.Provider>;
 }

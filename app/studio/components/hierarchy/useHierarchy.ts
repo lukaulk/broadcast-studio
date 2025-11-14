@@ -7,7 +7,7 @@ import { useStudio } from "../studioContext";
 import { NetworkNodeData } from "../nodes/types";
 
 export function useHierarchy() {
-    const { flowApi } = useStudio();
+    const { flowApi, nodesVersion } = useStudio();
     const [groups, setGroups] = useState<HierarchyGroup[]>([]);
     const [items, setItems] = useState<HierarchyItem[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -57,7 +57,7 @@ export function useHierarchy() {
                 children: filteredItems.filter((item) => item.groupId === group.id),
             }));
         });
-    }, [flowApi]);
+    }, [flowApi, nodesVersion]);
 
     // Filter items based on search query
     const filteredItems = useMemo(() => {
