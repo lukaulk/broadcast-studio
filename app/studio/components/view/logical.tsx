@@ -33,7 +33,7 @@ function Flow() {
   const { screenToFlowPosition } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");
-  const { setEditApiImpl } = useStudio();
+  const { setEditApiImpl, setFlowApiImpl } = useStudio();
 
   // clipboard for copy/paste
   const clipboardRef = useRef<Node[]>([]);
@@ -104,9 +104,9 @@ function Flow() {
         description: "CTRL+Click for multi-selection",
         duration: 3000
       });
-    } catch (error) {
-      // Log error for debugging
-      console.error("Error dropping node:", error);
+    } catch {
+      // Silently handle invalid payloads
+      // Error is likely due to invalid JSON or missing required fields
     }
   }, [screenToFlowPosition, setNodes]);
 
@@ -260,7 +260,27 @@ function Flow() {
       hasSelection: () => nodes.some((n) => n.selected) || edges.some((e) => e.selected),
       canPaste: () => clipboardRef.current.length > 0,
     });
-  }, [nodes, edges, setNodes, setEdges, setEditApiImpl]);
+
+    // Expose nodes and edges to context for hierarchy
+    setFlowApiImpl({
+      getNodes: () => nodes,
+      getEdges: () => edges,
+      setNodes: (newNodes) => {
+        if (typeof newNodes === 'function') {
+          setNodes((prevNodes) => newNodes(prevNodes));
+        } else {
+          setNodes(newNodes);
+        }
+      },
+      setEdges: (newEdges) => {
+        if (typeof newEdges === 'function') {
+          setEdges((prevEdges) => newEdges(prevEdges));
+        } else {
+          setEdges(newEdges);
+        }
+      },
+    } as Partial<import("../studioContext").StudioFlowApi>);
+  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl]);
 
   return (
     <ReactFlow

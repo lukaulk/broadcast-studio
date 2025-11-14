@@ -1,9 +1,9 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 import React, { createContext, useContext, useMemo, useRef, useState } from "react";
-import type { Node, Edge, Viewport, ReactFlowInstance } from "reactflow";
+import type { Node, Edge, Viewport, ReactFlowInstance } from "@xyflow/react";
 
 export type EditAction = "undo" | "redo" | "cut" | "copy" | "paste" | "delete" | "select_all" | "find" | "replace";
 
@@ -24,20 +24,20 @@ export interface StudioFlowApi {
   getViewport: () => Viewport;
   getSelectedNodes: () => Node[];
   getSelectedEdges: () => Edge[];
-  
+
   // Setters for ReactFlow data
   setNodes: (_nodes: Node[] | ((_nodes: Node[]) => Node[])) => void;
   setEdges: (_edges: Edge[] | ((_edges: Edge[]) => Edge[])) => void;
   addNode: (_node: Node) => void;
   addEdge: (_edge: Edge) => void;
   deleteElements: (_elements: { nodes?: Node[]; edges?: Edge[] }) => void;
-  
+
   // ReactFlow instance methods
   fitView: (_options?: { padding?: number; includeHiddenNodes?: boolean }) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   setCenter: (_x: number, _y: number, _options?: { zoom?: number }) => void;
-  
+
   // Project data
   getProjectData: () => ProjectData;
   loadProjectData: (_data: ProjectData) => void;
@@ -67,20 +67,20 @@ export interface ProjectSettings {
 interface StudioContextValue {
   // Edit API exposed to header and others
   editApi: StudioEditApi;
-  
+
   // Flow API for ReactFlow interaction
   flowApi: StudioFlowApi;
-  
+
   // Allow Flow to register actual implementations
   setEditApiImpl: (_impl: Partial<StudioEditApi>) => void;
   setFlowApiImpl: (_impl: Partial<StudioFlowApi>) => void;
-  
+
   // Project management
   currentProject: ProjectData | null;
   setCurrentProject: (_project: ProjectData | null) => void;
   isDirty: boolean;
   setIsDirty: (_dirty: boolean) => void;
-  
+
   // Clipboard for copy/paste operations
   clipboard: {
     nodes: Node[];
@@ -89,9 +89,9 @@ interface StudioContextValue {
   setClipboard: (_data: { nodes: Node[]; edges: Edge[] } | null) => void;
 }
 
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
-const noop = () => {};
+
+const noop = () => { };
 const noopArray = () => [];
 
 const defaultEditApi: StudioEditApi = {
@@ -136,7 +136,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const editApiRef = useRef<StudioEditApi>({ ...defaultEditApi });
   const flowApiRef = useRef<StudioFlowApi>({ ...defaultFlowApi });
   const [, forceUpdate] = useState(0);
-  
+
   // Project state
   const [currentProject, setCurrentProject] = useState<ProjectData | null>(null);
   const [isDirty, setIsDirty] = useState(false);
@@ -226,10 +226,10 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
       deleteElements: ({ nodes = [], edges = [] }) => {
         const nodeIds = nodes.map(n => n.id);
         const edgeIds = edges.map(e => e.id);
-        
+
         const currentNodes = reactFlowInstance.getNodes();
         const currentEdges = reactFlowInstance.getEdges();
-        
+
         reactFlowInstance.setNodes(currentNodes.filter(n => !nodeIds.includes(n.id)));
         reactFlowInstance.setEdges(currentEdges.filter(e => !edgeIds.includes(e.id)));
         setIsDirty(true);
@@ -243,7 +243,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
         const edges = reactFlowInstance.getEdges();
         const viewport = reactFlowInstance.getViewport();
         const now = new Date().toISOString();
-        
+
         return {
           name: "Broadcast Studio Project",
           version: "1.0.0",
@@ -276,7 +276,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
       copy: () => {
         const selectedNodes = reactFlowInstance.getNodes().filter(n => n.selected);
         const selectedEdges = reactFlowInstance.getEdges().filter(e => e.selected);
-        
+
         if (selectedNodes.length > 0 || selectedEdges.length > 0) {
           setClipboard({ nodes: selectedNodes, edges: selectedEdges });
         }
@@ -284,17 +284,17 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
       cut: () => {
         const selectedNodes = reactFlowInstance.getNodes().filter(n => n.selected);
         const selectedEdges = reactFlowInstance.getEdges().filter(e => e.selected);
-        
+
         if (selectedNodes.length > 0 || selectedEdges.length > 0) {
           setClipboard({ nodes: selectedNodes, edges: selectedEdges });
-          
+
           // Remove selected elements
           const nodeIds = selectedNodes.map(n => n.id);
           const edgeIds = selectedEdges.map(e => e.id);
-          
+
           const remainingNodes = reactFlowInstance.getNodes().filter(n => !nodeIds.includes(n.id));
           const remainingEdges = reactFlowInstance.getEdges().filter(e => !edgeIds.includes(e.id));
-          
+
           reactFlowInstance.setNodes(remainingNodes);
           reactFlowInstance.setEdges(remainingEdges);
           setIsDirty(true);
@@ -302,7 +302,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
       },
       paste: () => {
         if (!clipboard) return;
-        
+
         // Clone nodes with new IDs and offset position
         const nodeIdMap = new Map<string, string>();
         let copyCounter = 0;
@@ -319,7 +319,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
             selected: true,
           };
         });
-        
+
         // Clone edges with updated node references
         const pastedEdges = clipboard.edges.map(edge => ({
           ...edge,
@@ -328,11 +328,11 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
           target: nodeIdMap.get(edge.target) || edge.target,
           selected: true,
         }));
-        
+
         // Add to current elements
         const currentNodes = reactFlowInstance.getNodes().map(n => ({ ...n, selected: false }));
         const currentEdges = reactFlowInstance.getEdges().map(e => ({ ...e, selected: false }));
-        
+
         reactFlowInstance.setNodes([...currentNodes, ...pastedNodes]);
         reactFlowInstance.setEdges([...currentEdges, ...pastedEdges]);
         setIsDirty(true);
@@ -340,14 +340,14 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
       deleteSelected: () => {
         const selectedNodes = reactFlowInstance.getNodes().filter(n => n.selected);
         const selectedEdges = reactFlowInstance.getEdges().filter(e => e.selected);
-        
+
         if (selectedNodes.length > 0 || selectedEdges.length > 0) {
           const nodeIds = selectedNodes.map(n => n.id);
           const edgeIds = selectedEdges.map(e => e.id);
-          
+
           const remainingNodes = reactFlowInstance.getNodes().filter(n => !nodeIds.includes(n.id));
           const remainingEdges = reactFlowInstance.getEdges().filter(e => !edgeIds.includes(e.id));
-          
+
           reactFlowInstance.setNodes(remainingNodes);
           reactFlowInstance.setEdges(remainingEdges);
           setIsDirty(true);
@@ -356,7 +356,7 @@ export function useStudioFlowImplementation(reactFlowInstance: ReactFlowInstance
       selectAll: () => {
         const nodes = reactFlowInstance.getNodes().map(n => ({ ...n, selected: true }));
         const edges = reactFlowInstance.getEdges().map(e => ({ ...e, selected: true }));
-        
+
         reactFlowInstance.setNodes(nodes);
         reactFlowInstance.setEdges(edges);
       },
