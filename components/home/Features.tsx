@@ -4,7 +4,7 @@ export default function Features() {
   const id = "features";
 
   return (
-    <section id={id} className="py-20 bg-gradient-to-b from-[var(--primary)] to-[var(--chart-1)] ">
+    <section id={id} className="py-20 bg-gradient-to-b from-[var(--background)] to-[var(--chart-1)] ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 text-[var(--bsui-gray-0)]">
           <h2 className="text-4xl sm:text-5xl mb-6 ">

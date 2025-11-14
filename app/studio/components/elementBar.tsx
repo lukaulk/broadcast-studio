@@ -2,18 +2,17 @@
 
 import Component from "./component";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { nodeConfigs } from "./nodes";
 
 export default function ElementBar() {
-  const components = [
-    { icon: "/dvc/svg/laptop.svg", name: "PC", type: "End Device" },
-    { icon: "/dvc/svg/router.svg", name: "Router", type: "Wireless Device" },
-    { icon: "/dvc/svg/switchs.svg", name: "Switch", type: "Connect Device" },
-    { icon: "/dvc/svg/server.svg", name: "Server", type: "End Device", className: "scale-95" },
-    { icon: "/dvc/svg/smartphone.svg", name: "Smartphone", type: "End Device" },
-    { icon: "/dvc/svg/cloud.svg", name: "Cloud", type: "End Device", className: "scale-125" },
-    { icon: "/dvc/svg/desktop.svg", name: "Desktop", type: "End Device" },
-    { icon: "/dvc/svg/printer.svg", name: "Printer", type: "End Device", className: "scale-125" },
-  ];
+  // Usa a configuração centralizada dos nodes
+  const components = Object.values(nodeConfigs).map(config => ({
+    icon: config.icon,
+    name: config.name,
+    type: config.dvctype,
+    nodeType: config.type,
+    className: config.className,
+  }));
 
   return (
     <div className="p-2">
@@ -26,6 +25,7 @@ export default function ElementBar() {
                 icon={component.icon}
                 name={component.name}
                 type={component.type}
+                nodeType={component.nodeType}
                 className={component.className}
               />
             ))}

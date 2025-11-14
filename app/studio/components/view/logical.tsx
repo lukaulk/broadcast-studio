@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge, useReactFlow } from "@xyflow/react";
 import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
-import CustomNode from "../costumNode";
+import { nodeTypes, createNodeFromType, nodeConfigs } from "../nodes";
 import { useStudio } from "../studioContext";
 import { toast } from "sonner";
 
@@ -26,10 +26,6 @@ const defaultEdges: Edge[] = [
 ];
 
 const defaultNodes: Node[] = [];
-
-const nodeTypes = {
-  customNode: CustomNode,
-};
 
 function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
@@ -63,26 +59,54 @@ function Flow() {
     if (!raw) return;
 
     try {
-      const payload = JSON.parse(raw) as { type?: string; src?: string; name?: string };
+      const payload = JSON.parse(raw) as { type?: string; nodeType?: string; src?: string; name?: string };
       const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
       const newId = String(nextIdRef.current++);
 
-      const newNode: Node = {
-        id: newId,
-        type: "customNode",
-        position,
-        data: { label: payload.name ? `${payload.name}-0${newId}` : "Device", image: payload.src ?? "/dvc/desktop.png" },
-      };
+      // Determina o tipo de node baseado no payload
+      // Prioriza nodeType, depois tenta inferir do name, e por último usa 'customNode' como fallback
+      let nodeType = payload.nodeType || payload.type;
+
+      if (!nodeType && payload.name) {
+        // Tenta encontrar o tipo baseado no nome
+        const nameLower = payload.name.toLowerCase();
+        const foundType = Object.keys(nodeConfigs).find(
+          key => nodeConfigs[key].name.toLowerCase() === nameLower
+        );
+        nodeType = foundType || "customNode";
+      } else {
+        nodeType = nodeType || "customNode";
+      }
+
+      // Cria o node usando a função utilitária ou cria manualmente se for customNode
+      let newNode: Node;
+
+      if (nodeType !== "customNode" && nodeConfigs[nodeType]) {
+        newNode = createNodeFromType(nodeType, newId, position);
+      } else {
+        // Fallback para o formato antigo
+        newNode = {
+          id: newId,
+          type: "customNode",
+          position,
+          data: {
+            label: payload.name ? `${payload.name}-${newId}` : "Device",
+            image: payload.src ?? "/dvc/desktop.png",
+            dvctype: "End Device"
+          },
+        };
+      }
 
       setNodes((nds) => nds.concat(newNode));
 
       // helpful tip on first use
-      toast.success(`${payload.name} added`, {
+      toast.success(`${payload.name || nodeType} added`, {
         description: "CTRL+Click for multi-selection",
         duration: 3000
       });
-    } catch {
-      // ignore invalid payloads
+    } catch (error) {
+      // Log error for debugging
+      console.error("Error dropping node:", error);
     }
   }, [screenToFlowPosition, setNodes]);
 
@@ -256,7 +280,10 @@ function Flow() {
       fitView
     >
       {/* Pen overlay canvas - only interactive in pen mode */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ zIndex: mode === "pen" ? 10 : -1 }}
+      >
         <canvas
           ref={canvasRef}
           className={`absolute inset-0 ${mode === "pen" ? "pointer-events-auto" : "pointer-events-none"}`}

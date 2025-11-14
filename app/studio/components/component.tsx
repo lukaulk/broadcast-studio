@@ -6,6 +6,7 @@ import type { DragEvent } from "react";
 interface ComponentProps {
   name?: string;
   type?: string;
+  nodeType?: string;
   description?: string;
   icon?: string;
   className?: string;
@@ -14,13 +15,19 @@ interface ComponentProps {
 export default function Component({
   name,
   type,
+  nodeType,
   icon,
   description,
   className,
 }: ComponentProps) {
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
-    // send a small payload identifying the component
-    const payload = JSON.stringify({ type: "imageNode", src: icon, name });
+    // send a payload identifying the component with nodeType for proper node creation
+    const payload = JSON.stringify({ 
+      type: "imageNode", 
+      nodeType: nodeType || name?.toLowerCase(), 
+      src: icon, 
+      name 
+    });
     e.dataTransfer.setData("application/reactflow", payload);
     // also set plain text for better cross-browser drag initiation (e.g., Firefox)
     e.dataTransfer.setData("text/plain", payload);
