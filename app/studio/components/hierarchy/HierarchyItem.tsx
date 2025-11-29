@@ -49,8 +49,21 @@ export function HierarchyItem({
                     }`}
                 onClick={handleClick}
             >
-                {/* Visibility Toggle */}
-                <button
+                {/* Node Icon */}
+                <div className="flex-shrink-0">
+                    <Image
+                        src={item.icon}
+                        alt={item.name}
+                        width={20}
+                        height={20}
+                        className="object-contain"
+                    />
+                </div>
+
+                {/* Node Name */}
+                <span className="flex-1 text-md truncate">{item.name}</span>
+ {/* Visibility Toggle */}
+ <button
                     onClick={(e) => {
                         e.stopPropagation();
                         onToggleVisibility(item.id);
@@ -85,7 +98,7 @@ export function HierarchyItem({
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="size-4 opacity-50"
+                            className="size-4 opacity-60"
                         >
                             <path
                                 strokeLinecap="round"
@@ -127,7 +140,7 @@ export function HierarchyItem({
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="size-4 opacity-50"
+                            className="size-4 opacity-60"
                         >
                             <path
                                 strokeLinecap="round"
@@ -137,28 +150,13 @@ export function HierarchyItem({
                         </svg>
                     )}
                 </button>
-
-                {/* Node Icon */}
-                <div className="flex-shrink-0">
-                    <Image
-                        src={item.icon}
-                        alt={item.name}
-                        width={20}
-                        height={20}
-                        className="object-contain"
-                    />
-                </div>
-
-                {/* Node Name */}
-                <span className="flex-1 text-sm truncate">{item.name}</span>
-
                 {/* Actions Menu */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100"
+                            className="h-6 w-6 p-0 opacity-70 group-hover:opacity-100 data-[state=open]:opacity-100"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <svg

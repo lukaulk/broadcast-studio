@@ -13,7 +13,7 @@ export interface ImageLabelNodeData extends Record<string, unknown> {
 const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
   const d = data as ImageLabelNodeData;
   return (
-    <div className={`flex flex-col items-center justify-center ${selected ? "ring-2 ring-[#008AED] rounded-md" : ""}`}>
+    <div className={`flex flex-col items-center justify-center ${selected ? "ring ring-[#008AED] rounded-md" : ""}`}>
       <Image
         src={d.image}
         alt={d.label}

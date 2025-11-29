@@ -87,7 +87,7 @@ export default function SideBar() {
       </div>
 
       {/* Content */}
-      <ScrollArea className="flex-1 px-2 py-2">
+      <ScrollArea className="flex-1">
         <div className="space-y-1">
           {/* Groups */}
           {groups.map((group) => (
@@ -130,7 +130,7 @@ export default function SideBar() {
 
           {/* Empty State */}
           {groups.length === 0 && items.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-8 text-center text-[var(--bsui-gray-1)]">
+            <div className="flex flex-col items-center justify-center py-8 text-center text-[var(--bsui-gray-0)]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -146,7 +146,6 @@ export default function SideBar() {
                 />
               </svg>
               <p className="text-sm">No nodes in hierarchy</p>
-              <p className="text-xs mt-1">Add nodes to the canvas to see them here</p>
             </div>
           )}
         </div>

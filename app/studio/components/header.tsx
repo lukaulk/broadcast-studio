@@ -40,6 +40,8 @@ import {
   Search,
   LogOut,
 } from "lucide-react";
+import { nodeConfigs, createNodeFromType } from "./nodes";
+import type { NodeConfig } from "./nodes";
 
 /**
  * Static menu configuration.
@@ -94,14 +96,6 @@ const MENU_DATA = {
     label: "Nodes",
     items: [
       "Add Node",
-      "Delete Node",
-      "Duplicate Node",
-      "separator",
-      "Group Nodes",
-      "Ungroup Nodes",
-      "separator",
-      "Connect Nodes",
-      "Disconnect Nodes",
       "separator",
       "Node Properties",
       "Node Library",
@@ -259,12 +253,14 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
   // Dialog visibility
   const [newProjectOpen, setNewProjectOpen] = useState(false);
   const [openProjectOpen, setOpenProjectOpen] = useState(false);
+  const [addNodeOpen, setAddNodeOpen] = useState(false);
 
   // Form & UI state
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [nodeSearchQuery, setNodeSearchQuery] = useState("");
 
   /**
    * Create a new project (local-only for now).
@@ -366,6 +362,37 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     document.body.removeChild(link);
   };
 
+  /**
+   * Add a node to the flow at the center of the viewport
+   */
+  const handleAddNode = (nodeType: string) => {
+    if (!studio) return;
+
+    try {
+      const nodes = studio.flowApi.getNodes();
+      const viewport = studio.flowApi.getViewport();
+
+      // Calculate center position in flow coordinates
+      // Approximate center based on viewport (this is a simple approximation)
+      const centerX = -viewport.x / viewport.zoom + (typeof window !== 'undefined' ? window.innerWidth / 2 / viewport.zoom : 400);
+      const centerY = -viewport.y / viewport.zoom + (typeof window !== 'undefined' ? window.innerHeight / 2 / viewport.zoom : 300);
+
+      const newId = String(nodes.length + 1);
+      const newNode = createNodeFromType(nodeType, newId, { x: centerX, y: centerY });
+
+      studio.flowApi.addNode(newNode);
+      setAddNodeOpen(false);
+      setNodeSearchQuery("");
+
+      // Show success message
+      // eslint-disable-next-line no-console
+      console.log(`Node ${nodeConfigs[nodeType]?.name || nodeType} added`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error adding node:", error);
+    }
+  };
+
   /** Handler for actions that map directly to the studio API or local helpers. */
   const handleItem = (item: string) => {
     if (!studio) return;
@@ -380,6 +407,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       },
       "Save As...": handleSaveAs,
       Exit: () => router.back(),
+      "Add Node": () => setAddNodeOpen(true),
       Copy: () => studio.editApi.copy(),
       Cut: () => studio.editApi.cut(),
       Paste: () => studio.editApi.paste(),
@@ -395,6 +423,13 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     (p) =>
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  /** Filtered nodes list based on search query */
+  const filteredNodes = Object.entries(nodeConfigs).filter(([key, config]) =>
+    config.name.toLowerCase().includes(nodeSearchQuery.toLowerCase()) ||
+    config.dvctype.toLowerCase().includes(nodeSearchQuery.toLowerCase()) ||
+    key.toLowerCase().includes(nodeSearchQuery.toLowerCase())
   );
 
   /** Compute whether a menu item should be disabled using studio API guards. */
@@ -560,6 +595,86 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
             <Button onClick={handleOpenProject} disabled={!selectedProject} className={STYLES.dialog.button.primary}>
               <FolderOpen size={16} className="mr-2" />
               Open Project
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Node Dialog */}
+      <Dialog open={addNodeOpen} onOpenChange={setAddNodeOpen}>
+        <DialogContent className={`${STYLES.dialog.content} max-w-2xl`}>
+          <DialogHeader className={STYLES.dialog.header}>
+            <DialogTitle className={STYLES.dialog.title}>
+              Add Node
+            </DialogTitle>
+            <DialogDescription className={STYLES.dialog.description}>
+              Select a network node to add
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Input
+                placeholder="Search nodes..."
+                value={nodeSearchQuery}
+                onChange={(e) => setNodeSearchQuery(e.target.value)}
+                className={`${STYLES.dialog.input} pl-10`}
+              />
+            </div>
+
+            <ScrollArea className="h-96">
+              <div className="pr-4 grid grid-cols-2 gap-3">
+                {filteredNodes.map(([nodeType, config]) => {
+                  const nodeConfig = config as NodeConfig;
+                  return (
+                    <div
+                      key={nodeType}
+                      className={STYLES.dialog.projectItem}
+                      onClick={() => handleAddNode(nodeType)}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-12 h-12 bg-[var(--bsui-gray-1)] rounded-md flex items-center justify-center border border-[var(--bsui-border)]">
+                          {nodeConfig.icon && (
+                            <Image
+                              src={nodeConfig.icon}
+                              alt={nodeConfig.name}
+                              width={50}
+                              height={50}
+                              className="object-contain"
+                            />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 font-medium text-[var(--bsui-gray-0)]">
+                            {nodeConfig.name}
+                          </div>
+                          <p className="text-sm opacity-70 mt-1 text-[var(--bsui-gray-0)]">{nodeConfig.dvctype}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </ScrollArea>
+
+            {filteredNodes.length === 0 && (
+              <div className="text-center py-8 text-[var(--bsui-gray-0)] opacity-70">
+                <p>No nodes found matching &quot;{nodeSearchQuery}&quot;</p>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter className={STYLES.dialog.footer}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setAddNodeOpen(false);
+                setNodeSearchQuery("");
+              }}
+              className={STYLES.dialog.button.secondary}
+            >
+              Cancel
             </Button>
           </DialogFooter>
         </DialogContent>

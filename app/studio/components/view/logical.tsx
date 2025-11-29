@@ -34,6 +34,30 @@ function Flow() {
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");
   const { setEditApiImpl, setFlowApiImpl, incrementNodesVersion } = useStudio();
+  const versionScheduleRef = useRef<number | null>(null);
+
+  const notifyNodesChanged = useCallback(() => {
+    if (typeof window === "undefined") return;
+    if (versionScheduleRef.current !== null) return;
+    versionScheduleRef.current = window.requestAnimationFrame(() => {
+      versionScheduleRef.current = null;
+      incrementNodesVersion();
+    });
+  }, [incrementNodesVersion]);
+
+  useEffect(() => {
+    return () => {
+      if (versionScheduleRef.current !== null) {
+        window.cancelAnimationFrame(versionScheduleRef.current);
+        versionScheduleRef.current = null;
+      }
+    };
+  }, []);
+
+  const handleNodesChange = useCallback((changes: Parameters<typeof onNodesChange>[0]) => {
+    onNodesChange(changes);
+    notifyNodesChanged();
+  }, [onNodesChange, notifyNodesChanged]);
 
   // clipboard for copy/paste
   const clipboardRef = useRef<Node[]>([]);
@@ -47,11 +71,14 @@ function Flow() {
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
+    event.stopPropagation();
     event.dataTransfer.dropEffect = "copy";
   }, []);
 
   const onDrop = useCallback((event: React.DragEvent) => {
     event.preventDefault();
+    event.stopPropagation();
+
     // read our primary custom MIME type first, then fallback to text/plain
     const raw =
       event.dataTransfer.getData("application/reactflow") ||
@@ -60,6 +87,8 @@ function Flow() {
 
     try {
       const payload = JSON.parse(raw) as { type?: string; nodeType?: string; src?: string; name?: string };
+
+      // Use screenToFlowPosition with current flow instance
       const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
       const newId = String(nextIdRef.current++);
 
@@ -97,12 +126,8 @@ function Flow() {
         };
       }
 
-      setNodes((nds) => {
-        const updated = nds.concat(newNode);
-        // Notify hierarchy of node change
-        incrementNodesVersion();
-        return updated;
-      });
+      setNodes((nds) => [...nds, newNode]);
+      notifyNodesChanged();
 
       // helpful tip on first use
       toast.success(`${payload.name || nodeType} added`, {
@@ -113,7 +138,7 @@ function Flow() {
       // Silently handle invalid payloads
       // Error is likely due to invalid JSON or missing required fields
     }
-  }, [screenToFlowPosition, setNodes, incrementNodesVersion]);
+  }, [screenToFlowPosition, setNodes, notifyNodesChanged]);
 
   // ensure canvas matches container size
   useEffect(() => {
@@ -214,11 +239,8 @@ function Flow() {
     const cut = () => {
       const selectedIds = new Set(getSelectedNodes().map((n) => n.id));
       clipboardRef.current = nodes.filter((n) => selectedIds.has(n.id)).map((n) => ({ ...n, selected: false }));
-      setNodes((nds) => {
-        const updated = nds.filter((n) => !selectedIds.has(n.id));
-        incrementNodesVersion();
-        return updated;
-      });
+      setNodes((nds) => nds.filter((n) => !selectedIds.has(n.id)));
+      notifyNodesChanged();
       // remove edges connected to deleted nodes
       setEdges((eds) => eds.filter((e) => !selectedIds.has(e.source) && !selectedIds.has(e.target)));
     };
@@ -238,21 +260,17 @@ function Flow() {
         });
         // deselect existing then add pasted selected
         const cleared: Node[] = nds.map((n) => ({ ...n, selected: false } as Node));
-        const updated = ([] as Node[]).concat(cleared, pasted);
-        incrementNodesVersion();
-        return updated;
+        return ([] as Node[]).concat(cleared, pasted);
       });
+      notifyNodesChanged();
     };
 
     const deleteSelected = () => {
       const selectedNodeIds = new Set(getSelectedNodes().map((n) => n.id));
       const selectedEdgeIds = new Set(getSelectedEdges().map((e) => e.id));
       if (selectedNodeIds.size === 0 && selectedEdgeIds.size === 0) return;
-      setNodes((nds) => {
-        const updated = nds.filter((n) => !selectedNodeIds.has(n.id));
-        incrementNodesVersion();
-        return updated;
-      });
+      setNodes((nds) => nds.filter((n) => !selectedNodeIds.has(n.id)));
+      notifyNodesChanged();
       setEdges((eds) => eds
         // drop explicitly selected edges
         .filter((e) => !selectedEdgeIds.has(e.id))
@@ -282,15 +300,11 @@ function Flow() {
       getEdges: () => edges,
       setNodes: (newNodes) => {
         if (typeof newNodes === 'function') {
-          setNodes((prevNodes) => {
-            const updated = newNodes(prevNodes);
-            incrementNodesVersion();
-            return updated;
-          });
+          setNodes((prevNodes) => newNodes(prevNodes));
         } else {
           setNodes(newNodes);
-          incrementNodesVersion();
         }
+        notifyNodesChanged();
       },
       setEdges: (newEdges) => {
         if (typeof newEdges === 'function') {
@@ -299,13 +313,17 @@ function Flow() {
           setEdges(newEdges);
         }
       },
+      addNode: (newNode) => {
+        setNodes((nds) => [...nds, newNode]);
+        notifyNodesChanged();
+      },
     } as Partial<import("../studioContext").StudioFlowApi>);
-  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, incrementNodesVersion]);
+  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, notifyNodesChanged]);
 
   return (
     <ReactFlow
       nodes={nodes}
-      onNodesChange={onNodesChange}
+      onNodesChange={handleNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       nodeTypes={nodeTypes}
