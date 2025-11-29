@@ -1,11 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import OptionBar from "./components/optionBar";
-import SideBar from "./components/sideBar";
 import Header from "./components/header";
-import StatusBar from "./components/statusBar";
-import ElementBar from "./components/elementBar";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import StudioLayout from "./components/studioLayout";
 import { ReactFlowProvider } from "@xyflow/react";
 import { StudioProvider } from "./components/studioContext";
 import { getSession } from "@/lib/get-session";
@@ -45,31 +41,7 @@ export default async function Studio() {
       <StudioProvider>
         <ReactFlowProvider>
           <Header />
-          <ResizablePanelGroup direction="vertical" className="flex-1 w-full select-none">
-            <ResizablePanel defaultSize={72} className="flex w-full">
-              <ResizablePanelGroup direction="horizontal" className="w-full h-full">
-                <ResizablePanel defaultSize={80} className="flex w-full h-vh">
-                  <OptionBar />
-                </ResizablePanel>
-                <ResizableHandle withHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] hover:w-1 w-[1px] cursor-col-resize" />
-                <ResizablePanel defaultSize={20} minSize={13} maxSize={21} className="flex">
-                  <SideBar />
-                </ResizablePanel>
-              </ResizablePanelGroup>
-            </ResizablePanel>
-
-            <ResizableHandle className="bg-[var(--bsui-border)] hover:bg-[var(--bsui-active)] h-[1px] hover:h-4 cursor-row-resize" />
-
-            <ResizablePanel
-              minSize={19}
-              defaultSize={20}
-              maxSize={25}
-              className="flex rounded-none border-t border-t-[var(--bsui-border)] w-full items-center bg-[var(--bsui-gray-6)] text-[var(--bsui-gray-0)] shadow-md"
-            >
-              <ElementBar />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-          <StatusBar />
+          <StudioLayout />
         </ReactFlowProvider>
       </StudioProvider>
     </div>

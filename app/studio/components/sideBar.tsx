@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,7 +18,7 @@ import { HierarchyItem } from "./hierarchy/HierarchyItem";
 import { useStudio } from "./studioContext";
 
 export default function SideBar() {
-  const { flowApi } = useStudio();
+  const { flowApi, registerCreateGroupDialog } = useStudio();
   const {
     groups,
     items,
@@ -37,6 +37,13 @@ export default function SideBar() {
 
   const [showCreateGroupDialog, setShowCreateGroupDialog] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
+
+  // Register the dialog opener function with the context
+  React.useEffect(() => {
+    registerCreateGroupDialog(() => {
+      setShowCreateGroupDialog(true);
+    });
+  }, [registerCreateGroupDialog]);
 
   const selectedNodes = flowApi.getSelectedNodes();
   const selectedNodeIds = new Set(selectedNodes.map((n) => n.id));

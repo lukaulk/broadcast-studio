@@ -73,7 +73,6 @@ const MENU_DATA = {
       "separator",
       "Select All",
       "Find",
-      "Replace",
     ],
   },
   view: {
@@ -81,14 +80,10 @@ const MENU_DATA = {
     items: [
       "Zoom In",
       "Zoom Out",
-      "Fit to Screen",
-      "Actual Size",
       "separator",
       "Full Screen",
       "Grid",
-      "Rulers",
       "separator",
-      "Theme",
       "Preferences",
     ],
   },
@@ -104,18 +99,8 @@ const MENU_DATA = {
   hierarchy: {
     label: "Hierarchy",
     items: [
-      "Show Hierarchy",
-      "Hide Hierarchy",
-      "separator",
-      "Expand All",
-      "Collapse All",
-      "separator",
-      "Sort by Name",
-      "Sort by Type",
-      "Sort by Date",
-      "separator",
-      "Filter",
-      "Search",
+      "Show/Hide Hierarchy",
+      "New Group"
     ],
   },
   window: {
@@ -393,6 +378,25 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     }
   };
 
+  /**
+   * Toggle fullscreen mode
+   */
+  const toggleFullScreen = () => {
+    if (typeof document === 'undefined') return;
+
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen().catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error(`Error attempting to exit fullscreen: ${err.message}`);
+      });
+    }
+  };
+
   /** Handler for actions that map directly to the studio API or local helpers. */
   const handleItem = (item: string) => {
     if (!studio) return;
@@ -408,6 +412,12 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       "Save As...": handleSaveAs,
       Exit: () => router.back(),
       "Add Node": () => setAddNodeOpen(true),
+      "Zoom In": () => studio.flowApi.zoomIn(),
+      "Zoom Out": () => studio.flowApi.zoomOut(),
+      "Full Screen": toggleFullScreen,
+      "Grid": () => studio.flowApi.toggleGrid(),
+      "Show/Hide Hierarchy": () => studio.toggleHierarchy(),
+      "New Group": () => studio.openCreateGroupDialog(),
       Copy: () => studio.editApi.copy(),
       Cut: () => studio.editApi.cut(),
       Paste: () => studio.editApi.paste(),

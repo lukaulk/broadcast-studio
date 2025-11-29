@@ -37,6 +37,8 @@ export interface StudioFlowApi {
   zoomIn: () => void;
   zoomOut: () => void;
   setCenter: (_x: number, _y: number, _options?: { zoom?: number }) => void;
+  toggleGrid: () => void;
+  getShowGrid: () => boolean;
 
   // Project data
   getProjectData: () => ProjectData;
@@ -91,6 +93,15 @@ interface StudioContextValue {
   // Nodes version counter to trigger updates in consumers
   nodesVersion: number;
   incrementNodesVersion: () => void;
+
+  // Hierarchy/SideBar visibility
+  showHierarchy: boolean;
+  setShowHierarchy: (_show: boolean) => void;
+  toggleHierarchy: () => void;
+
+  // Create group dialog
+  openCreateGroupDialog: () => void;
+  registerCreateGroupDialog: (fn: () => void) => void;
 }
 
 
@@ -123,6 +134,8 @@ const defaultFlowApi: StudioFlowApi = {
   zoomIn: noop,
   zoomOut: noop,
   setCenter: noop,
+  toggleGrid: noop,
+  getShowGrid: () => false,
   getProjectData: () => ({
     name: "Untitled Project",
     version: "1.0.0",
@@ -146,9 +159,27 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [isDirty, setIsDirty] = useState(false);
   const [clipboard, setClipboard] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
   const [nodesVersion, setNodesVersion] = useState(0);
+  const [showHierarchy, setShowHierarchy] = useState(true);
+
+  // Ref to store callback to open create group dialog
+  const openCreateGroupDialogRef = useRef<(() => void) | null>(null);
 
   const incrementNodesVersion = useCallback(() => {
     setNodesVersion((v) => v + 1);
+  }, []);
+
+  const toggleHierarchy = useCallback(() => {
+    setShowHierarchy((prev) => !prev);
+  }, []);
+
+  const openCreateGroupDialog = useCallback(() => {
+    if (openCreateGroupDialogRef.current) {
+      openCreateGroupDialogRef.current();
+    }
+  }, []);
+
+  const registerCreateGroupDialog = useCallback((fn: () => void) => {
+    openCreateGroupDialogRef.current = fn;
   }, []);
 
   const setEditApiImpl = (impl: Partial<StudioEditApi>) => {
@@ -175,7 +206,12 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setClipboard,
     nodesVersion,
     incrementNodesVersion,
-  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion]);
+    showHierarchy,
+    setShowHierarchy,
+    toggleHierarchy,
+    openCreateGroupDialog,
+    registerCreateGroupDialog,
+  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion, showHierarchy, toggleHierarchy, openCreateGroupDialog, registerCreateGroupDialog]);
 
   return <StudioContext.Provider value={value}>{children}</StudioContext.Provider>;
 }

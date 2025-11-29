@@ -1,7 +1,7 @@
 "use client";
 import "@xyflow/react/dist/style.css";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge, useReactFlow } from "@xyflow/react";
+import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge, useReactFlow, Background } from "@xyflow/react";
 import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
 import { nodeTypes, createNodeFromType, nodeConfigs } from "../nodes";
@@ -33,6 +33,7 @@ function Flow() {
   const { screenToFlowPosition } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const [mode, setMode] = useState<"select" | "pen" | "move">("select");
+  const [showGrid, setShowGrid] = useState(true);
   const { setEditApiImpl, setFlowApiImpl, incrementNodesVersion } = useStudio();
   const versionScheduleRef = useRef<number | null>(null);
 
@@ -317,8 +318,10 @@ function Flow() {
         setNodes((nds) => [...nds, newNode]);
         notifyNodesChanged();
       },
+      toggleGrid: () => setShowGrid((prev) => !prev),
+      getShowGrid: () => showGrid,
     } as Partial<import("../studioContext").StudioFlowApi>);
-  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, notifyNodesChanged]);
+  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, notifyNodesChanged, showGrid]);
 
   return (
     <ReactFlow
@@ -339,6 +342,7 @@ function Flow() {
       deleteKeyCode={null}
       multiSelectionKeyCode={null}
     >
+      {showGrid && <Background gap={20} size={1} />}
       {/* Pen overlay canvas - only interactive in pen mode */}
       {mode === "pen" && (
         <div
