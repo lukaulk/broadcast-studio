@@ -50,7 +50,7 @@ import type { NodeConfig } from "./nodes";
  * - MENU_ORDER determines render order.
  */
 const MENU_DATA = {
-  
+
   file: {
     label: "File",
     items: [
@@ -233,7 +233,14 @@ const hasStudioMethod = (studio: ReturnType<typeof useStudio> | undefined, metho
  */
 const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; isDesktop?: boolean }) => {
   const menu = MENU_DATA[menuKey];
-  const studio = useStudio();
+  const {
+    currentProject,
+    flowApi,
+    editApi,
+    showHierarchy,
+    setShowHierarchy,
+    openCreateGroupDialog,
+  } = useStudio();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -329,8 +336,8 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     const projectData = {
       name: "My Broadcast Project",
       version: "1.0.0",
-      nodes: hasStudioMethod(studio, ["flowApi", "getNodes"]) ? (studio!.flowApi.getNodes() as unknown) : [],
-      connections: hasStudioMethod(studio, ["flowApi", "getEdges"]) ? (studio!.flowApi.getEdges() as unknown) : [],
+      nodes: flowApi.getNodes(),
+      connections: flowApi.getEdges(),
       settings: {
         theme: "dark",
         grid: true,
@@ -353,11 +360,11 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
    * Add a node to the flow at the center of the viewport
    */
   const handleAddNode = (nodeType: string) => {
-    if (!studio) return;
+    if (!currentProject) return;
 
     try {
-      const nodes = studio.flowApi.getNodes();
-      const viewport = studio.flowApi.getViewport();
+      const nodes = flowApi.getNodes();
+      const viewport = flowApi.getViewport();
 
       // Calculate center position in flow coordinates
       // Approximate center based on viewport (this is a simple approximation)
@@ -367,7 +374,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       const newId = String(nodes.length + 1);
       const newNode = createNodeFromType(nodeType, newId, { x: centerX, y: centerY });
 
-      studio.flowApi.addNode(newNode);
+      flowApi.addNode(newNode);
       setAddNodeOpen(false);
       setNodeSearchQuery("");
 
@@ -401,7 +408,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
   /** Handler for actions that map directly to the studio API or local helpers. */
   const handleItem = (item: string) => {
-    if (!studio) return;
+    if (!currentProject) return;
 
     // Map of simple command handlers -> keeps switch compact and easy to extend.
     const commandMap: Record<string, () => void> = {
@@ -414,15 +421,17 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       "Save As...": handleSaveAs,
       Exit: () => router.back(),
       "Add Node": () => setAddNodeOpen(true),
-      "Zoom In": () => studio.flowApi.zoomIn(),
-      "Zoom Out": () => studio.flowApi.zoomOut(),
+      "Zoom In": () => flowApi.zoomIn(),
+      "Zoom Out": () => flowApi.zoomOut(),
       "Full Screen": toggleFullScreen,
-      "Grid": () => studio.flowApi.toggleGrid(),
-      Copy: () => studio.editApi.copy(),
-      Cut: () => studio.editApi.cut(),
-      Paste: () => studio.editApi.paste(),
-      Delete: () => studio.editApi.deleteSelected(),
-      "Select All": () => studio.editApi.selectAll(),
+      "Grid": () => flowApi.toggleGrid(),
+      Copy: () => editApi.copy(),
+      Cut: () => editApi.cut(),
+      Paste: () => editApi.paste(),
+      Delete: () => editApi.deleteSelected(),
+      "Select All": () => editApi.selectAll(),
+      "Show/Hide Hierarchy": () => setShowHierarchy(!showHierarchy),
+      "New Group": () => openCreateGroupDialog(),
     };
     const fn = commandMap[item];
     if (fn) fn();
@@ -444,9 +453,9 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
   /** Compute whether a menu item should be disabled using studio API guards. */
   const computeDisabled = (item: string) => {
-    if (!studio) return false;
-    if (["Copy", "Cut", "Delete"].includes(item)) return !hasStudioMethod(studio, ["editApi", "hasSelection"]) || !studio.editApi.hasSelection();
-    if (item === "Paste") return !hasStudioMethod(studio, ["editApi", "canPaste"]) || !studio.editApi.canPaste();
+    if (!currentProject) return false;
+    if (["Copy", "Cut", "Delete"].includes(item)) return !editApi.hasSelection();
+    if (item === "Paste") return !editApi.canPaste();
     return false;
   };
 
@@ -472,7 +481,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
                 onSelect={() => handleItem(item)}
                 disabled={computeDisabled(item)}
               >
-                {item}
+                {item === "Show/Hide Hierarchy" ? (showHierarchy ? "Hide Hierarchy" : "Show Hierarchy") : item}
               </DropdownMenuItem>
             )
           )}

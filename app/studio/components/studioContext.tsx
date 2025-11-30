@@ -6,6 +6,7 @@ import React, { createContext, useContext, useMemo, useRef, useState, useCallbac
 import type { Node, Edge, Viewport, ReactFlowInstance } from "@xyflow/react";
 
 export type EditAction = "undo" | "redo" | "cut" | "copy" | "paste" | "delete" | "select_all" | "find" | "replace";
+export type ToolMode = "select" | "pen" | "move";
 
 export interface StudioEditApi {
   copy: () => void;
@@ -91,8 +92,19 @@ interface StudioContextValue {
   setClipboard: (_data: { nodes: Node[]; edges: Edge[] } | null) => void;
 
   // Nodes version counter to trigger updates in consumers
+  // Nodes version counter to trigger updates in consumers
   nodesVersion: number;
   incrementNodesVersion: () => void;
+
+  // UI State
+  showHierarchy: boolean;
+  setShowHierarchy: (_show: boolean) => void;
+  toolMode: ToolMode;
+  setToolMode: (_mode: ToolMode) => void;
+
+  // Dialogs
+  openCreateGroupDialog: () => void;
+  setOpenCreateGroupDialogImpl: (_fn: () => void) => void;
 }
 
 
@@ -151,6 +163,11 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [clipboard, setClipboard] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
   const [nodesVersion, setNodesVersion] = useState(0);
 
+  // UI State
+  const [showHierarchy, setShowHierarchy] = useState(true);
+  const [toolMode, setToolMode] = useState<ToolMode>("select");
+  const openCreateGroupDialogRef = useRef<() => void>(noop);
+
   const incrementNodesVersion = useCallback(() => {
     setNodesVersion((v) => v + 1);
   }, []);
@@ -179,7 +196,13 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setClipboard,
     nodesVersion,
     incrementNodesVersion,
-  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion]);
+    showHierarchy,
+    setShowHierarchy,
+    toolMode,
+    setToolMode,
+    openCreateGroupDialog: () => openCreateGroupDialogRef.current(),
+    setOpenCreateGroupDialogImpl: (fn: () => void) => { openCreateGroupDialogRef.current = fn; },
+  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion, showHierarchy, toolMode]);
 
   return <StudioContext.Provider value={value}>{children}</StudioContext.Provider>;
 }

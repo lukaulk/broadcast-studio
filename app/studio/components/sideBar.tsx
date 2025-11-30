@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,7 +18,15 @@ import { HierarchyItem } from "./hierarchy/HierarchyItem";
 import { useStudio } from "./studioContext";
 
 export default function SideBar() {
-  const { flowApi } = useStudio();
+  const { flowApi, setOpenCreateGroupDialogImpl } = useStudio();
+  const [showCreateGroupDialog, setShowCreateGroupDialog] = useState(false);
+
+  // Register dialog opener with context
+  useEffect(() => {
+    setOpenCreateGroupDialogImpl(() => setShowCreateGroupDialog(true));
+    return () => setOpenCreateGroupDialogImpl(() => { });
+  }, [setOpenCreateGroupDialogImpl]);
+
   const {
     groups,
     items,
@@ -32,10 +40,10 @@ export default function SideBar() {
     deleteGroup,
     renameGroup,
     toggleGroupExpand,
+    toggleGroupVisibility,
     moveItemToGroup,
   } = useHierarchy();
 
-  const [showCreateGroupDialog, setShowCreateGroupDialog] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
 
   const selectedNodes = flowApi.getSelectedNodes();
@@ -53,7 +61,7 @@ export default function SideBar() {
 
   return (
     <div className="flex flex-col h-full w-full bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)]">
-      {/* Header */}
+      {/* Hierarchy Bar */}
       <div className="flex items-center border-b border-b-[var(--bsui-border)] w-full justify-center bg-[var(--bsui-gray-3)] text-[var(--bsui-gray-0)] shadow-md h-17 px-4">
         <span className="text-md font-semibold">Hierarchy</span>
         <Input
@@ -97,6 +105,7 @@ export default function SideBar() {
               onToggleExpand={toggleGroupExpand}
               onRename={renameGroup}
               onDelete={deleteGroup}
+              onToggleVisibility={toggleGroupVisibility}
               onItemAction={{
                 onToggleVisibility: toggleItemVisibility,
                 onToggleLock: toggleItemLock,

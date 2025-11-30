@@ -192,14 +192,21 @@ export function useHierarchy() {
     }, []);
 
     const deleteGroup = useCallback((groupId: string) => {
-        // Move items to ungrouped
-        setItems((current) =>
-            current.map((item) =>
-                item.groupId === groupId ? { ...item, groupId: undefined } : item
-            )
-        );
+        // Find group children
+        const group = groups.find(g => g.id === groupId);
+        if (group) {
+            const childrenIds = group.children.map(c => c.nodeId);
+
+            // Delete children nodes from flow
+            if (childrenIds.length > 0) {
+                const nodes = flowApi.getNodes();
+                const updatedNodes = nodes.filter((node) => !childrenIds.includes(node.id));
+                flowApi.setNodes(updatedNodes);
+            }
+        }
+
         setGroups((current) => current.filter((g) => g.id !== groupId));
-    }, []);
+    }, [groups, flowApi]);
 
     const renameGroup = useCallback((groupId: string, newName: string) => {
         setGroups((current) =>
@@ -230,6 +237,38 @@ export function useHierarchy() {
         []
     );
 
+    const toggleGroupVisibility = useCallback((groupId: string) => {
+        const group = groups.find(g => g.id === groupId);
+        if (!group) return;
+
+        const childrenIds = new Set(group.children.map(c => c.nodeId));
+        if (childrenIds.size === 0) return;
+
+        const nodes = flowApi.getNodes();
+        // Check if all are currently hidden to decide whether to show or hide
+        const allHidden = group.children.every(c => !c.visible);
+        const newHiddenState = !allHidden; // If all hidden, show them. Else hide them.
+
+        const updatedNodes = nodes.map((node) => {
+            if (childrenIds.has(node.id)) {
+                return {
+                    ...node,
+                    hidden: newHiddenState,
+                };
+            }
+            return node;
+        });
+        flowApi.setNodes(updatedNodes);
+
+        // Update local state immediately for responsiveness
+        setItems((current) =>
+            current.map(item =>
+                childrenIds.has(item.nodeId) ? { ...item, visible: !newHiddenState } : item
+            )
+        );
+
+    }, [groups, flowApi]);
+
     return {
         groups: filteredGroups,
         items: ungroupedItems,
@@ -245,6 +284,7 @@ export function useHierarchy() {
         renameGroup,
         toggleGroupExpand,
         moveItemToGroup,
+        toggleGroupVisibility,
     };
 }
 
