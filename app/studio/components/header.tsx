@@ -408,18 +408,28 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
   /** Handler for actions that map directly to the studio API or local helpers. */
   const handleItem = (item: string) => {
+    // Commands that don't require an active project
+    const globalCommands: Record<string, () => void> = {
+      "New Project": () => setNewProjectOpen(true),
+      "Open Project": () => setOpenProjectOpen(true),
+      Exit: () => router.back(),
+      "Preferences": () => { /* TODO: Open preferences */ },
+    };
+
+    if (globalCommands[item]) {
+      globalCommands[item]();
+      return;
+    }
+
     if (!currentProject) return;
 
     // Map of simple command handlers -> keeps switch compact and easy to extend.
     const commandMap: Record<string, () => void> = {
-      "New Project": () => setNewProjectOpen(true),
-      "Open Project": () => setOpenProjectOpen(true),
       "Save Project": () => {
         // eslint-disable-next-line no-console
         console.log("Saving current project...");
       },
       "Save As...": handleSaveAs,
-      Exit: () => router.back(),
       "Add Node": () => setAddNodeOpen(true),
       "Zoom In": () => flowApi.zoomIn(),
       "Zoom Out": () => flowApi.zoomOut(),
@@ -453,7 +463,12 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
   /** Compute whether a menu item should be disabled using studio API guards. */
   const computeDisabled = (item: string) => {
-    if (!currentProject) return false;
+    // Always enabled
+    if (["New Project", "Open Project", "Exit", "Preferences"].includes(item)) return false;
+
+    // Requires project
+    if (!currentProject) return true;
+
     if (["Copy", "Cut", "Delete"].includes(item)) return !editApi.hasSelection();
     if (item === "Paste") return !editApi.canPaste();
     return false;
