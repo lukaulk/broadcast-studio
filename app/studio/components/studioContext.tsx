@@ -93,15 +93,6 @@ interface StudioContextValue {
   // Nodes version counter to trigger updates in consumers
   nodesVersion: number;
   incrementNodesVersion: () => void;
-
-  // Hierarchy/SideBar visibility
-  showHierarchy: boolean;
-  setShowHierarchy: (_show: boolean) => void;
-  toggleHierarchy: () => void;
-
-  // Create group dialog
-  openCreateGroupDialog: () => void;
-  registerCreateGroupDialog: (fn: () => void) => void;
 }
 
 
@@ -159,27 +150,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [isDirty, setIsDirty] = useState(false);
   const [clipboard, setClipboard] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
   const [nodesVersion, setNodesVersion] = useState(0);
-  const [showHierarchy, setShowHierarchy] = useState(true);
-
-  // Ref to store callback to open create group dialog
-  const openCreateGroupDialogRef = useRef<(() => void) | null>(null);
 
   const incrementNodesVersion = useCallback(() => {
     setNodesVersion((v) => v + 1);
-  }, []);
-
-  const toggleHierarchy = useCallback(() => {
-    setShowHierarchy((prev) => !prev);
-  }, []);
-
-  const openCreateGroupDialog = useCallback(() => {
-    if (openCreateGroupDialogRef.current) {
-      openCreateGroupDialogRef.current();
-    }
-  }, []);
-
-  const registerCreateGroupDialog = useCallback((fn: () => void) => {
-    openCreateGroupDialogRef.current = fn;
   }, []);
 
   const setEditApiImpl = (impl: Partial<StudioEditApi>) => {
@@ -206,12 +179,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setClipboard,
     nodesVersion,
     incrementNodesVersion,
-    showHierarchy,
-    setShowHierarchy,
-    toggleHierarchy,
-    openCreateGroupDialog,
-    registerCreateGroupDialog,
-  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion, showHierarchy, toggleHierarchy, openCreateGroupDialog, registerCreateGroupDialog]);
+  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion]);
 
   return <StudioContext.Provider value={value}>{children}</StudioContext.Provider>;
 }

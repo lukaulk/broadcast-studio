@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { loginAsGuest } from "@/app/actions/guest"
 
 interface dataProps {
- email: string; 
- password: string;
- name?: string
+  email: string;
+  password: string;
+  name?: string
 }
 interface AuthFormProps {
   mode?: "login" | "signup"
@@ -123,6 +124,25 @@ export function AuthForm({ mode = "login", onSubmit, onGoogleLogin, onGithubLogi
             GitHub
           </Button>
         </div>
+
+        <Button
+          variant="outline"
+          className="w-full bg-transparent"
+          onClick={async () => {
+            setIsLoading(true);
+            try {
+              await loginAsGuest();
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setIsLoading(false);
+            }
+          }}
+          disabled={isLoading}
+          type="button"
+        >
+          Continue as Guest
+        </Button>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

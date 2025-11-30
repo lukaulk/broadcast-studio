@@ -41,6 +41,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { nodeConfigs, createNodeFromType } from "./nodes";
+import { logoutGuest } from "@/app/actions/guest";
 import type { NodeConfig } from "./nodes";
 
 /**
@@ -49,6 +50,7 @@ import type { NodeConfig } from "./nodes";
  * - MENU_ORDER determines render order.
  */
 const MENU_DATA = {
+  
   file: {
     label: "File",
     items: [
@@ -416,8 +418,6 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       "Zoom Out": () => studio.flowApi.zoomOut(),
       "Full Screen": toggleFullScreen,
       "Grid": () => studio.flowApi.toggleGrid(),
-      "Show/Hide Hierarchy": () => studio.toggleHierarchy(),
-      "New Group": () => studio.openCreateGroupDialog(),
       Copy: () => studio.editApi.copy(),
       Cut: () => studio.editApi.cut(),
       Paste: () => studio.editApi.paste(),
@@ -710,9 +710,13 @@ export default function Header() {
   }, []);
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
-    router.refresh();
+    if (session?.user) {
+      await signOut();
+      router.push("/login");
+      router.refresh();
+    } else {
+      await logoutGuest();
+    }
   };
 
   const getUserInitials = (name?: string | null, email?: string) => {
@@ -747,7 +751,7 @@ export default function Header() {
       {/* Theme Toggle and User Avatar - Desktop */}
       <div className="hidden md:flex items-center ml-auto mr-6 gap-2">
         <ThemeToggle />
-        {session?.user && (
+        {session?.user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="relative flex gap-2 items-center rounded-sm justify-center shrink-0 overflow-hidden px-2 hover:bg-[var(--bsui-active)] transition-colors">
@@ -790,13 +794,42 @@ export default function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative flex gap-2 items-center rounded-sm justify-center shrink-0 overflow-hidden px-2 hover:bg-[var(--bsui-active)] transition-colors">
+                <span className="text-sm">Guest</span>
+                <Avatar className="size-7">
+                  <AvatarFallback className="bg-[var(--bsui-gray-2)] text-[var(--bsui-gray-0)] text-sm font-medium">
+                    G
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className={STYLES.dropdown.content}>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Guest User</p>
+                  <p className="text-xs leading-none opacity-70">Temporary Session</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className={STYLES.dropdown.separator} />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-red-400 focus:text-red-300 focus:bg-red-950/20 cursor-pointer"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Exit Guest Mode</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
 
       {/* Mobile menu button and user avatar */}
       <div className="md:hidden flex items-center gap-2">
         <ThemeToggle />
-        {session?.user && (
+        {session?.user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="relative flex size-10 shrink-0 overflow-hidden rounded-full ring-2 ring-[var(--bsui-border)]">
@@ -832,6 +865,34 @@ export default function Header() {
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative flex size-10 shrink-0 overflow-hidden rounded-full ring-2 ring-[var(--bsui-border)]">
+                <Avatar className="size-10">
+                  <AvatarFallback className="bg-[var(--bsui-gray-2)] text-[var(--bsui-gray-0)] text-sm font-medium">
+                    G
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className={STYLES.dropdown.content}>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Guest User</p>
+                  <p className="text-xs leading-none opacity-70">Temporary Session</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className={STYLES.dropdown.separator} />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-red-400 focus:text-red-300 focus:bg-red-950/20 cursor-pointer"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Exit Guest Mode</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
