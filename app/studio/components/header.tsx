@@ -43,7 +43,6 @@ import {
 import { nodeConfigs, createNodeFromType } from "./nodes";
 import { logoutGuest } from "@/app/actions/guest";
 import type { NodeConfig } from "./nodes";
-
 /**
  * Static menu configuration.
  * - MENU_DATA describes the structure and items for each top menu.
@@ -132,7 +131,7 @@ const MENU_ORDER = ["file", "edit", "view", "nodes", "hierarchy", "window"] as c
  * Tailwind class collection to keep JSX concise and consistent.
  */
 const STYLES = {
-  container: "flex h-10 w-full items-center bg-[var(--bsui-gray-1)] text-[var(--bsui-gray-0)]",
+  container: "flex h-10 w-full items-center bg-[var(--bsui-gray-1)] text-[var(--bsui-gray-0)] shadow-xl shadow-black/10",
   logo: {
     container: "flex items-center bs-logo mr-3 overflow-hidden flex-shrink-0",
     image: "ml-4",

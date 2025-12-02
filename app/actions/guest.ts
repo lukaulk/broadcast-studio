@@ -8,7 +8,7 @@ export async function loginAsGuest() {
 
     // Set guest session cookie for 30 minutes
     cookieStore.set("guest-session", "true", {
-        maxAge: 10 * 60, // 10 minutes in seconds
+        maxAge: 2 * 60, // 10 minutes in seconds
         path: "/",
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
