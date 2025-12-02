@@ -15,6 +15,7 @@ export default function ToolBar() {
 
   const addLabel = () => {
     const nodes = flowApi.getNodes();
+    // Select node
     const selectedNodes = nodes.filter((n) => n.selected);
     if (selectedNodes.length === 0) return;
 

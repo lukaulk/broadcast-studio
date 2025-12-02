@@ -7,7 +7,11 @@ import BaseNode, { BaseNodeProps } from "./BaseNode";
  * Pode ser customizado conforme necessário
  */
 const RouterNode: React.FC<BaseNodeProps> = (props) => {
-    return <BaseNode {...props} />;
+    return (
+    <div>
+        <BaseNode {...props}  />
+    </div>
+    );
 };
 
 export default RouterNode;

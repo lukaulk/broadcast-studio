@@ -3,6 +3,7 @@ import { Node } from "@xyflow/react";
 export type NodeType = "pc" | "router" | "switch" | "server" | "smartphone" | "cloud" | "desktop" | "printer";
 
 export interface NetworkNodeData {
+    info: string;
     label: string;
     image: string;
     dvctype: string;
