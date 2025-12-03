@@ -53,7 +53,7 @@ export default function ElementBar() {
                 <DialogHeader>
                   <DialogTitle>Add new element</DialogTitle>
                 </DialogHeader>
-                <p>Put your dialog content here...</p>
+                <p>New components soon...</p>
               </DialogContent>
             </Dialog>
           </div>

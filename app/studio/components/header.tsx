@@ -112,15 +112,6 @@ const MENU_DATA = {
       "Close",
       "separator",
       "New Window",
-      "Split Window",
-      "separator",
-      "Properties Panel",
-      "Timeline",
-      "Preview",
-      "Audio Mixer",
-      "separator",
-      "Reset Layout",
-      "Save Layout",
     ],
   },
 } as const;
@@ -234,6 +225,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
   const menu = MENU_DATA[menuKey];
   const {
     currentProject,
+    setCurrentProject,
     flowApi,
     editApi,
     showHierarchy,
@@ -272,11 +264,22 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
     // eslint-disable-next-line no-console
     console.log("Creating new project:", newProject);
+
+    const projectData = {
+      ...newProject,
+      version: "1.0.0",
+      nodes: [],
+      edges: [],
+      viewport: { x: 0, y: 0, zoom: 1 },
+      lastModified: new Date().toISOString(),
+    };
+
+    setCurrentProject(projectData);
+    flowApi.loadProjectData(projectData);
+
     setProjectName("");
     setProjectDescription("");
     setNewProjectOpen(false);
-
-    // TODO: persist project, navigate to project workspace, update app state
   };
 
   /**
@@ -288,10 +291,24 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     const project = MOCK_PROJECTS.find((p) => p.id === selectedProject);
     // eslint-disable-next-line no-console
     console.log("Opening project:", project);
+
+    if (project) {
+      const projectData = {
+        name: project.name,
+        description: project.description,
+        version: "1.0.0",
+        nodes: [], // Mock projects don't have actual nodes in this list
+        edges: [],
+        viewport: { x: 0, y: 0, zoom: 1 },
+        createdAt: new Date().toISOString(), // Mock date
+        lastModified: project.lastModified.toISOString(),
+      };
+      setCurrentProject(projectData);
+      flowApi.loadProjectData(projectData);
+    }
+
     setOpenProjectOpen(false);
     setSelectedProject(null);
-
-    // TODO: load project into studio state
   };
 
   /** Trigger the hidden file input to import a .bsf file */
@@ -317,8 +334,11 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
         const projectData = JSON.parse(e.target?.result as string);
         // eslint-disable-next-line no-console
         console.log("Loaded project from file:", projectData);
+
+        setCurrentProject(projectData);
+        flowApi.loadProjectData(projectData);
+
         setOpenProjectOpen(false);
-        // TODO: import projectData into studio
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error("Error loading project file:", error);
@@ -413,6 +433,11 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       "Open Project": () => setOpenProjectOpen(true),
       Exit: () => router.back(),
       "Preferences": () => { /* TODO: Open preferences */ },
+      "Full Screen": toggleFullScreen,
+      "New Window": () => window.open(window.location.href, "_blank"),
+      "Minimize": () => console.log("Window minimize triggered"),
+      "Maximize": () => console.log("Window maximize triggered"),
+      "Close": () => console.log("Window close triggered"),
     };
 
     if (globalCommands[item]) {
@@ -432,7 +457,6 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       "Add Node": () => setAddNodeOpen(true),
       "Zoom In": () => flowApi.zoomIn(),
       "Zoom Out": () => flowApi.zoomOut(),
-      "Full Screen": toggleFullScreen,
       "Grid": () => flowApi.toggleGrid(),
       Copy: () => editApi.copy(),
       Cut: () => editApi.cut(),
@@ -463,7 +487,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
   /** Compute whether a menu item should be disabled using studio API guards. */
   const computeDisabled = (item: string) => {
     // Always enabled
-    if (["New Project", "Open Project", "Exit", "Preferences"].includes(item)) return false;
+    if (["New Project", "Open Project", "Exit", "Preferences", "Full Screen", "New Window", "Minimize", "Maximize", "Close", "Show/Hide Hierarchy"].includes(item)) return false;
 
     // Requires project
     if (!currentProject) return true;
