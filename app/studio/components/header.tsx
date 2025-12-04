@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { memo, useState, useCallback, useRef } from "react";
+import { memo, useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useStudio } from "./studioContext";
 import { useSession, signOut } from "@/lib/auth-client";
@@ -22,6 +22,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -231,14 +232,18 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     showHierarchy,
     setShowHierarchy,
     openCreateGroupDialog,
+    isDirty,
+    setIsDirty,
   } = useStudio();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Dialog visibility
-  const [newProjectOpen, setNewProjectOpen] = useState(false);
+  const [saveProjectOpen, setSaveProjectOpen] = useState(false);
   const [openProjectOpen, setOpenProjectOpen] = useState(false);
   const [addNodeOpen, setAddNodeOpen] = useState(false);
+  const [unsavedChangesOpen, setUnsavedChangesOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<"new" | "open" | null>(null);
 
   // Form & UI state
   const [projectName, setProjectName] = useState("");
@@ -247,40 +252,119 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
   const [searchQuery, setSearchQuery] = useState("");
   const [nodeSearchQuery, setNodeSearchQuery] = useState("");
 
+  // Initialize default project if none exists
+  useEffect(() => {
+    if (!currentProject) {
+      const defaultProject = {
+        name: "Untitled Project",
+        version: "1.0.0",
+        nodes: [],
+        edges: [],
+        viewport: { x: 0, y: 0, zoom: 1 },
+        createdAt: new Date().toISOString(),
+        lastModified: new Date().toISOString(),
+      };
+      setCurrentProject(defaultProject);
+      // We don't load into flowApi here to avoid double-loading or overwriting if flow is mounting
+      // But for initial load it might be needed if flowApi is ready.
+      // Better to let the user start fresh or the flow component handle initial load if needed.
+      // Actually, if we set currentProject, we should probably ensure flowApi has data if it's ready.
+      // For now, just setting currentProject enables the UI.
+    }
+  }, [currentProject, setCurrentProject]);
+
   /**
-   * Create a new project (local-only for now).
-   * Reset form and close dialog on success.
+   * Create a new project (clears workspace).
    */
-  const handleNewProject = () => {
-    if (!projectName.trim()) return;
-
+  const createNewProject = useCallback(() => {
     const newProject = {
-      name: projectName.trim(),
-      description: projectDescription.trim(),
-      nodes: [],
-      settings: {},
-      createdAt: new Date().toISOString(),
-    };
-
-    // eslint-disable-next-line no-console
-    console.log("Creating new project:", newProject);
-
-    const projectData = {
-      ...newProject,
+      name: "Untitled Project",
       version: "1.0.0",
       nodes: [],
       edges: [],
       viewport: { x: 0, y: 0, zoom: 1 },
+      createdAt: new Date().toISOString(),
       lastModified: new Date().toISOString(),
     };
 
-    setCurrentProject(projectData);
-    flowApi.loadProjectData(projectData);
-
+    setCurrentProject(newProject);
+    flowApi.loadProjectData(newProject);
+    setIsDirty(false);
     setProjectName("");
     setProjectDescription("");
-    setNewProjectOpen(false);
+  }, [setCurrentProject, flowApi, setIsDirty]);
+
+  /**
+   * Handle "New Project" click
+   */
+  const handleNewProjectClick = () => {
+    if (isDirty) {
+      setPendingAction("new");
+      setUnsavedChangesOpen(true);
+    } else {
+      createNewProject();
+    }
   };
+
+  /**
+   * Save the current project (opens dialog to name it)
+   */
+  const handleSaveProject = () => {
+    if (currentProject) {
+      setProjectName(currentProject.name !== "Untitled Project" ? currentProject.name : "");
+      setProjectDescription(currentProject.description || "");
+    }
+    setSaveProjectOpen(true);
+  };
+
+  /**
+   * Confirm Save from Dialog
+   */
+  const confirmSaveProject = () => {
+    if (!projectName.trim() || !currentProject) return;
+
+    const updatedProject = {
+      ...currentProject,
+      name: projectName.trim(),
+      description: projectDescription.trim(),
+      lastModified: new Date().toISOString(),
+      nodes: flowApi.getNodes(),
+      edges: flowApi.getEdges(),
+      viewport: flowApi.getViewport(),
+    };
+
+    // eslint-disable-next-line no-console
+    console.log("Saving project:", updatedProject);
+
+    setCurrentProject(updatedProject);
+    setIsDirty(false);
+    setSaveProjectOpen(false);
+
+    // If we had a pending action (like creating new project after save), execute it
+    if (pendingAction === "new") {
+      createNewProject();
+      setPendingAction(null);
+      setUnsavedChangesOpen(false); // Close the unsaved warning if it was open (though we are in save dialog now)
+    }
+  };
+
+  /**
+   * Handle "Don't Save" option
+   */
+  const handleDontSave = () => {
+    if (pendingAction === "new") {
+      createNewProject();
+    }
+    setPendingAction(null);
+    setUnsavedChangesOpen(false);
+  };
+
+
+  /**
+   * Create a new project (local-only for now).
+   * Reset form and close dialog on success.
+   */
+
 
   /**
    * Open a project from the mock list.
@@ -297,10 +381,10 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
         name: project.name,
         description: project.description,
         version: "1.0.0",
-        nodes: [], // Mock projects don't have actual nodes in this list
+        nodes: [],
         edges: [],
         viewport: { x: 0, y: 0, zoom: 1 },
-        createdAt: new Date().toISOString(), // Mock date
+        createdAt: new Date().toISOString(),
         lastModified: project.lastModified.toISOString(),
       };
       setCurrentProject(projectData);
@@ -429,7 +513,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
   const handleItem = (item: string) => {
     // Commands that don't require an active project
     const globalCommands: Record<string, () => void> = {
-      "New Project": () => setNewProjectOpen(true),
+      "New Project": handleNewProjectClick,
       "Open Project": () => setOpenProjectOpen(true),
       Exit: () => router.back(),
       "Preferences": () => { /* TODO: Open preferences */ },
@@ -449,10 +533,7 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
     // Map of simple command handlers -> keeps switch compact and easy to extend.
     const commandMap: Record<string, () => void> = {
-      "Save Project": () => {
-        // eslint-disable-next-line no-console
-        console.log("Saving current project...");
-      },
+      "Save Project": handleSaveProject,
       "Save As...": handleSaveAs,
       "Add Node": () => setAddNodeOpen(true),
       "Zoom In": () => flowApi.zoomIn(),
@@ -489,8 +570,10 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
     // Always enabled
     if (["New Project", "Open Project", "Exit", "Preferences", "Full Screen", "New Window", "Minimize", "Maximize", "Close", "Show/Hide Hierarchy"].includes(item)) return false;
 
-    // Requires project
-    if (!currentProject) return true;
+    // We now have a default project, so we don't strictly need to check for currentProject
+    // But for safety, if somehow it's null, we might still want to disable.
+    // However, user requested "Enable all items".
+    // The only things that strictly require selection are Copy/Cut/Delete.
 
     if (["Copy", "Cut", "Delete"].includes(item)) return !editApi.hasSelection();
     if (item === "Paste") return !editApi.canPaste();
@@ -526,16 +609,16 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* New Project Dialog */}
-      <Dialog open={newProjectOpen} onOpenChange={setNewProjectOpen}>
+      {/* Save Project Dialog */}
+      <Dialog open={saveProjectOpen} onOpenChange={setSaveProjectOpen}>
         <DialogContent className={STYLES.dialog.content}>
           <DialogHeader className={STYLES.dialog.header}>
             <DialogTitle className={STYLES.dialog.title}>
               <Save size={20} />
-              Create New Project
+              Save Project
             </DialogTitle>
             <DialogDescription className={STYLES.dialog.description}>
-              Set up a new broadcast network project with custom configurations.
+              Save your broadcast network project.
             </DialogDescription>
           </DialogHeader>
 
@@ -568,13 +651,33 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
           </div>
 
           <DialogFooter className={STYLES.dialog.footer}>
-            <Button variant="outline" onClick={() => setNewProjectOpen(false)} className={STYLES.dialog.button.secondary}>
+            <Button variant="outline" onClick={() => setSaveProjectOpen(false)} className={STYLES.dialog.button.secondary}>
               Cancel
             </Button>
-            <Button onClick={handleNewProject} disabled={!projectName.trim()} className={STYLES.dialog.button.primary}>
-              <Plus size={16} className="mr-2" />
-              Create Project
+            <Button onClick={confirmSaveProject} disabled={!projectName.trim()} className={STYLES.dialog.button.primary}>
+              <Save size={16} className="mr-2" />
+              Save
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Unsaved Changes Alert Dialog */}
+      <Dialog open={unsavedChangesOpen} onOpenChange={setUnsavedChangesOpen}>
+        <DialogContent className={STYLES.dialog.content}>
+          <DialogHeader className={STYLES.dialog.header}>
+            <DialogTitle className={STYLES.dialog.title}>Unsaved Changes</DialogTitle>
+            <DialogDescription className={STYLES.dialog.description}>
+              You have unsaved changes in your current project. Do you want to save them before creating a new project?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className={STYLES.dialog.footer}>
+            <Button variant="outline" onClick={() => setUnsavedChangesOpen(false)} className={STYLES.dialog.button.secondary}>Cancel</Button>
+            <Button onClick={handleDontSave} className="bg-red-600 hover:bg-red-700 text-white border-none">Don&apos;t Save</Button>
+            <Button onClick={() => {
+              setUnsavedChangesOpen(false);
+              handleSaveProject();
+            }} className={STYLES.dialog.button.primary}>Save Project</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -795,6 +898,18 @@ export default function Header() {
         ))}
       </div>
 
+      {/* Project Name Display */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block text-sm font-medium text-[var(--bsui-gray-0)] opacity-80">
+        {/* We need to access currentProject here. 
+            Since Header is a parent component and doesn't use useStudio directly (it was commented out),
+            we need to either move this into a child component or use useStudio here.
+            The previous code had `const studio = useStudio();` commented out.
+            I will create a small component to display the name to avoid re-rendering the whole header if not needed,
+            or just use useStudio here. Using useStudio here is fine.
+        */}
+        <ProjectNameDisplay />
+      </div>
+
       {/* Theme Toggle and User Avatar - Desktop */}
       <div className="hidden md:flex items-center ml-auto mr-6 gap-2">
         <ThemeToggle />
@@ -814,7 +929,6 @@ export default function Header() {
                     {getUserInitials(session.user.name, session.user.email)}
                   </AvatarFallback>
                 </Avatar>
-
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -961,3 +1075,10 @@ export default function Header() {
     </div>
   );
 }
+
+function ProjectNameDisplay() {
+  const { currentProject } = useStudio();
+  if (!currentProject) return null;
+  return <span>{currentProject.name}</span>;
+}
+

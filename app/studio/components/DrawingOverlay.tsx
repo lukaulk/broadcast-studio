@@ -9,20 +9,24 @@ export default function DrawingOverlay() {
     const isDrawingRef = useRef<boolean>(false);
     const dprRef = useRef<number>(1);
 
-    // Resize canvas to match window
+    // Resize canvas to match parent container
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
         const resize = () => {
+            const parent = canvas.parentElement;
+            if (!parent) return;
+
+            const { width, height } = parent.getBoundingClientRect();
             const dpr = Math.max(window.devicePixelRatio || 1, 1);
             dprRef.current = dpr;
 
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
 
-            canvas.style.width = `${window.innerWidth}px`;
-            canvas.style.height = `${window.innerHeight}px`;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
 
             const ctx = canvas.getContext("2d");
             if (ctx) {
@@ -35,6 +39,14 @@ export default function DrawingOverlay() {
         };
 
         resize();
+        // Use ResizeObserver for more robust resizing of parent container
+        const parent = canvas.parentElement;
+        if (parent) {
+            const resizeObserver = new ResizeObserver(() => resize());
+            resizeObserver.observe(parent);
+            return () => resizeObserver.disconnect();
+        }
+
         window.addEventListener("resize", resize);
         return () => window.removeEventListener("resize", resize);
     }, []);
@@ -105,8 +117,7 @@ export default function DrawingOverlay() {
 
     return (
         <div
-            className="fixed inset-0 z-[9999] cursor-crosshair touch-none"
-            style={{ pointerEvents: "auto" }}
+            className="absolute inset-0 z-[50] cursor-crosshair touch-none pointer-events-auto"
         >
             <canvas
                 ref={canvasRef}

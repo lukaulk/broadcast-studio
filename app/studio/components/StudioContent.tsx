@@ -3,7 +3,6 @@
 import { useStudio } from "./studioContext";
 import { ReactFlowProvider } from "@xyflow/react";
 import Header from "./header";
-import DrawingOverlay from "./DrawingOverlay";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import OptionBar from "./optionBar";
 import SideBar from "./sideBar";
@@ -17,7 +16,6 @@ export default function StudioContent() {
         <div className="flex flex-col h-dvh w-full min-w-dvh bg-[var(--bsui-gray-4)] text-[var(--bsui-gray-0)]">
             <ReactFlowProvider>
                 <Header />
-                <DrawingOverlay />
                 <ResizablePanelGroup direction="vertical" className="flex-1 w-full select-none">
                     <ResizablePanel defaultSize={72} className="flex w-full">
                         <ResizablePanelGroup direction="horizontal" className="w-full h-full">

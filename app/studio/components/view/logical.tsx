@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MiniMap, ReactFlow, useNodesState, useEdgesState, addEdge, useReactFlow, Background } from "@xyflow/react";
 import type { Node, Edge, Connection } from "@xyflow/react";
 import ToolBar from "../toolBar";
+import DrawingOverlay from "../DrawingOverlay";
 import { nodeTypes, createNodeFromType, nodeConfigs } from "../nodes";
 import { useStudio } from "../studioContext";
 import { toast } from "sonner";
@@ -30,7 +31,7 @@ const defaultNodes: Node[] = [];
 function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, getViewport, setViewport, zoomIn, zoomOut, fitView } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
   const { setEditApiImpl, setFlowApiImpl, incrementNodesVersion, toolMode } = useStudio();
   const [showGrid, setShowGrid] = useState(true);
@@ -229,8 +230,22 @@ function Flow() {
       },
       toggleGrid: () => setShowGrid((prev) => !prev),
       getShowGrid: () => showGrid,
+      loadProjectData: (data) => {
+        setNodes(data.nodes || []);
+        setEdges(data.edges || []);
+        if (data.viewport) {
+          setViewport(data.viewport);
+        } else {
+          fitView();
+        }
+        notifyNodesChanged();
+      },
+      getViewport: () => getViewport(),
+      zoomIn: () => zoomIn(),
+      zoomOut: () => zoomOut(),
+      fitView: (options) => fitView(options),
     } as Partial<import("../studioContext").StudioFlowApi>);
-  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, notifyNodesChanged, showGrid]);
+  }, [nodes, edges, setNodes, setEdges, setEditApiImpl, setFlowApiImpl, notifyNodesChanged, showGrid, getViewport, setViewport, zoomIn, zoomOut, fitView]);
 
   return (
     <ReactFlow
@@ -262,6 +277,7 @@ function Flow() {
         pannable
       />
       <ToolBar />
+      <DrawingOverlay />
     </ReactFlow>
   );
 }
