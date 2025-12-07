@@ -51,7 +51,7 @@ export default function ContextMenu({ position, onClose, editApi }: ContextMenuP
     );
 
     const Separator = () => <div className="h-[1px] bg-[var(--bsui-border)] my-1" />;
-
+  
     return (
         <div
             ref={ref}
