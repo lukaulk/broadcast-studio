@@ -16,25 +16,29 @@ interface NodeLabelDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     initialLabel: string;
-    onSave: (label: string) => void;
+    initialInfo?: string;
+    onSave: (label: string, info: string) => void;
 }
 
 export function NodeLabelDialog({
     open,
     onOpenChange,
     initialLabel,
+    initialInfo = "",
     onSave,
 }: NodeLabelDialogProps) {
     const [label, setLabel] = useState(initialLabel);
+    const [info, setInfo] = useState(initialInfo);
 
     useEffect(() => {
         if (open) {
             setLabel(initialLabel);
+            setInfo(initialInfo || "");
         }
-    }, [open, initialLabel]);
+    }, [open, initialLabel, initialInfo]);
 
     const handleSave = () => {
-        onSave(label);
+        onSave(label, info);
         onOpenChange(false);
     };
 
@@ -62,6 +66,19 @@ export function NodeLabelDialog({
                             onKeyDown={handleKeyDown}
                             className="col-span-3 bg-[var(--bsui-gray-2)] border-[var(--bsui-border)] text-[var(--bsui-gray-0)]"
                             autoFocus
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="info" className="text-right">
+                            Info
+                        </Label>
+                        <Input
+                            id="info"
+                            value={info}
+                            onChange={(e) => setInfo(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="col-span-3 bg-[var(--bsui-gray-2)] border-[var(--bsui-border)] text-[var(--bsui-gray-0)]"
+                            placeholder="Optional info..."
                         />
                     </div>
                 </div>

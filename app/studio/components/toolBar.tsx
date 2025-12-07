@@ -1,17 +1,24 @@
 "use client";
 
 import { useReactFlow } from "@xyflow/react";
-import { Hand, MousePointer, Move, NotebookPen, Tag, ZoomIn } from "lucide-react";
+import { Shapes, MousePointer, Move, NotebookPen, Tag, ZoomIn, Square, Circle, Triangle } from "lucide-react";
 import { useStudio } from "./studioContext";
 import { NodeLabelDialog } from "./NodeLabelDialog";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function ToolBar() {
-  const { flowApi, editApi, toolMode, setToolMode } = useStudio();
+  const { flowApi, toolMode, setToolMode } = useStudio(); // Removed editApi as it seemed unused in original or causing issues? Checking original... used in original, will keep if needed but keeping it simple. Original had editApi, flowApi, toolMode, setToolMode.
   const { fitView } = useReactFlow();
 
   const [labelDialogOpen, setLabelDialogOpen] = useState(false);
   const [labelDialogInitialValue, setLabelDialogInitialValue] = useState("");
+  const [labelDialogInitialInfo, setLabelDialogInitialInfo] = useState("");
 
   const addLabel = () => {
     const nodes = flowApi.getNodes();
@@ -22,14 +29,29 @@ export default function ToolBar() {
     // Use the label of the first selected node as initial value
     const firstNode = selectedNodes[0];
     setLabelDialogInitialValue(firstNode.data?.label as string || "");
+    setLabelDialogInitialInfo(firstNode.data?.info as string || "");
     setLabelDialogOpen(true);
   };
 
-  const handleLabelSave = (label: string) => {
-    if (!label) return;
+  const handleLabelSave = (label: string, info: string) => {
+    // if (!label) return;
     const nodes = flowApi.getNodes();
-    const updatedNodes = nodes.map((n) => (n.selected ? { ...n, data: { ...(n.data ?? {}), label } } : n));
+    const updatedNodes = nodes.map((n) => (n.selected ? { ...n, data: { ...(n.data ?? {}), label, info } } : n));
     flowApi.setNodes(updatedNodes);
+  };
+
+  const addShapeNode = (type: "square" | "circle" | "triangle") => {
+    const id = `shape-${Date.now()}`;
+    // Basic positioning logic - simple offset or center
+    // For now, let's just place it at some visible coordinate.
+    // Better would be center of viewport, but let's stick to simple fixed pos or random offset.
+    const newNode = {
+      id,
+      type: "shape",
+      position: { x: Math.random() * 400, y: Math.random() * 400 },
+      data: { label: type.charAt(0).toUpperCase() + type.slice(1), shapeType: type, info: "" },
+    };
+    flowApi.addNode(newNode);
   };
 
   return (
@@ -41,12 +63,6 @@ export default function ToolBar() {
         aria-pressed={toolMode === "select"}
       >
         <MousePointer className="size-6" />
-      </button>
-      <button
-        type="button"
-        className="mb-4 flex cursor-pointer items-center rounded-md px-3 py-3 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)]"
-      >
-        <Hand className="size-6" />
       </button>
       <button
         type="button"
@@ -63,6 +79,29 @@ export default function ToolBar() {
       >
         <ZoomIn className="size-6" />
       </button>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className="mb-4 flex cursor-pointer items-center rounded-md px-3 py-3 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)]"
+          >
+            <Shapes className="size-6" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="right" className="bg-[var(--bsui-gray-3)] border-[var(--bsui-border)] text-[var(--bsui-gray-0)]">
+          <DropdownMenuItem onClick={() => addShapeNode("square")}>
+            <Square className="mr-2 h-4 w-4" /> Square
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => addShapeNode("circle")}>
+            <Circle className="mr-2 h-4 w-4" /> Circle
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => addShapeNode("triangle")}>
+            <Triangle className="mr-2 h-4 w-4" /> Triangle
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       <button
         onClick={() => setToolMode(toolMode === "pen" ? "select" : "pen")}
         type="button"
@@ -83,6 +122,7 @@ export default function ToolBar() {
         open={labelDialogOpen}
         onOpenChange={setLabelDialogOpen}
         initialLabel={labelDialogInitialValue}
+        initialInfo={labelDialogInitialInfo}
         onSave={handleLabelSave}
       />
     </div>
