@@ -78,7 +78,7 @@ export function NodeLabelDialog({
                             onChange={(e) => setInfo(e.target.value)}
                             onKeyDown={handleKeyDown}
                             className="col-span-3 bg-[var(--bsui-gray-2)] border-[var(--bsui-border)] text-[var(--bsui-gray-0)]"
-                            placeholder="Optional info..."
+                            placeholder="(Optional) Add some info about the node..."
                         />
                     </div>
                 </div>

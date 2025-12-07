@@ -49,7 +49,8 @@ export default function ToolBar() {
       id,
       type: "shape",
       position: { x: Math.random() * 400, y: Math.random() * 400 },
-      data: { label: type.charAt(0).toUpperCase() + type.slice(1), shapeType: type, info: "" },
+      style: { width: 128, height: 128, borderRadius: type === "circle" ? "50%" : "" },
+      data: { label: type.charAt(0).toUpperCase() + type.slice(1), shapeType: type, info: "", icon: "/favicon.png"},
     };
     flowApi.addNode(newNode);
   };

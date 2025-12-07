@@ -546,6 +546,8 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
       "Select All": () => editApi.selectAll(),
       "Show/Hide Hierarchy": () => setShowHierarchy(!showHierarchy),
       "New Group": () => openCreateGroupDialog(),
+      Undo: () => editApi.undo(),
+      Redo: () => editApi.redo(),
     };
     const fn = commandMap[item];
     if (fn) fn();
@@ -577,6 +579,8 @@ const MenuDropdown = memo(({ menuKey, isDesktop = true }: { menuKey: MenuKey; is
 
     if (["Copy", "Cut", "Delete"].includes(item)) return !editApi.hasSelection();
     if (item === "Paste") return !editApi.canPaste();
+    if (item === "Undo") return !editApi.canUndo();
+    if (item === "Redo") return !editApi.canRedo();
     return false;
   };
 

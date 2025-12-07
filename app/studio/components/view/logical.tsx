@@ -8,6 +8,7 @@ import DrawingOverlay from "../DrawingOverlay";
 import { nodeTypes, createNodeFromType, nodeConfigs } from "../nodes";
 import { useStudio } from "../studioContext";
 import { toast } from "sonner";
+import ContextMenu from "../ContextMenu";
 
 // --- edges
 const defaultEdges: Edge[] = [
@@ -33,9 +34,21 @@ function Flow() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
   const { screenToFlowPosition, getViewport, setViewport, zoomIn, zoomOut, fitView } = useReactFlow();
   const nextIdRef = useRef<number>(defaultNodes.length + 1);
-  const { setEditApiImpl, setFlowApiImpl, incrementNodesVersion, toolMode } = useStudio();
+  const { setEditApiImpl, setFlowApiImpl, incrementNodesVersion, toolMode, takeSnapshot, editApi } = useStudio();
   const [showGrid, setShowGrid] = useState(true);
   const versionScheduleRef = useRef<number | null>(null);
+
+  // Context Menu State
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+
+  const onContextMenu = useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+    setContextMenu({ x: event.clientX, y: event.clientY });
+  }, []);
+
+  const onPaneClick = useCallback(() => {
+    if (contextMenu) setContextMenu(null);
+  }, [contextMenu]);
 
   const notifyNodesChanged = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -63,7 +76,10 @@ function Flow() {
   // clipboard for copy/paste
   const clipboardRef = useRef<Node[]>([]);
 
-  const onConnect = (connection: Connection) => setEdges((eds) => addEdge(connection, eds));
+  const onConnect = (connection: Connection) => {
+    takeSnapshot();
+    setEdges((eds) => addEdge(connection, eds));
+  };
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -265,7 +281,12 @@ function Flow() {
       fitView
       deleteKeyCode={null}
       multiSelectionKeyCode={null}
+      onContextMenu={onContextMenu}
+      onPaneClick={onPaneClick}
+      onNodeDragStart={() => takeSnapshot()} // Snapshot *before* drag? Or after? Usually before to undo to previous pos.
+      onSelectionDragStart={() => takeSnapshot()}
     >
+      {contextMenu && <ContextMenu position={contextMenu} onClose={() => setContextMenu(null)} editApi={editApi} />}
       {showGrid && <Background gap={20} size={1} />}
       <MiniMap
         nodeStrokeWidth={1}

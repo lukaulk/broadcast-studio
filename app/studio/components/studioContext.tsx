@@ -2,7 +2,7 @@
 
 
 
-import React, { createContext, useContext, useMemo, useRef, useState, useCallback } from "react";
+import React, { createContext, useContext, useMemo, useRef, useState, useCallback, useEffect } from "react";
 import type { Node, Edge, Viewport, ReactFlowInstance } from "@xyflow/react";
 
 export type EditAction = "undo" | "redo" | "cut" | "copy" | "paste" | "delete" | "select_all" | "find" | "replace";
@@ -16,6 +16,10 @@ export interface StudioEditApi {
   selectAll: () => void;
   hasSelection: () => boolean;
   canPaste: () => boolean;
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
 }
 
 export interface StudioFlowApi {
@@ -105,6 +109,7 @@ interface StudioContextValue {
   // Dialogs
   openCreateGroupDialog: () => void;
   setOpenCreateGroupDialogImpl: (_fn: () => void) => void;
+  takeSnapshot: () => void;
 }
 
 
@@ -120,6 +125,10 @@ const defaultEditApi: StudioEditApi = {
   selectAll: noop,
   hasSelection: () => false,
   canPaste: () => false,
+  undo: noop,
+  redo: noop,
+  canUndo: () => false,
+  canRedo: () => false,
 };
 
 const defaultFlowApi: StudioFlowApi = {
@@ -163,6 +172,12 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [clipboard, setClipboard] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
   const [nodesVersion, setNodesVersion] = useState(0);
 
+  // History state
+  const historyRef = useRef<{
+    past: { nodes: Node[]; edges: Edge[] }[];
+    future: { nodes: Node[]; edges: Edge[] }[];
+  }>({ past: [], future: [] });
+
   // UI State
   const [showHierarchy, setShowHierarchy] = useState(true);
   const [toolMode, setToolMode] = useState<ToolMode>("select");
@@ -183,6 +198,76 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     forceUpdate((v) => v + 1);
   };
 
+  const takeSnapshot = useCallback(() => {
+    const nodes = flowApiRef.current.getNodes();
+    const edges = flowApiRef.current.getEdges();
+    // Don't snapshot if empty or same as last (optional optimization, but simple check is good)
+    const last = historyRef.current.past[historyRef.current.past.length - 1];
+    if (last && JSON.stringify(last.nodes) === JSON.stringify(nodes) && JSON.stringify(last.edges) === JSON.stringify(edges)) {
+      return;
+    }
+
+    historyRef.current.past.push({ nodes, edges });
+    historyRef.current.future = []; // clear future on new change
+    forceUpdate((v) => v + 1);
+  }, []);
+
+  const undo = useCallback(() => {
+    const { past, future } = historyRef.current;
+    if (past.length === 0) return;
+
+    const currentNodes = flowApiRef.current.getNodes();
+    const currentEdges = flowApiRef.current.getEdges();
+
+    // Check if we need to save current state to future first?
+    // Actually standard undo: pop from past, apply it. Push 'current' (before undo) to future.
+    // Wait, if we are at 'present', 'past' has previous states.
+    // If we undo, 'present' goes to 'future', and we load 'last past'.
+    // So we need to capture 'present' before applying undo.
+
+    const previous = past.pop();
+    if (!previous) return;
+
+    future.push({ nodes: currentNodes, edges: currentEdges });
+
+    flowApiRef.current.setNodes(previous.nodes);
+    flowApiRef.current.setEdges(previous.edges);
+    forceUpdate((v) => v + 1);
+  }, []);
+
+  const redo = useCallback(() => {
+    const { past, future } = historyRef.current;
+    if (future.length === 0) return;
+
+    const currentNodes = flowApiRef.current.getNodes();
+    const currentEdges = flowApiRef.current.getEdges();
+
+    const next = future.pop();
+    if (!next) return;
+
+    past.push({ nodes: currentNodes, edges: currentEdges });
+
+    flowApiRef.current.setNodes(next.nodes);
+    flowApiRef.current.setEdges(next.edges);
+    forceUpdate((v) => v + 1);
+  }, []);
+
+  // Update defaultEditApi with our local undo/redo implementations that use the closure
+  // Use useEffect to update the ref when these change? Or just pass them.
+  // We need to inject them into the editApiRef which is exposed.
+  // Since setEditApiImpl merges, we can just merge these in.
+
+  // Actually, we should probably set these defaults in the ref initialization or use an effect.
+  useEffect(() => {
+    setEditApiImpl({
+      undo,
+      redo,
+      canUndo: () => historyRef.current.past.length > 0,
+      canRedo: () => historyRef.current.future.length > 0,
+    });
+  }, [undo, redo]);
+
+
   const value = useMemo<StudioContextValue>(() => ({
     editApi: editApiRef.current,
     flowApi: flowApiRef.current,
@@ -202,7 +287,8 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setToolMode,
     openCreateGroupDialog: () => openCreateGroupDialogRef.current(),
     setOpenCreateGroupDialogImpl: (fn: () => void) => { openCreateGroupDialogRef.current = fn; },
-  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion, showHierarchy, toolMode]);
+    takeSnapshot,
+  }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion, showHierarchy, toolMode, takeSnapshot]);
 
   return <StudioContext.Provider value={value}>{children}</StudioContext.Provider>;
 }

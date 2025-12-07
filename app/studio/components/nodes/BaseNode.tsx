@@ -15,7 +15,9 @@ export interface BaseNodeProps extends NodeProps {
 const BaseNode: React.FC<BaseNodeProps> = ({ data, selected }) => {
     return (
         <div className={`flex flex-col items-center justify-center ${selected ? "ring-[0.5px] border-dashed bg-[#008AED22] ring-[#008AED] rounded-md" : ""}`}>
-            <div  className="w-full p-2 bg-cyan-300/30 border-cyan-400 text-xs text-center rounded-xs">{data.info || "192.167.0.2"}</div>
+            {data.info && (
+                <div  className="p-1 bg-cyan-300/30 border-cyan-400 text-[7px] w-full text-center rounded-xs">{data.info}</div>
+            )}
             <Image
                 src={data.image}
                 alt={data.label}

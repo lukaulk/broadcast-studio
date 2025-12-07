@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { NodeProps, Handle, Position } from "@xyflow/react";
+import React, { memo } from "react";
+import { NodeProps, Handle, Position, NodeResizer } from "@xyflow/react";
 
 export interface ShapeNodeData extends Record<string, unknown> {
     label?: string;
@@ -17,18 +17,20 @@ const ShapeNode: React.FC<ShapeNodeProps> = ({ data, selected }) => {
     const { shapeType, label, color = "#e2e2e2" } = data;
 
     const getShapeStyle = () => {
-        const baseStyle = "flex items-center justify-center text-xs font-semibold text-black/70 pointer-events-none transition-all duration-200";
-        const selectedStyle = selected ? "ring-2 ring-[#008AED] ring-offset-2" : "";
+        const baseStyle = "flex items-center justify-center text-xs font-semibold text-black/70 pointer-events-none transition-all duration-200 w-full h-full";
+        // Selected state is now handled by the NodeResizer mostly, but we can keep a border if we want
+        // or let the shape itself have the border.
 
         switch (shapeType) {
             case "circle":
-                return `${baseStyle} w-32 h-32 rounded-full border-2 border-dashed border-gray-400 bg-white/50 ${selectedStyle}`;
+                return `${baseStyle} rounded-full border-2 border-dashed border-gray-400 bg-white/50`;
             case "triangle":
                 // Triangle is trickier with pure CSS borders but can be done with clip-path
-                return `${baseStyle} w-32 h-32 clip-path-triangle bg-white/50 ${selectedStyle}`;
+                // Borders don't show well on clip-path triangles usually.
+                return `${baseStyle} clip-path-triangle bg-white/50`;
             case "square":
             default:
-                return `${baseStyle} w-32 h-32 rounded-md border-2 border-dashed border-gray-400 bg-white/50 ${selectedStyle}`;
+                return `${baseStyle} rounded-md border-2 border-dashed border-gray-400 bg-white/50`;
         }
     };
 
@@ -36,10 +38,17 @@ const ShapeNode: React.FC<ShapeNodeProps> = ({ data, selected }) => {
     const triangleStyle = shapeType === 'triangle' ? { clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' } : {};
 
     return (
-        <div className="relative group">
+        <div className="w-full h-full relative group min-w-[50px] min-h-[50px]">
+            <NodeResizer
+                isVisible={selected}
+                minWidth={50}
+                minHeight={50}
+                keepAspectRatio={shapeType === 'circle' || shapeType === 'triangle'}
+            />
+
             {/* Info Badge if present */}
             {data.info && (
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-cyan-300/30 border border-cyan-400 text-[10px] px-2 py-0.5 rounded text-black whitespace-nowrap">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-cyan-300/30 border border-cyan-400 text-[10px] px-2 py-0.5 rounded text-black whitespace-nowrap z-10">
                     {data.info}
                 </div>
             )}
@@ -51,7 +60,7 @@ const ShapeNode: React.FC<ShapeNodeProps> = ({ data, selected }) => {
                 {label}
             </div>
 
-            {/* Handles - Keep them but maybe hidden or minimal for shapes just to allow connections if needed for diagramming */}
+            {/* Handles - Hidden by default, show on hover or when connecting */}
             <Handle type="target" position={Position.Top} className="opacity-0 group-hover:opacity-50" />
             <Handle type="source" position={Position.Bottom} className="opacity-0 group-hover:opacity-50" />
             <Handle type="target" position={Position.Left} className="opacity-0 group-hover:opacity-50" />
@@ -60,4 +69,4 @@ const ShapeNode: React.FC<ShapeNodeProps> = ({ data, selected }) => {
     );
 };
 
-export default ShapeNode;
+export default memo(ShapeNode);
