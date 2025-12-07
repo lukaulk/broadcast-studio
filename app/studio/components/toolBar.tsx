@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ToolBar() {
-  const { flowApi, toolMode, setToolMode } = useStudio(); // Removed editApi as it seemed unused in original or causing issues? Checking original... used in original, will keep if needed but keeping it simple. Original had editApi, flowApi, toolMode, setToolMode.
+  const { flowApi, toolMode, setToolMode, clearDrawing } = useStudio(); // Removed editApi as it seemed unused in original or causing issues? Checking original... used in original, will keep if needed but keeping it simple. Original had editApi, flowApi, toolMode, setToolMode.
   const { fitView } = useReactFlow();
 
   const [labelDialogOpen, setLabelDialogOpen] = useState(false);
@@ -50,13 +50,13 @@ export default function ToolBar() {
       type: "shape",
       position: { x: Math.random() * 400, y: Math.random() * 400 },
       style: { width: 128, height: 128, borderRadius: type === "circle" ? "50%" : "" },
-      data: { label: type.charAt(0).toUpperCase() + type.slice(1), shapeType: type, info: "", icon: "/favicon.png"},
+      data: { label: type.charAt(0).toUpperCase() + type.slice(1), shapeType: type, info: "", icon: "/favicon.png" },
     };
     flowApi.addNode(newNode);
   };
 
   return (
-    <div className="h-sm absolute top-1/3 z-10 left-5 -translate-y-1/5 -mt-8 rounded-md p-2 border border-[var(--bsui-border)] bg-[var(--bsui-gray-3)]">
+    <div className="h-sm absolute top-1/3 z-[60] left-5 -translate-y-1/5 -mt-8 rounded-md p-2 border border-[var(--bsui-border)] bg-[var(--bsui-gray-3)]">
       <button
         onClick={() => setToolMode("select")}
         type="button"
@@ -105,9 +105,14 @@ export default function ToolBar() {
 
       <button
         onClick={() => setToolMode(toolMode === "pen" ? "select" : "pen")}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          clearDrawing();
+        }}
         type="button"
         className={`mb-4 flex cursor-pointer items-center rounded-md px-3 py-3 hover:bg-[var(--bsui-active)] active:scale-95 active:bg-[var(--bsui-actived)] ${toolMode === "pen" ? "bg-[var(--bsui-active)] ring-1 ring-[var(--bsui-actived)]" : ""}`}
         aria-pressed={toolMode === "pen"}
+        title="Right click to clear drawing"
       >
         <NotebookPen className="size-6" />
       </button>

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useStudio } from "./studioContext";
 
 export default function DrawingOverlay() {
-    const { toolMode } = useStudio();
+    const { toolMode, setClearDrawingImpl } = useStudio();
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const isDrawingRef = useRef<boolean>(false);
     const dprRef = useRef<number>(1);
@@ -30,6 +30,9 @@ export default function DrawingOverlay() {
 
             const ctx = canvas.getContext("2d");
             if (ctx) {
+                // Reset transform to avoid cumulative scaling on repeated resizes
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+
                 ctx.scale(dpr, dpr);
                 ctx.lineCap = "round";
                 ctx.lineJoin = "round";
@@ -49,7 +52,29 @@ export default function DrawingOverlay() {
 
         window.addEventListener("resize", resize);
         return () => window.removeEventListener("resize", resize);
+        
     }, []);
+
+    // Register clear implementation
+    useEffect(() => {
+        setClearDrawingImpl(() => {
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
+
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.restore();
+
+            // Reset context state
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.strokeStyle = "#3AE87A";
+            ctx.lineWidth = 3;
+        });
+    }, [setClearDrawingImpl]);
 
     const getCanvasPos = (e: React.PointerEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current!;
@@ -95,12 +120,12 @@ export default function DrawingOverlay() {
 
     const handleContextMenu = (e: React.MouseEvent<HTMLCanvasElement>) => {
         e.preventDefault();
+        // Also clear on right click on canvas itself
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        // Clear entire canvas
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -38,7 +38,7 @@ export default function Component({
     <div
       draggable
       onDragStart={handleDragStart}
-      className={`group relative flex items-center justify-center w-40 h-40 hover:scale-105 transition-transform rounded-md overflow-hidden cursor-grab active:cursor-grabbing active:opacity-90 active:border active:border-blue-500 ${className}`}
+      className={`group relative flex items-center justify-center w-40 h-40 hover:scale-105 transition-transform rounded-md overflow-hidden cursor-grab active:cursor-grabbing active:opacity-90 active:border active:border-blue-500 z-0 ${className}`}
       title={description}
     >
       {icon && (

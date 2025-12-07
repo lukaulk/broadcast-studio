@@ -56,7 +56,7 @@ export default function ContextMenu({ position, onClose, editApi }: ContextMenuP
         <div
             ref={ref}
             style={{ top: position.y, left: position.x }}
-            className="fixed z-50 min-w-[200px] bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] shadow-xl rounded-md py-1 text-[var(--bsui-gray-0)]"
+            className="fixed z-500 min-w-[200px] bg-[var(--bsui-gray-2)] border border-[var(--bsui-border)] shadow-xl rounded-md py-1 text-[var(--bsui-gray-0)]"
         >
             <MenuItem label="Undo" action={editApi.undo} disabled={!editApi.canUndo()} shortcut="Ctrl+Z" />
             <MenuItem label="Redo" action={editApi.redo} disabled={!editApi.canRedo()} shortcut="Ctrl+Y" />

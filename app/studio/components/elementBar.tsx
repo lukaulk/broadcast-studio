@@ -15,7 +15,7 @@ export default function ElementBar() {
   }));
 
   return (
-    <div className="p-2 w-full overflow-hidden">
+    <div className="p-2 w-full overflow-hidden z-0">
       <div className="flex items-center w-full overflow-hidden">
         <ScrollArea className="w-full overflow-x-auto overflow-hidden whitespace-nowrap">
           <div className="flex items-center space-x-4 py-1">
@@ -57,7 +57,6 @@ export default function ElementBar() {
               </DialogContent>
             </Dialog>
           </div>
-
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>

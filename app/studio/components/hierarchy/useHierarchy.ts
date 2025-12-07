@@ -95,10 +95,9 @@ export function useHierarchy() {
 
     const toggleItemVisibility = useCallback(
         (itemId: string) => {
-            setItems((current) => {
-                const item = current.find((i) => i.id === itemId);
-                if (!item) return current;
-
+            const currentItems = itemsRef.current;
+            const item = currentItems.find((i) => i.id === itemId);
+            if (item) {
                 const nodes = flowApi.getNodes();
                 const updatedNodes = nodes.map((node) => {
                     if (node.id === item.nodeId) {
@@ -110,23 +109,16 @@ export function useHierarchy() {
                     return node;
                 });
                 flowApi.setNodes(updatedNodes);
-
-                const updated = current.map((i) =>
-                    i.id === itemId ? { ...i, visible: !i.visible } : i
-                );
-                itemsRef.current = updated;
-                return updated;
-            });
+            }
         },
         [flowApi]
     );
 
     const toggleItemLock = useCallback(
         (itemId: string) => {
-            setItems((current) => {
-                const item = current.find((i) => i.id === itemId);
-                if (!item) return current;
-
+            const currentItems = itemsRef.current;
+            const item = currentItems.find((i) => i.id === itemId);
+            if (item) {
                 const nodes = flowApi.getNodes();
                 const updatedNodes = nodes.map((node) => {
                     if (node.id === item.nodeId) {
@@ -138,16 +130,12 @@ export function useHierarchy() {
                     return node;
                 });
                 flowApi.setNodes(updatedNodes);
-
-                const updated = current.map((i) =>
-                    i.id === itemId ? { ...i, locked: !i.locked } : i
-                );
-                itemsRef.current = updated;
-                return updated;
-            });
+            }
         },
         [flowApi]
     );
+
+
 
     const selectNode = useCallback(
         (nodeId: string) => {
@@ -163,18 +151,13 @@ export function useHierarchy() {
 
     const deleteItem = useCallback(
         (itemId: string) => {
-            setItems((current) => {
-                const item = current.find((i) => i.id === itemId);
-                if (!item) return current;
-
+            const currentItems = itemsRef.current;
+            const item = currentItems.find((i) => i.id === itemId);
+            if (item) {
                 const nodes = flowApi.getNodes();
                 const updatedNodes = nodes.filter((node) => node.id !== item.nodeId);
                 flowApi.setNodes(updatedNodes);
-
-                const updated = current.filter((i) => i.id !== itemId);
-                itemsRef.current = updated;
-                return updated;
-            });
+            }
         },
         [flowApi]
     );

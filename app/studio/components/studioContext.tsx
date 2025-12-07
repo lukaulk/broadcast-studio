@@ -110,6 +110,9 @@ interface StudioContextValue {
   openCreateGroupDialog: () => void;
   setOpenCreateGroupDialogImpl: (_fn: () => void) => void;
   takeSnapshot: () => void;
+  // Drawing API
+  clearDrawing: () => void;
+  setClearDrawingImpl: (_fn: () => void) => void;
 }
 
 
@@ -182,6 +185,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [showHierarchy, setShowHierarchy] = useState(true);
   const [toolMode, setToolMode] = useState<ToolMode>("select");
   const openCreateGroupDialogRef = useRef<() => void>(noop);
+  const clearDrawingRef = useRef<() => void>(noop);
 
   const incrementNodesVersion = useCallback(() => {
     setNodesVersion((v) => v + 1);
@@ -288,6 +292,8 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     openCreateGroupDialog: () => openCreateGroupDialogRef.current(),
     setOpenCreateGroupDialogImpl: (fn: () => void) => { openCreateGroupDialogRef.current = fn; },
     takeSnapshot,
+    clearDrawing: () => clearDrawingRef.current(),
+    setClearDrawingImpl: (fn: () => void) => { clearDrawingRef.current = fn; },
   }), [currentProject, isDirty, clipboard, nodesVersion, incrementNodesVersion, showHierarchy, toolMode, takeSnapshot]);
 
   return <StudioContext.Provider value={value}>{children}</StudioContext.Provider>;
