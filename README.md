@@ -10,22 +10,22 @@
   </tr>
 </table>
 
-# Broadcast Studio 📡
+# Broadcast Studio 
 
-## 📖 Overview
+##  Overview
 
-**Broadcast Studio** is a web app for studying computer networks, network simulation, and hands-on learning with integrated artificial intelligence. Ideal for students, teachers, and professionals who want to explore, test, and understand network behavior in controlled environments, with support for automated analysis, realistic simulations, and AI-based interactive learning. 🌐
+**Broadcast Studio** is a web app for studying computer networks, network simulation, and hands-on learning with integrated artificial intelligence. Ideal for students, teachers, and professionals who want to explore, test, and understand network behavior in controlled environments, with support for automated analysis, realistic simulations, and AI-based interactive learning. 
 
-Whether you’re a student, teacher, or IT professional, Broadcast Studio provides the flexibility and power you need to visualize, experiment with, and master the world of computer networks. 💻✨
+Whether you’re a student, teacher, or IT professional, Broadcast Studio provides the flexibility and power you need to visualize, experiment with, and master the world of computer networks. 
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-* **Visual Topology Editor**: Build and visualize topologies by dragging and dropping devices (routers, switches, PCs) onto a canvas. 🖱️
-* **Real-Time Simulation**: Watch data traffic and network behavior live. 🚦
-* **Integrated Terminal**: Run commands like `ping` and `traceroute` inside a built-in terminal. 🚀
-* **Cross-Platform Compatibility**: Web-based and accessible from any device, with future support for a desktop version. 📱🖥️
+* **Visual Topology Editor**: Build and visualize topologies by dragging and dropping devices (routers, switches, PCs) onto a canvas. 
+* **Real-Time Simulation**: Watch data traffic and network behavior live. 
+* **Integrated Terminal**: Run commands like `ping` and `traceroute` inside a built-in terminal. 
+* **Cross-Platform Compatibility**: Web-based and accessible from any device, with future support for a desktop version. 
 
 ---
 
@@ -35,7 +35,7 @@ Whether you’re a student, teacher, or IT professional, Broadcast Studio provid
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 ### Front-end
 
@@ -58,13 +58,13 @@ Whether you’re a student, teacher, or IT professional, Broadcast Studio provid
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
-### 📌 Prerequisites
+###  Prerequisites
 
 * **Bun** must be installed on your system.
 
-### ⚙️ Setup
+###  Setup
 
 ```bash
 # Clone the repository
@@ -74,25 +74,25 @@ git clone https://github.com/lukaulk/broadcast-studio.git
 cd broadcast-studio
 ```
 
-### 📦 Installation
+###  Installation
 
 ```bash
 # Install front-end dependencies with Bun
 bun install
 ```
 
-### ▶️ Running the Project
+###  Running the Project
 
 ```bash
 # Start the development server
 bun dev
 ```
 
-Open your browser and go to **[http://localhost:3000](http://localhost:3000)** to see Broadcast Studio in action. 🎉
+Open your browser and go to **[http://localhost:3000](http://localhost:3000)** to see Broadcast Studio in action. 
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are always welcome! 🙌
 
@@ -101,7 +101,7 @@ Contributions are always welcome! 🙌
 * If you looking for the back-end, click here [BS-CORE](https://github.com/lukaulk/bs-core).
 ---
 
-## 📜 License
+##  License
 
 This project is licensed under the **MIT License**.
 
