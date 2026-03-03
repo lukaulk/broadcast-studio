@@ -14,7 +14,6 @@ export async function loginAsGuest() {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
     })
-
     redirect("/studio")
 }
 
